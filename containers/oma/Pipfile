@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+omahdf5tordf = {git = "git+${LABGIT}/biosoda"}
+omamer = "*"
+edgehog = "*"
+hogprop = {git = "git+${LABGIT}/hogprop2"}
+         #branch = "nf-convert", 
+#pyoma = {git = "git+https://github.com/DessimozLab/pyoma.git", ref = "v0.13.3", extras = ["create_db", "enrichment", "notebooks"] }
+pyoma = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"

@@ -1,0 +1,14 @@
+Bootstrap: docker
+From: cbrg/darwin:2022-05-31
+
+%post
+    # Install necessary dependencies
+    apt-get update && apt-get install -y \
+        git \
+        procps
+
+
+%labels
+    Author Adrian Altenhoff
+    Repository ssh://gitolite@lab.dessimoz.org:2222/nf-oma-browser-build
+    Version 0.0.1

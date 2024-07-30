@@ -1,0 +1,35 @@
+FROM python:3.11-slim as basis
+
+# set environment varibles
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+FROM basis as builder
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+       build-essential \
+       libxml2 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Tell pipenv to create venv in the current directory
+ENV PIPENV_VENV_IN_PROJECT=1
+
+WORKDIR /usr/src
+RUN pip install --upgrade pipenv pip
+COPY Pipfile Pipfile.lock .
+RUN pipenv sync
+
+FROM basis as runtime
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+       libxml2 \
+       procps \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /usr/src/.venv /usr/src/.venv
+ENV PATH="/usr/src/.venv/bin:$PATH"
+RUN adduser omabuild
+WORKDIR /usr/src
+USER omabuild
+
+CMD ["./.venv/bin/python"]
