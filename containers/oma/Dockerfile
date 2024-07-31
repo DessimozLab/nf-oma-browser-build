@@ -29,8 +29,8 @@ RUN pip install --upgrade pipenv pip
 COPY Pipfile Pipfile.lock ./
 RUN --mount=type=ssh \
     --mount=type=secret,id=labgit \
-    . /run/secrets/labgit && \
-    pipenv sync
+    LABGIT=$(cat /run/secrets/labgit ) \
+       pipenv sync
 
 FROM basis as runtime
 RUN apt-get update \

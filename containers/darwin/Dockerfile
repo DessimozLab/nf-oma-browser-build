@@ -14,7 +14,7 @@ RUN mkdir -m 700 /root/.ssh/ \
 WORKDIR /src
 RUN --mount=type=ssh \
     --mount=type=secret,id=labgit \
-    . /run/secrets/labgit && \
+    LABGIT=$(cat /run/secrets/labgit) && \
     git clone ${LABGIT}/OMA && \
     git clone ${LABGIT}/browser && \
     git clone -b nf-convert ${LABGIT}/pyoma && \
