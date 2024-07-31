@@ -1,27 +1,33 @@
 process CONVERT_GS {
-    memory {50.GB}
-    time {5.hour}
-    publishDir "${DARWIN_NETWORK_SCRATCH_PATH}/pyoma"
+    tag "Convert GenomeSummaries to JSON format"
+    label "process_single"
+    container = "dessimozlab/omadarwin:nf-latest"
+
+    input:
+        path "Summaries.drw"
+        path "SubGenome.drw"
 
     output:
-    path 'conv.done'
-    path 'gs.json' into gs_json
+        path 'conv.done'
+        path 'gs.json', emit: gs_json
 
-    """
-    darwin -E -q << EOF
-      ReadProgram('${CODE_REPOS_ROOT}/pyoma/pyoma/browser/convert.drw');
-      outfn := 'gs.json';
-      GetGenomeData();
-      OpenWriting('conv.done'); lprint(date(), time(), 'success'); OpenWriting(previous);
-      done
-    EOF
-    """
+    script:
+        """
+        export DARWIN_BROWSERDATA_PATH="\$(pwd)"
+        darwin -E -q << EOF
+          ReadProgram('${CODE_REPOS_ROOT}/pyoma/pyoma/browser/convert.drw');
+          outfn := 'gs.json';
+          GetGenomeData();
+          OpenWriting('conv.done'); lprint(date(), time(), 'success'); OpenWriting(previous);
+          done
+        EOF
+        """
 }
 
-med_procs = 20
 process CONVERT_PROTEINS {
-    memory {50.GB}
-    time {5.hour}
+    tag "Convert Proteins chunk ${chunk}/${nr_chunks} to JSON format"
+    label "process_single"
+    container "dessimozlab/omadarwin:nf-latest"
 
     input:
         each chunk
@@ -35,6 +41,7 @@ process CONVERT_PROTEINS {
 
     script:
         """
+        export DARWIN_BROWSERDATA_PATH="$browser_data_path"
         mkdir  prots cps
         darwin -E -q << EOF
           NR_PROCESSES := $nr_chunks;
