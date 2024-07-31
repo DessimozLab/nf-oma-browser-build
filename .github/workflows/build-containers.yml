@@ -7,6 +7,9 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+      - name: checkout repo
+        uses: actions/checkout@v4
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -32,7 +35,7 @@ jobs:
       - name: Build python oma build container
         uses: docker/build-push-action@v6
         with:
-          context: containers/darwin
+          context: containers/oma
           platforms: linux/amd64,linux/arm64
           push: true
           tags: dessimozlab/omabuild:nf-latest
