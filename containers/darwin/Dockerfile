@@ -22,6 +22,11 @@ RUN --mount=type=ssh \
 
 FROM cbrg/darwin:latest as runtime
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+       procps \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY --from=builder /src /src
 ENV DARWIN_OMA_REPO_PATH="/src/OMA"
 ENV DARWIN_BROWSER_REPO_PATH="/src/browser"
