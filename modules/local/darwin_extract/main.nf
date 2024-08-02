@@ -15,7 +15,7 @@ process CONVERT_GS {
         """
         export DARWIN_BROWSERDATA_PATH="\$(pwd)"
         darwin -E -q << EOF
-          ReadProgram('${CODE_REPOS_ROOT}/pyoma/pyoma/browser/convert.drw');
+          ReadProgram('\${CODE_REPOS_ROOT}/pyoma/pyoma/browser/convert.drw');
           outfn := 'gs.json';
           GetGenomeData();
           OpenWriting('conv.done'); lprint(date(), time(), 'success'); OpenWriting(previous);
@@ -46,8 +46,8 @@ process CONVERT_PROTEINS {
         darwin -E -q << EOF
           NR_PROCESSES := $nr_chunks;
           THIS_PROC_NR := $chunk;
-          ReadProgram('${DARWIN_OMA_REPO_PATH}/lib/Platforms');
-          ReadProgram('${CODE_REPOS_ROOT}/pyoma/pyoma/browser/convert.drw');
+          ReadProgram('\${DARWIN_OMA_REPO_PATH}/lib/Platforms');
+          ReadProgram('\${CODE_REPOS_ROOT}/pyoma/pyoma/browser/convert.drw');
           pInf := DetectParallelInfo();
           for g in genomes do
              if IsMyJob(pInf, g) then
