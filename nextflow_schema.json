@@ -1,10 +1,10 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://raw.githubusercontent.com/oma-browser-build/master/nextflow_schema.json",
   "title": "oma-browser-build pipeline parameters",
   "description": "Convert OMA run into OMA Browser release",
   "type": "object",
-  "definitions": {
+  "defs": {
     "input_output_options": {
       "title": "Input/output options",
       "type": "object",
@@ -39,10 +39,10 @@
   },
   "allOf": [
     {
-      "$ref": "#/definitions/input_output_options"
+      "$ref": "#/defs/input_output_options"
     },
     {
-      "$ref": "#/definitions/generic_options"
+      "$ref": "#/defs/generic_options"
     }
   ],
   "properties": {
@@ -54,6 +54,7 @@
     },
     "oma_browser_data_dir": {
       "type": "string",
+      "format": "directory-path",
       "default": "test/bla"
     },
     "nr_medium_procs": {
