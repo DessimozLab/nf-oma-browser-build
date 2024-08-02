@@ -1,17 +1,19 @@
 #!/usr/bin/env nextflow
 
 // Modules
-include {CONVERT_GS, CONVERT_PROTEINS} from "./../../../modules/local/darwin_extract"
+include { CONVERT_GS; CONVERT_PROTEINS } from "./../../../modules/local/darwin_extract"
 
 workflow EXTRACT_DARWIN {
     take:
-        path browserdata
-        val nr_chunks
+        browserdata
+        nr_chunks
 
     main:
-        def chunks = Channel.of(1..nr_chunks)
-        def summaries = Channel.fromPath("$browserdata/Summaries.drw", checkIfExists: true )
-        def subgenome = Channel.fromPath("$browserdata/SubGenome.drw")
+        chunks = Channel.of(1..nr_chunks)
+        //summaries = Channel.fromPath("${browserdata}/Summaries.drw", checkIfExists: true )
+        summaries = Channel.fromPath("${browserdata}/Summaries.drw")
+        summaries.view()
+        subgenome = Channel.fromPath("${browserdata}/SubGenome.drw")
         CONVERT_GS(summaries, subgenome)
         CONVERT_PROTEINS(chunks, nr_chunks, browserdata)
 
@@ -21,11 +23,3 @@ workflow EXTRACT_DARWIN {
         cps_files = CONVERT_PROTEINS.out.cps_json.collect()
 }
 
-workflow {
-    take:
-        path browserdata
-        val nr_chunks
-
-    main:
-        EXTRACT_DARWIN(browserdata, nr_chunks)
-}

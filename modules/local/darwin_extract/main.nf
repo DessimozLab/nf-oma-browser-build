@@ -32,7 +32,7 @@ process CONVERT_PROTEINS {
     input:
         each chunk
         val nr_chunks
-        path browser_data_path, type: "dir"
+        path browser_data_path
 
     output:
         path 'conv.done',      emit: done_flag

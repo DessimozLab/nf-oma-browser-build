@@ -46,7 +46,10 @@ workflow OMA_browser_build {
 
     // Run the pipeline
     // parse_inputs()
-    oma_browser_build()
+    def oma_browser_data_dir = Channel.fromPath(params.oma_browser_data_dir, type: "dir")
+    nr_chunks = params.nr_medium_procs
+
+    oma_browser_build(oma_browser_data_dir, nr_chunks)
 }
 
 workflow {
