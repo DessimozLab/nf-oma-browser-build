@@ -18,7 +18,7 @@ process CONVERT_GS {
           outdir := './'; \
           MatrixPath := '$matrix_file'; \
           GenomeSummariesPath := '${GenomeSummaries_file}'; \
-          GenomesDir := '${genomes}';
+          GenomesDir := trim(TimedCallSystem('readlink -f ${genomes}')[2]);
 
           ReadProgram('\${CODE_REPOS_ROOT}/pyoma/pyoma/browser/build/convert.drw');
           #GetGenomeData();
