@@ -15,8 +15,12 @@ process CONVERT_GS {
     script:
         """
         darwin -E -q << EOF
-          outdir := './';
-          ReadProgram('\${CODE_REPOS_ROOT}/pyoma/pyoma/build/convert.drw');
+          outdir := './'; \
+          MatrixPath := '$matrix_file'; \
+          GenomeSummariesPath := '${GenomeSummaries_file}'; \
+          GenomesDir := '${genomes}';
+
+          ReadProgram('\${CODE_REPOS_ROOT}/pyoma/pyoma/browser/build/convert.drw');
           #GetGenomeData();
           OpenWriting('conv.done'); lprint(date(), time(), 'success'); OpenWriting(previous);
           done
