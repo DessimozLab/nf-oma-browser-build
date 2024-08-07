@@ -11,9 +11,8 @@ workflow EXTRACT_DARWIN {
     main:
         chunks = Channel.of(1..nr_chunks)
         //summaries = Channel.fromPath("${browserdata}/Summaries.drw", checkIfExists: true )
-        summaries = Channel.fromPath("${browserdata}/Summaries.drw")
-        summaries.view()
-        subgenome = Channel.fromPath("${browserdata}/SubGenome.drw")
+        def summaries = browserdata / "Summaries.drw"
+        def subgenome = browserdata / "SubGenome.drw"
         CONVERT_GS(summaries, subgenome)
         CONVERT_PROTEINS(chunks, nr_chunks, browserdata)
 
