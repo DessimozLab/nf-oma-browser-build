@@ -46,10 +46,11 @@ workflow OMA_browser_build {
 
     // Run the pipeline
     // parse_inputs()
-    def oma_browser_data_dir = file(params.oma_browser_data_dir)  //, type: "dir")
-    nr_chunks = params.nr_medium_procs
+    def genomes_dir = file(params.genomes_dir)
+    def matrix_file = file(params.matrix_file)
+    def hog_orthoxml = file(params.hog_orthoxml)
 
-    oma_browser_build(oma_browser_data_dir, nr_chunks)
+    oma_browser_build(genomes_dir, matrix_file, hog_orthoxml)
 }
 
 workflow {

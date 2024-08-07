@@ -5,11 +5,13 @@ include {EXTRACT_DARWIN} from "./../subworkflows/local/extract_darwin"
 
 workflow oma_browser_build {
     take:
-        oma_browser_data_dir
-        nr_chunks
+        genomes_folder
+        matrix_file
+        hog_orthoxml
 
     main:
-        EXTRACT_DARWIN(oma_browser_data_dir, nr_chunks)
+        EXTRACT_DARWIN(genomes_folder, matrix_file, hog_orthoxml)
+
 }
 
 workflow {
