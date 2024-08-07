@@ -46,7 +46,7 @@ process CONVERT_PROTEINS {
           genome := '${genome.SpeciesCode}';
           dbpath := '${dbpath}';
           Goff := ${genome.Goff};
-          tot_entries := ${genome.Goff};
+          tot_entries := ${genome.TotEntries};
           tot_aa := ${genome.TotAA};
 
           ReadProgram('\${CODE_REPOS_ROOT}/pyoma/pyoma/browser/build/convert_database.drw');
