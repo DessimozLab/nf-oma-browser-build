@@ -45,7 +45,7 @@ process CONVERT_PROTEINS {
           tot_entries := ${genome.Goff};
           tot_aa := ${genome.TotAA};
 
-          ReadProgram('\${CODE_REPOS_ROOT}/pyoma/pyoma/build/convert_database.drw');
+          ReadProgram('\${CODE_REPOS_ROOT}/pyoma/pyoma/browser/build/convert_database.drw');
           OpenWriting('conv.done'); lprint(date(), time(), 'success'); OpenWriting(previous);
           done
         EOF
