@@ -30,10 +30,8 @@ def subtaxonomy_from_genomes(tax, genomes):
 
 def parse_genomes_tsv(genomes_tsv):
     with open(genomes_tsv, 'r') as f:
-        dialect = csv.Sniffer().sniff(f.read(1000))
-        f.seek(0)
-        reader = csv.DictReader(f, dialect=dialect)
-        genomes = {int(row['TaxonId']): row['SciName'] for row in reader}
+        reader = csv.DictReader(f, dialect="excel-tab")
+        genomes = {int(row['TaxonID']): row['SciName'] for row in reader}
     return genomes
 
 
@@ -45,7 +43,7 @@ if __name__ == '__main__':
     parser.add_argument('--out', required=True, help="Path to output file")
     conf = parser.parse_args()
 
-    tax = Taxonomy(conf.database)
+    tax = omataxonomy.Taxonomy(conf.database)
     genomes = parse_genomes_tsv(conf.input)
     taxtab = subtaxonomy_from_genomes(tax, genomes)
 

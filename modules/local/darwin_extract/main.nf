@@ -70,7 +70,7 @@ process CONVERT_TAXONOMY {
 
     script:
         """
-        python subtaxonomy-from-genomes.py --input $gs_tsv --database $sqlite_taxonomy --out taxonomy.tsv
+        subtaxonomy-from-genomes.py --input $gs_tsv --database $sqlite_taxonomy --out taxonomy.tsv
 
         """
 }
