@@ -55,3 +55,22 @@ process CONVERT_PROTEINS {
         EOF
         """
 }
+
+process CONVERT_TAXONOMY {
+    tag "Convert Taxonomy of genomes using omataxonomy"
+    label "process_single"
+    container "dessimozlab/omabuild:nf-latest"
+
+    input:
+        path gs_tsv
+        path sqlite_taxonomy
+
+    output:
+        path "taxonomy.tsv",          emit: tax_tsv
+
+    script:
+        """
+        python subtaxonomy-from-genomes.py --input $gs_tsv --database $sqlite_taxonomy --out taxonomy.tsv
+
+        """
+}

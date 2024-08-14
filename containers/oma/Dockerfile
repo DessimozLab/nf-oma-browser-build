@@ -1,10 +1,9 @@
-FROM python:3.11-slim as basis
+FROM python:3.11-slim AS basis
 
 # set environment varibles
-#ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 
-FROM basis as builder
+FROM basis AS builder
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        build-essential \
@@ -32,7 +31,7 @@ RUN --mount=type=ssh \
     LABGIT=$(cat /run/secrets/labgit ) \
        pipenv sync
 
-FROM basis as runtime
+FROM basis AS runtime
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        libxml2 \

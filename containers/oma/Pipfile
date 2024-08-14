@@ -8,9 +8,11 @@ omahdf5tordf = {git = "git+${LABGIT}/biosoda"}
 omamer = "*"
 edgehog = "*"
 hogprop = {git = "git+${LABGIT}/hogprop2"}
-         #branch = "nf-convert", 
-#pyoma = {git = "git+https://github.com/DessimozLab/pyoma.git", ref = "v0.13.3", extras = ["create_db", "enrichment", "notebooks"] }
+         #branch = "nf-convert",
+         #ref = "v0.13.3"
+#pyoma = {git = "git+https://github.com/DessimozLab/pyoma.git", branch = "nf-convert", extras = ["create_db", "enrichment", "notebooks"] }
 pyoma = "*"
+omataxonomy = "*"
 
 [dev-packages]
 
