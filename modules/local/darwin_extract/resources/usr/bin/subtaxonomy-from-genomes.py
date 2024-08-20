@@ -31,7 +31,7 @@ def subtaxonomy_from_genomes(tax, genomes):
 def parse_genomes_tsv(genomes_tsv):
     with open(genomes_tsv, 'r') as f:
         reader = csv.DictReader(f, dialect="excel-tab")
-        genomes = {int(row['TaxonID']): row['SciName'] for row in reader}
+        genomes = {int(row['NCBITaxonId']): row['SciName'] for row in reader}
     return genomes
 
 
