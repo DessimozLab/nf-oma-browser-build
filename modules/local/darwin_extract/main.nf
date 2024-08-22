@@ -26,7 +26,7 @@ process CONVERT_GS {
 }
 
 process CONVERT_PROTEINS {
-    tag "Convert Proteins from ${genome.SpeciesCode} to JSON format"
+    tag "Convert Proteins from ${genome.UniProtSpeciesCode} to JSON format"
     label "process_single"
     container "dessimozlab/omadarwin:nf-latest"
 
@@ -34,14 +34,14 @@ process CONVERT_PROTEINS {
         tuple val(genome), path(dbpath)
 
     output:
-        path "${genome.SpeciesCode}.json",   emit: prot_json
+        path "${genome.UniProtSpeciesCode}.json",   emit: prot_json
 
     script:
         """
         darwin -E -q << EOF
-          genome := '${genome.SpeciesCode}';
+          genome := '${genome.UniProtSpeciesCode}';
           dbpath := '${dbpath}';
-          Goff := ${genome.Goff};
+          Goff := ${genome.EntryOff};
           tot_entries := ${genome.TotEntries};
           tot_aa := ${genome.TotAA};
 

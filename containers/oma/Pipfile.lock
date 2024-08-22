@@ -40,14 +40,6 @@
             "markers": "python_version >= '3.8'",
             "version": "==4.4.0"
         },
-        "appnope": {
-            "hashes": [
-                "sha256:1de3860566df9caf38f01f86f65e0e13e379af54f9e4bee1e66b48f2efffd1ee",
-                "sha256:502575ee11cd7a28c0205f379b525beefebab9d161b7c964670864014ed7213c"
-            ],
-            "markers": "platform_system == 'Darwin'",
-            "version": "==0.1.4"
-        },
         "argon2-cffi": {
             "hashes": [
                 "sha256:879c3e79a2729ce768ebb7d36d4609e3a78a4ca2ec3a9f12286ca057e3d0db08",
@@ -1934,7 +1926,7 @@
             ],
             "git": "git+https://github.com/DessimozLab/pyoma.git",
             "markers": "python_version >= '3.6'",
-            "ref": "nf-convert"
+            "ref": "bb82a2c25cf1b5d180aa304553550f2e371367e6"
         },
         "pyopa": {
             "hashes": [

@@ -13,7 +13,8 @@ process ADD_GENOMES {
 
     script:
         """
-        oma-build --db OmaServer.h5 \
+        oma-build genomes \
+                --db OmaServer.h5 \
                 --gs-tsv $gs_tsv \
                 --tax-tsv $tax_tsv \
                 --genomes $genomes_json

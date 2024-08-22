@@ -2,7 +2,7 @@
 
 // Subworkflows
 include {EXTRACT_DARWIN} from "./../subworkflows/local/extract_darwin"
-include {IMPORT_HDF5} from "./../subworkflows/local/hd5import"
+include {IMPORT_HDF5} from "./../subworkflows/local/hdf5import"
 
 workflow oma_browser_build {
     take:
@@ -14,7 +14,7 @@ workflow oma_browser_build {
         EXTRACT_DARWIN(genomes_folder, matrix_file, hog_orthoxml)
         IMPORT_HDF5(EXTRACT_DARWIN.out.gs_file,
                     EXTRACT_DARWIN.out.tax_tsv,
-                    EXTARCT_DARWIN.out.proteins)
+                    EXTRACT_DARWIN.out.protein_files)
 }
 
 workflow {
