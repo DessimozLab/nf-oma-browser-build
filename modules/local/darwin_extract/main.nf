@@ -41,13 +41,29 @@ process CONVERT_PROTEINS {
         darwin -E -q << EOF
           genome := '${genome.UniProtSpeciesCode}';
           dbpath := '${dbpath}';
-          Goff := ${genome.EntryOff};
           tot_entries := ${genome.TotEntries};
           tot_aa := ${genome.TotAA};
 
           ReadProgram('\${CODE_REPOS_ROOT}/pyoma/pyoma/browser/build/convert_database.drw');
           done
         EOF
+        """
+}
+
+process CONVERT_OMA_GROUPS {
+    tag "Extract OMA Groups"
+    label "process_single"
+    container "dessimozlab/omabuild:nf-latest"
+
+    input:
+        path matrix_file
+
+    output:
+        path "oma_groups.json", emit: oma_groups_json
+
+    script:
+        """
+        extract-oma-groups.py --matrix $matrix_file --out oma_groups.json
         """
 }
 
@@ -66,6 +82,5 @@ process CONVERT_TAXONOMY {
     script:
         """
         subtaxonomy-from-genomes.py --input $gs_tsv --database $sqlite_taxonomy --out taxonomy.tsv
-
         """
 }

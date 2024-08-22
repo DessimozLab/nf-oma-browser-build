@@ -6,6 +6,7 @@ process ADD_GENOMES {
     input:
         path gs_tsv
         path tax_tsv
+        path oma_groups
         path genomes_json
 
     output:
@@ -17,6 +18,7 @@ process ADD_GENOMES {
                 --db OmaServer.h5 \
                 --gs-tsv $gs_tsv \
                 --tax-tsv $tax_tsv \
+                --oma-groups $oma_groups
                 --genomes $genomes_json
         """
 

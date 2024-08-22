@@ -8,9 +8,10 @@ workflow IMPORT_HDF5 {
         gs_tsv
         tax_tsv
         genomes_json
+        oma_groups
 
     main:
-        ADD_GENOMES(gs_tsv, tax_tsv, genomes_json.collect())
+        ADD_GENOMES(gs_tsv, tax_tsv, oma_groups, genomes_json.collect())
 
     emit:
         db_h5 = ADD_GENOMES.out.db_h5

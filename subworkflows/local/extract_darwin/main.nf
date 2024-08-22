@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 
 // Modules
-include { CONVERT_GS; CONVERT_PROTEINS; CONVERT_TAXONOMY } from "./../../../modules/local/darwin_extract"
+include { CONVERT_GS; CONVERT_PROTEINS; CONVERT_TAXONOMY; CONVERT_OMA_GROUPS} from "./../../../modules/local/darwin_extract"
 
 workflow EXTRACT_DARWIN {
     take:
@@ -22,6 +22,7 @@ workflow EXTRACT_DARWIN {
             | transpose
             | set { convert_jobs }
         CONVERT_PROTEINS(convert_jobs)
+        CONVERT_OMA_GROUPS(matrix_file)
 
         CONVERT_TAXONOMY(CONVERT_GS.out.gs_tsv, taxonomy)
 
@@ -30,6 +31,7 @@ workflow EXTRACT_DARWIN {
         gs_file = CONVERT_GS.out.gs_tsv
         protein_files = CONVERT_PROTEINS.out.prot_json.collect()
         tax_tsv = CONVERT_TAXONOMY.out.tax_tsv
+        oma_groups = CONVERT_OMA_GROUPS.out.oma_groups_json
 
 }
 
