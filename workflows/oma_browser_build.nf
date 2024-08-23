@@ -14,6 +14,7 @@ workflow oma_browser_build {
         EXTRACT_DARWIN(genomes_folder, matrix_file, hog_orthoxml)
         IMPORT_HDF5(EXTRACT_DARWIN.out.gs_file,
                     EXTRACT_DARWIN.out.tax_tsv,
+                    EXTRACT_DARWIN.out.oma_groups,
                     EXTRACT_DARWIN.out.protein_files)
 }
 

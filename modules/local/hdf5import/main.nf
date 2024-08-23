@@ -18,7 +18,7 @@ process ADD_GENOMES {
                 --db OmaServer.h5 \
                 --gs-tsv $gs_tsv \
                 --tax-tsv $tax_tsv \
-                --oma-groups $oma_groups
+                --oma-groups $oma_groups \
                 --genomes $genomes_json
         """
 

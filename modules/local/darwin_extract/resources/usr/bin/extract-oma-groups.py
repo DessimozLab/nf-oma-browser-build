@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 import gzip
+import json
 import re
+import collections
 
 def parse_matrix_file(matrix_file):
     open_ = gzip.open if matrix_file.endswith('.gz') else open
@@ -16,7 +18,7 @@ def parse_matrix_file(matrix_file):
                 break
 
         grps = [collections.defaultdict(int) for _ in genomes]
-        _m_re = re.compile(r"^_M\[(?P<grp>\d+),(?P<sp>\t+)\]\s*:=\s*(?P<nr>\t+)[:;]$")
+        _m_re = re.compile(r"^_M\[(?P<grp>\d+),(?P<sp>\d+)\]\s*:=\s*(?P<nr>\d+)[:;]$")
         for line in fh:
             m = _m_re.match(line)
             if m is not None:
