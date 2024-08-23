@@ -11,14 +11,16 @@ process ADD_GENOMES {
 
     output:
         path "OmaServer.h5", emit: db_h5
+        path "SourceXRefs.h5", emit: source_xref_h5
 
     script:
         """
-        oma-build genomes \
+        oma-build -vv genomes \
                 --db OmaServer.h5 \
                 --gs-tsv $gs_tsv \
                 --tax-tsv $tax_tsv \
                 --oma-groups $oma_groups \
+                --xref-db SourceXRefs.h5 \
                 --genomes $genomes_json
         """
 
