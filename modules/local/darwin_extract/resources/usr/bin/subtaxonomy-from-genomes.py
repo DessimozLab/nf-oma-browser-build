@@ -4,16 +4,17 @@ import omataxonomy
 import csv
 
 def subtaxonomy_from_genomes(tax, genomes):
-    tree = tax.get_topology(genomes.keys(), intermediate_nodes=True, collapse_subspecies=True, annotate=True)
+    tree = tax.get_topology(genomes.keys(), intermediate_nodes=True, collapse_subspecies=False, annotate=True)
     taxtab = []
     while True:
         if len(tree.children) != 1: break
         tree = tree.children[0]
 
     for node in tree.traverse(strategy="preorder"):
-        parent_taxid = node.up.taxid if node.up is not None and node != tree else -1
+        parent_taxid = node.up.taxid if node.up is not None and node != tree else 0
         if node.taxid in (131567, 1):
             node.taxid = 0
+            parent_taxid = -1
             sciname = "LUCA"
         elif node.sci_name.startswith("d__"):
             sciname = node.sci_name.replace("d__", "")
