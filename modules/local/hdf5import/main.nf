@@ -27,5 +27,28 @@ process ADD_GENOMES {
     stub:
         """
         touch OmaServer.h5
+        touch SourceXRefs.h5
+        """
+}
+
+process BUILD_SEQINDEX {
+    label "process_medium"
+    label "single_process"
+
+    input:
+        path database
+
+    output:
+        path "OmaServer.h5.idx", emit: seqidx_h5
+
+    script:
+        """
+        oma-build --vv seqindex \
+            --db $database \
+            --out "OmaServer.h5.idx"
+        """
+    stub:
+        """
+        touch OmaServer.h5.idx
         """
 }
