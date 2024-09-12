@@ -1,7 +1,7 @@
 // Processes
 process ADD_GENOMES {
-    label "single_process"
     label "process_long"
+    cpus 1
 
     input:
         path gs_tsv
@@ -33,7 +33,7 @@ process ADD_GENOMES {
 
 process BUILD_SEQINDEX {
     label "process_medium"
-    label "single_process"
+    cpus 1
 
     input:
         path database
@@ -43,12 +43,37 @@ process BUILD_SEQINDEX {
 
     script:
         """
-        oma-build --vv seqindex \
+        oma-build -vv seqindex \
             --db $database \
             --out "OmaServer.h5.idx"
         """
     stub:
         """
         touch OmaServer.h5.idx
+        """
+}
+
+process BUILD_HOG_H5 {
+    label "process_medium"
+    cpus 1
+
+    input:
+        path database
+        path orthoxml
+
+    output:
+        path "hog.h5", emit: hog_h5
+        path "oma-hogs.orthoXML" emit: hogs_orthoxml
+        path "oma-hogs.orthoXML.augmented" emit: hogs_augmented_orthoxml
+
+    script:
+        """
+        oma-build -vv hog \
+            --orthoxml $orthoxml \
+            --db $database \
+            --hdf5-out hog.h5 \
+            --augmented-orthoxml-out oma-hogs.orthoXML.augmented \
+            --orthoxml-out oma-hogs.orthoXML \
+            --oma-prot-id
         """
 }
