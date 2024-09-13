@@ -76,4 +76,36 @@ process BUILD_HOG_H5 {
             --orthoxml-out oma-hogs.orthoXML \
             --oma-prot-id
         """
+    stub:
+        """
+        touch hog.h5
+        touch oma-hogs.orthoXML
+        touch oma-hogs.orthoXML.augmented
+        """
+
 }
+
+process ADD_PAIRWISE_ORTHOLOGS {
+    label "process_medium"
+    cpus 1
+
+    input:
+        path database
+        path vps_base
+
+    output:
+        path "vps.h5", emit: vps_h5
+
+    script:
+        """
+        oma-build -vv vps \
+            --db $database \
+            --vps-base $vps_base \
+            --hdf5-out vps.h5
+        """
+
+    stub:
+        """
+        touch vps.h5
+        """
+    }
