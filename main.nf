@@ -49,8 +49,9 @@ workflow OMA_browser_build {
     def genomes_dir = file(params.genomes_dir)
     def matrix_file = file(params.matrix_file)
     def hog_orthoxml = file(params.hog_orthoxml)
+    def vps_base = params.pairwise_orthologs_folder
 
-    oma_browser_build(genomes_dir, matrix_file, hog_orthoxml)
+    oma_browser_build(genomes_dir, matrix_file, hog_orthoxml, vps_base)
 }
 
 workflow {

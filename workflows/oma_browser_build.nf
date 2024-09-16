@@ -9,6 +9,7 @@ workflow oma_browser_build {
         genomes_folder
         matrix_file
         hog_orthoxml
+        vps_base
 
     main:
         EXTRACT_DARWIN(genomes_folder, matrix_file, hog_orthoxml)
@@ -16,12 +17,14 @@ workflow oma_browser_build {
                     EXTRACT_DARWIN.out.tax_tsv,
                     EXTRACT_DARWIN.out.oma_groups,
                     EXTRACT_DARWIN.out.protein_files,
-                    hog_orthoxml)
-}
+                    hog_orthoxml,
+                    vps_base)
+
 
 workflow {
     oma_browser_data_dir = Channel.fromPath(params.oma_browser_data_dir, type: "dir")
     nr_chunks = params.nr_medium_procs
+    vps_base = params.pairwise_orthologs_folder
 
     oma_browser_build(oma_browser_data_dir, nr_chunks)
 }
