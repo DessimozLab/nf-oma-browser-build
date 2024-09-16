@@ -63,8 +63,8 @@ process BUILD_HOG_H5 {
 
     output:
         path "hog.h5", emit: hog_h5
-        path "oma-hogs.orthoXML" emit: hogs_orthoxml
-        path "oma-hogs.orthoXML.augmented" emit: hogs_augmented_orthoxml
+        path "oma-hogs.orthoXML", emit: hogs_orthoxml
+        path "oma-hogs.orthoXML.augmented", emit: hogs_augmented_orthoxml
 
     script:
         """
