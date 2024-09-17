@@ -16,7 +16,7 @@ workflow IMPORT_HDF5 {
         ADD_GENOMES(gs_tsv, tax_tsv, oma_groups, genomes_json.collect())
         BUILD_SEQINDEX(ADD_GENOMES.out.db_h5)
         BUILD_HOG_H5(ADD_GENOMES.out.db_h5, hogs)
-        if ()vps_base != null) {
+        if (vps_base != null) {
             ADD_PAIRWISE_ORTHOLOGS(ADD_GENOMES.out.db_h5, vps_base)
             pw_h5 = ADD_PAIRWISE_ORTHOLOGS.out.vps_h5
         } else {
