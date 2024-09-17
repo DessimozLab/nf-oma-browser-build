@@ -13,6 +13,7 @@ workflow IMPORT_HDF5 {
         vps_base
 
     main:
+
         ADD_GENOMES(gs_tsv, tax_tsv, oma_groups, genomes_json.collect())
         BUILD_SEQINDEX(ADD_GENOMES.out.db_h5)
         BUILD_HOG_H5(ADD_GENOMES.out.db_h5, hogs)
@@ -22,10 +23,19 @@ workflow IMPORT_HDF5 {
         } else {
             pw_h5 = null
         }
-
+        if (params.known_domains != null) {
+            domains = Channel.fromPath(params.known_domains).collect()
+            cath_names = Channel.fromPath(params.cath_names_path)
+            pfam_names = Channel.fromPath(params.pfam_names_path)
+            ADD_DOMAINS(ADD_GENOMES.out.db_h5, domains, cath_names, pfam_names)
+            domains_h5 = ADD_DOMAINS.out.domains_h5
+        } else {
+            domains_h5 = null
+        }
     emit:
         db_h5 = ADD_GENOMES.out.db_h5
         seqidx_h5 = BUILD_SEQINDEX.out.seqidx_h5
         hog_h5 = BUILD_HOG_H5.out.hog_h5
         pw_h5 = pw_h5
+        domains_h5 = domains_h5
 }
