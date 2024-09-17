@@ -61,7 +61,7 @@ workflow {
 workflow.onComplete {
     println "Pipeline completed at: ${workflow.complete}"
     println "Time to complete workflow execution: ${workflow.duration}"
-    println "Execution status: ${workflow.success ? 'Succesful' : 'Failed'}"
+    println "Execution status: ${workflow.success ? 'Successful' : 'Failed'}"
     println "Reports stored in ${params.outdir}/reports/nextflow"
 }
 

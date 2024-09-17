@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 
 // Modules
-include { ADD_GENOMES; BUILD_SEQINDEX; BUILD_HOG_H5; ADD_PAIRWISE_ORTHOLOGS } from "./../../../modules/local/hdf5import"
+include { ADD_GENOMES; BUILD_SEQINDEX; BUILD_HOG_H5; ADD_PAIRWISE_ORTHOLOGS; ADD_DOMAINS } from "./../../../modules/local/hdf5import"
 
 workflow IMPORT_HDF5 {
     take:

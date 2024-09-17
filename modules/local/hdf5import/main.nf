@@ -126,7 +126,7 @@ process ADD_DOMAINS {
     script:
         """
         oma-build -vv domains \
-            --db $database
+            --db $database \
             --hdf5-out domains.h5 \
             --domains $domain_files \
             --cath_names $cath_names \
