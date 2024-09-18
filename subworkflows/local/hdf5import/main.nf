@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 
 // Modules
-include { ADD_GENOMES; BUILD_SEQINDEX; BUILD_HOG_H5; ADD_PAIRWISE_ORTHOLOGS; ADD_DOMAINS } from "./../../../modules/local/hdf5import"
+include { ADD_GENOMES; BUILD_SEQINDEX; BUILD_HOG_H5; ADD_PAIRWISE_ORTHOLOGS; ADD_DOMAINS; COMBINE_H5_FILES } from "./../../../modules/local/hdf5import"
 
 workflow IMPORT_HDF5 {
     take:
@@ -11,6 +11,7 @@ workflow IMPORT_HDF5 {
         genomes_json
         hogs
         vps_base
+        splice_json
 
     main:
 
@@ -32,10 +33,10 @@ workflow IMPORT_HDF5 {
         } else {
             domains_h5 = null
         }
+        COMBINE_H5_FILES(ADD_GENOMES.out.db_h5, BUILD_SEQINDEX.out.seqidx_h5, BUILD_HOG_H5.out.hog_h5, pw_h5, domains_h5, splice_json)
+
     emit:
-        db_h5 = ADD_GENOMES.out.db_h5
+        db_h5 = COMBINE_H5_FILES.out.db_h5
         seqidx_h5 = BUILD_SEQINDEX.out.seqidx_h5
-        hog_h5 = BUILD_HOG_H5.out.hog_h5
-        pw_h5 = pw_h5
-        domains_h5 = domains_h5
+
 }

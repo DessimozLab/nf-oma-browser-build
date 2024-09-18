@@ -129,12 +129,40 @@ process ADD_DOMAINS {
             --db $database \
             --hdf5-out domains.h5 \
             --domains $domain_files \
-            --cath_names $cath_names \
-            --pfam_names $pfam_names
+            --cath-names $cath_names \
+            --pfam-names $pfam_names
         """
 
     stub:
         """
         touch domains.h5
+        """
+}
+
+
+process COMBINE_H5_FILES {
+    label "process_single"
+
+    input:
+        path input_db
+        path seqidx
+        path hogs_h5
+        path vps
+        path domains
+        path splice_json
+
+    output:
+        path "OmaServer.h5", emit: db_h5
+
+    script:
+        """
+        cp $input_db OmaServer.h5
+        ptrepack --keep-source-filters --propindexes $hogs_h5:/ OmaServer.h5:/
+        ptrepack --keep-source-filters --propindexes $vps:/ OmaServer.h5:/
+        ptrepack --keep-source-filters --propindexes $domains:/ OmaServer.h5:/
+
+        oma-build -vv splice \
+            --db OmaServer.h5 \
+            --splice-json $splice_json
         """
 }

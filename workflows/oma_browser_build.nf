@@ -18,7 +18,8 @@ workflow oma_browser_build {
                     EXTRACT_DARWIN.out.oma_groups,
                     EXTRACT_DARWIN.out.protein_files,
                     hog_orthoxml,
-                    vps_base)
+                    vps_base,
+                    EXTRACT_DARWIN.out.splice_json)
 }
 
 

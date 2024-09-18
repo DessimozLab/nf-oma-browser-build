@@ -25,6 +25,7 @@ process CONVERT_GS {
         """
 }
 
+
 process CONVERT_PROTEINS {
     tag "Convert Proteins from ${genome.UniProtSpeciesCode} to JSON format"
     label "process_single"
@@ -64,6 +65,32 @@ process CONVERT_OMA_GROUPS {
     script:
         """
         extract-oma-groups.py --matrix $matrix_file --out oma_groups.json
+        """
+}
+
+process CONVERT_SPLICE_MAP {
+    tag "Convert Splicing information to json"
+    label "process_single"
+    container "dessimozlab/omadarwin:nf-latest"
+
+    input:
+        path splice_drw
+
+    output:
+        path "splice.json", emit: splice_json
+
+    script:
+        """
+        darwin -E -q << EOF
+          ReadProgram('$splice_drw');
+          splice_json := json(Splicings);
+          Set(printgc=false):
+          OpenWriting('splice.json'):
+          prints(splice_json):
+          OpenWriting(previous):
+          print("Splicing data converted.");
+          done
+        EOF
         """
 }
 
