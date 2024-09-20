@@ -33,7 +33,7 @@ workflow IMPORT_HDF5 {
         } else {
             domains_h5 = null
         }
-        COMBINE_H5_FILES(ADD_GENOMES.out.db_h5, BUILD_SEQINDEX.out.seqidx_h5, BUILD_HOG_H5.out.hog_h5, pw_h5, domains_h5, splice_json)
+        COMBINE_H5_FILES(ADD_GENOMES.out.db_h5, BUILD_HOG_H5.out.hog_h5, pw_h5, domains_h5, splice_json)
 
     emit:
         db_h5 = COMBINE_H5_FILES.out.db_h5

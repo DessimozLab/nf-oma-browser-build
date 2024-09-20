@@ -2,6 +2,7 @@
 process ADD_GENOMES {
     label "process_single"
     label "process_long"
+    container "dessimozlab/omabuild:nf-latest"
 
     input:
         path gs_tsv
@@ -34,6 +35,8 @@ process ADD_GENOMES {
 process BUILD_SEQINDEX {
     label "process_medium"
     cpus { 1 }
+    container "dessimozlab/omabuild:nf-latest"
+
 
     input:
         path database
@@ -56,6 +59,8 @@ process BUILD_SEQINDEX {
 process BUILD_HOG_H5 {
     label "process_medium"
     cpus { 1 }
+    container "dessimozlab/omabuild:nf-latest"
+
 
     input:
         path database
@@ -87,6 +92,7 @@ process BUILD_HOG_H5 {
 
 process ADD_PAIRWISE_ORTHOLOGS {
     label "process_medium"
+    container "dessimozlab/omabuild:nf-latest"
 
     input:
         path database
@@ -112,6 +118,7 @@ process ADD_PAIRWISE_ORTHOLOGS {
 process ADD_DOMAINS {
     label "process_medium"
     cpus { 1 }
+    container "dessimozlab/omabuild:nf-latest"
 
     input:
         path database
@@ -141,10 +148,10 @@ process ADD_DOMAINS {
 
 process COMBINE_H5_FILES {
     label "process_single"
+    container "dessimozlab/omabuild:nf-latest"
 
     input:
         path input_db
-        path seqidx
         path hogs_h5
         path vps
         path domains
