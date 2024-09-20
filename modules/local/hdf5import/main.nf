@@ -1,7 +1,7 @@
 // Processes
 process ADD_GENOMES {
+    label "process_single"
     label "process_long"
-    cpus 1
 
     input:
         path gs_tsv
@@ -33,7 +33,7 @@ process ADD_GENOMES {
 
 process BUILD_SEQINDEX {
     label "process_medium"
-    cpus 1
+    cpus { 1 }
 
     input:
         path database
@@ -55,7 +55,7 @@ process BUILD_SEQINDEX {
 
 process BUILD_HOG_H5 {
     label "process_medium"
-    cpus 1
+    cpus { 1 }
 
     input:
         path database
@@ -87,7 +87,6 @@ process BUILD_HOG_H5 {
 
 process ADD_PAIRWISE_ORTHOLOGS {
     label "process_medium"
-    cpus 1
 
     input:
         path database
@@ -112,7 +111,7 @@ process ADD_PAIRWISE_ORTHOLOGS {
 
 process ADD_DOMAINS {
     label "process_medium"
-    cpus 1
+    cpus { 1 }
 
     input:
         path database
