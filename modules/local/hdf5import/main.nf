@@ -151,7 +151,7 @@ process COMBINE_H5_FILES {
     container "dessimozlab/omabuild:nf-latest"
 
     input:
-        path input_db
+        path input_db, stageAs: 'OmaServer_input.h5'
         path hogs_h5
         path vps
         path domains
