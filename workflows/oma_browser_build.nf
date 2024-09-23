@@ -12,7 +12,6 @@ workflow oma_browser_build {
         vps_base
 
     main:
-        def taxonomy_sqlite = genomes_folder / "taxonomy.sqlite"
         EXTRACT_DARWIN(genomes_folder, matrix_file, hog_orthoxml)
         IMPORT_HDF5(EXTRACT_DARWIN.out.gs_file,
                     EXTRACT_DARWIN.out.tax_tsv,
@@ -21,7 +20,7 @@ workflow oma_browser_build {
                     hog_orthoxml,
                     vps_base,
                     EXTRACT_DARWIN.out.splice_json,
-                    taxonomy_sqlite)
+                    genomes_folder)
 
 }
 

@@ -13,7 +13,7 @@ workflow IMPORT_HDF5 {
         hogs
         vps_base
         splice_json
-        taxonomy_sqlite
+        genomes_folder
 
     main:
 
@@ -39,7 +39,7 @@ workflow IMPORT_HDF5 {
 
         uniprot_swissprot = Channel.fromPath(params.xref_uniprot_swissprot)
         uniprot_trembl = Channel.fromPath(params.xref_uniprot_trembl)
-        PREPARE_XREFS(gs_tsv, taxonomy_sqlite, uniprot_swissprot, uniprot_trembl)
+        PREPARE_XREFS(gs_tsv, genomes_folder, uniprot_swissprot, uniprot_trembl)
 
     emit:
         db_h5 = COMBINE_H5_FILES.out.db_h5
