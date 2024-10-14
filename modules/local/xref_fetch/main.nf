@@ -48,6 +48,7 @@ process MAP_XREFS {
         tuple (path xref_in), (val format), val(source)
         path gs_tsv
         path tax_sqlite
+        path tax_traverse_pkl
         path db
         path seq_idx_db
         path src_xref_db

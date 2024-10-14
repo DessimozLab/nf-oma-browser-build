@@ -13,23 +13,40 @@ workflow PREPARE_XREFS {
         // Transform swissprot and trembl channels into tuples
         def swissprot_channel = uniprot_swissprot.map { path -> tuple(path, 'swiss', 'swissprot') }
         def trembl_channel = uniprot_trembl.map { path -> tuple(path, 'swiss', 'trembl') }
+        def refseq_channel = FETCH_REFSEQ().out.refseq_proteins.map{ path -> tuple(path, 'genbank', 'refseq') }
 
-        // Concatenate the two channels
-        def up_channel = swissprot_channel.concat(trembl_channel)
-        up_channel.view()
+        // Concatenate the three channels
+        def xref_channel = swissprot_channel.concat(trembl_channel, refseq_channel)
+        xref_channel.view()
 
-        FETCH_REFSEQ()
-        def refseq_xrefs = FETCH_REFSEQ.out.refseq_proteins.map{ path -> tuple(path, 'genbank', 'refseq') }
-
-	def taxonomy_sqlite = genome_folder / "taxonomy.sqlite"
+	    def taxonomy_sqlite = genome_folder / "taxonomy.sqlite"
         def tax_traverse_pkl = genome_folder / "taxonomy.sqlite.traverse.pkl"
         FILTER_AND_SPLIT(up_channel, gs_tsv, taxonomy_sqlite, tax_traverse_pkl)
-        def all_xref_chunks = refseq_xrefs.mix(FILTER_AND_SPLIT.out.split_xref)
 
         // debug output
-	all_xref_chunks.view()
+	    FILTER_AND_SPLIT.out.split_xref.view()
 
     emit:
-        chunks = all_xref_chunks
+        xref = FILTER_AND_SPLIT.out.split_xref
 
+}
+
+
+
+workflow MAP_XREFS_WF {
+    take:
+        xref,
+        gs_tsv,
+        genome_folder
+        db,
+        seq_idx_db,
+        source_xref_db
+
+    main:
+        def taxonomy_sqlite = genome_folder / "taxonomy.sqlite"
+        def tax_traverse_pkl = genome_folder / "taxonomy.sqlite.traverse.pkl"
+        MAP_XREFS(xref, gs_tsv, taxonomy_sqlite, tax_traverse_pkl, db, seq_idx_db, source_xref_db)
+
+    emit:
+        xref_db = MAP_XREFS.out.xref_h5
 }
