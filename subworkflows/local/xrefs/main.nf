@@ -1,41 +1,51 @@
 #!/usr/bin/env nextflow
 
-// Modules
-include { FETCH_REFSEQ; FILTER_AND_SPLIT, MAP_XREFS } from "./../../../modules/local/xref_fetch"
+include { FETCH_REFSEQ; FILTER_AND_SPLIT; MAP_XREFS } from "./../../../modules/local/xref_fetch"
 
 workflow PREPARE_XREFS {
     take:
         gs_tsv
-        taxonomy_sqlite
+        genome_folder
         uniprot_swissprot
         uniprot_trembl
 
     main:
-        concat(uniprot_swissprot, uniprot_trembl)
-          | map({it, "swiss"}).set(up_xref)
-        up_xref.view()
-        FETCH_REFSEQ()
-        FETCH_REFSEQ.out.refseq_proteins
-          | map({it, "genbank"}).set(refseq_xref)
-        xref_in = up_xref.mix(refseq_xref)
-        FILTER_AND_SPLIT(xref_in, gs_tsv, taxonomy_sqlite)
+        // Transform swissprot and trembl channels into tuples
+        def swissprot_channel = uniprot_swissprot.map { path -> tuple(path, 'swiss', 'swissprot') }
+        def trembl_channel = uniprot_trembl.map { path -> tuple(path, 'swiss', 'trembl') }
+        def refseq_channel = FETCH_REFSEQ().out.refseq_proteins.map{ path -> tuple(path, 'genbank', 'refseq') }
+
+        // Concatenate the three channels
+        def xref_channel = swissprot_channel.concat(trembl_channel, refseq_channel)
+        xref_channel.view()
+
+	    def taxonomy_sqlite = genome_folder / "taxonomy.sqlite"
+        def tax_traverse_pkl = genome_folder / "taxonomy.sqlite.traverse.pkl"
+        FILTER_AND_SPLIT(up_channel, gs_tsv, taxonomy_sqlite, tax_traverse_pkl)
+
+        // debug output
+	    FILTER_AND_SPLIT.out.split_xref.view()
 
     emit:
         xref = FILTER_AND_SPLIT.out.split_xref
 
 }
 
+
+
 workflow MAP_XREFS_WF {
     take:
         xref,
         gs_tsv,
-        taxonomy_sqlite,
+        genome_folder
         db,
         seq_idx_db,
         source_xref_db
 
     main:
-        MAP_XREFS(xref, gs_tsv, taxonomy_sqlite, db, seq_idx_db, source_xref_db)
+        def taxonomy_sqlite = genome_folder / "taxonomy.sqlite"
+        def tax_traverse_pkl = genome_folder / "taxonomy.sqlite.traverse.pkl"
+        MAP_XREFS(xref, gs_tsv, taxonomy_sqlite, tax_traverse_pkl, db, seq_idx_db, source_xref_db)
 
     emit:
         xref_db = MAP_XREFS.out.xref_h5
