@@ -17,7 +17,7 @@ workflow PREPARE_XREFS {
         // Concatenate the two channels
         def up_channel = swissprot_channel.concat(trembl_channel)
         up_channel.view()
-        
+
         FETCH_REFSEQ()
         def refseq_xrefs = FETCH_REFSEQ.out.refseq_proteins.map{ path -> tuple(path, 'genbank', 'refseq') }
 
@@ -25,13 +25,11 @@ workflow PREPARE_XREFS {
         def tax_traverse_pkl = genome_folder / "taxonomy.sqlite.traverse.pkl"
         FILTER_AND_SPLIT(up_channel, gs_tsv, taxonomy_sqlite, tax_traverse_pkl)
         def all_xref_chunks = refseq_xrefs.mix(FILTER_AND_SPLIT.out.split_xref)
-	
+
         // debug output
 	all_xref_chunks.view()
 
     emit:
         chunks = all_xref_chunks
-
-}
 
 }

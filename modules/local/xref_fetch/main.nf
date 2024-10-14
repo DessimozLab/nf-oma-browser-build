@@ -37,5 +37,34 @@ process FILTER_AND_SPLIT {
             --gs-tsv $gs_tsv \\
             --tax-sqlite $tax_sqlite
         """
+}
 
+
+process MAP_XREFS {
+    label process_single
+    container "dessimozlab/omabuild:nf-latest"
+
+    input:
+        tuple (path xref_in), (val format), val(source)
+        path gs_tsv
+        path tax_sqlite
+        path db
+        path seq_idx_db
+        path src_xref_db
+
+    output:
+        path "xref.h5", emit: xref_h5
+
+    script:
+        """
+        oma-build -vv map-xref \\
+            --xref $xref_in \\
+            --format $format \\
+            --gs-tsv $gs_tsv \\
+            --tax_sqlite $tax_sqlite \\
+            --out xref.h5 \\
+            --db $db \\
+            --seq-idx-db $seq_idx_db \\
+            --xref-source-db $src_xref_db
+        """
 }
