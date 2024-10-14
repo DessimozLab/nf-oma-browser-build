@@ -2,7 +2,7 @@
 
 // Modules
 include { ADD_GENOMES; BUILD_SEQINDEX; BUILD_HOG_H5; ADD_PAIRWISE_ORTHOLOGS; ADD_DOMAINS; COMBINE_H5_FILES } from "./../../../modules/local/hdf5import"
-include { PREPARE_XREFS, MAP_XREFS_WF } from "./../xrefs"
+include { PREPARE_XREFS; MAP_XREFS_WF } from "./../xrefs"
 
 
 workflow IMPORT_HDF5 {
@@ -43,7 +43,7 @@ workflow IMPORT_HDF5 {
         PREPARE_XREFS(gs_tsv, genomes_folder, uniprot_swissprot, uniprot_trembl)
         MAP_XREFS_WF(PREPARE_XREFS.out.xref,
                   gs_tsv,
-                  genomes_folder
+                  genomes_folder,
                   COMBINE_H5_FILES.out.db_h5,
                   BUILD_SEQINDEX.out.seqidx_h5,
                   ADD_GENOMES.out.source_xref_h5)

@@ -41,7 +41,7 @@ process FILTER_AND_SPLIT {
 
 
 process MAP_XREFS {
-    label process_single
+    label "process_single"
     container "dessimozlab/omabuild:nf-latest"
 
     input:
