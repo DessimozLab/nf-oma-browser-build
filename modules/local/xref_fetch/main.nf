@@ -62,7 +62,7 @@ process MAP_XREFS {
             --xref $xref_in \\
             --format $format \\
             --gs-tsv $gs_tsv \\
-            --tax_sqlite $tax_sqlite \\
+            --tax-sqlite $tax_sqlite \\
             --out xref.h5 \\
             --db $db \\
             --seq-idx-db $seq_idx_db \\
