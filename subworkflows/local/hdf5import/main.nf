@@ -40,7 +40,7 @@ workflow IMPORT_HDF5 {
 
         uniprot_swissprot = Channel.fromPath(params.xref_uniprot_swissprot)
         uniprot_trembl = Channel.fromPath(params.xref_uniprot_trembl)
-        PREPARE_XREFS(gs_tsv, genomes_folder, uniprot_swissprot, uniprot_trembl)
+        PREPARE_XREFS(gs_tsv, genomes_folder, uniprot_swissprot, uniprot_trembl, params.xref_refseq)
         MAP_XREFS_WF(PREPARE_XREFS.out.xref,
                   gs_tsv,
                   genomes_folder,
