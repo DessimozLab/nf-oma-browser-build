@@ -16,14 +16,14 @@ workflow PREPARE_XREFS {
         def trembl_channel = uniprot_trembl.map { path -> tuple(path, 'swiss', 'trembl') }
 
         if (refseq_folder != null){
-            def refseq_channel = Channel.fromPath(refseq_folder + "/*.gpff.gz").collect().map { path -> tuple(path, 'genbank', 'refseq') }
+            refseq_channel = Channel.fromPath("${refseq_folder}/*.gpff.gz").collect().map { path -> tuple(path, 'genbank', 'refseq') }
         } else {
             FETCH_REFSEQ()
-            def refseq_channel = FETCH_REFSEQ.out.refseq_proteins.map{ path -> tuple(path, 'genbank', 'refseq') }
+            refseq_channel = FETCH_REFSEQ.out.refseq_proteins.map{ path -> tuple(path, 'genbank', 'refseq') }
         }
 
         // Concatenate the three channels
-        def xref_channel = swissprot_channel.concat(trembl_channel, refseq_channel)
+        xref_channel = swissprot_channel.concat(trembl_channel, refseq_channel)
         xref_channel.view()
 
         def taxonomy_sqlite = genome_folder / "taxonomy.sqlite"
@@ -33,7 +33,8 @@ workflow PREPARE_XREFS {
         // debug output
         filtered_xrefs = FILTER_AND_SPLIT.out.split_xref
             .flatMap{ files, format, source ->
-                files.collect { file -> tuple(file, format, source)}
+                def fileList = files instanceof List ? files : [files]
+                fileList.collect { file -> tuple(file, format, source)}
             }
         filtered_xrefs.view()
 
@@ -55,8 +56,13 @@ workflow MAP_XREFS_WF {
     main:
         def taxonomy_sqlite = genome_folder / "taxonomy.sqlite"
         def tax_traverse_pkl = genome_folder / "taxonomy.sqlite.traverse.pkl"
-        MAP_XREFS(xref, gs_tsv, taxonomy_sqlite, tax_traverse_pkl, db, seq_idx_db, source_xref_db)
+        map_xref_params = xref
+           .combine(gs_tsv)
+           .combine(db)
+           .combine(seq_idx_db)
+           .combine(source_xref_db) 
+        MAP_XREFS(map_xref_params, taxonomy_sqlite, tax_traverse_pkl)
 
     emit:
-        xref_db = MAP_XREFS.out.xref_h5
+        xref_db = MAP_XREFS.out.xref_match
 }

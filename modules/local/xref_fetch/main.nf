@@ -42,28 +42,31 @@ process FILTER_AND_SPLIT {
 
 process MAP_XREFS {
     label "process_single"
+    label "process_long"
     container "dessimozlab/omabuild:nf-latest"
 
     input:
-        tuple (path xref_in), (val format), val(source)
-        path gs_tsv
-        path tax_sqlite
-        path tax_traverse_pkl
-        path db
-        path seq_idx_db
-        path src_xref_db
+        tuple path(xref_in), val(format), val(source), 
+              path(gs_tsv),
+              path(db),
+              path(seq_idx_db),
+              path(src_xref_db)
+        path(tax_sqlite)
+        path(tax_traverse_pkl)
 
     output:
-        path "xref.h5", emit: xref_h5
+        tuple path("xref.pkl"), val(source), emit: xref_match
+        tuple path(xref_in), val(format), emit: xref_chunk
 
     script:
         """
         oma-build -vv map-xref \\
             --xref $xref_in \\
             --format $format \\
+            --source $source \\
             --gs-tsv $gs_tsv \\
             --tax-sqlite $tax_sqlite \\
-            --out xref.h5 \\
+            --out xref.pkl \\
             --db $db \\
             --seq-idx-db $seq_idx_db \\
             --xref-source-db $src_xref_db
