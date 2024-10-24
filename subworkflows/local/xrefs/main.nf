@@ -36,7 +36,10 @@ workflow PREPARE_XREFS {
                 def fileList = files instanceof List ? files : [files]
                 fileList.collect { file -> tuple(file, format, source)}
             }
-        filtered_xrefs.view()
+        filtered_xrefs
+            .groupTuple()
+            .map { source, map_resList, format, xrefList -> [source, map_resList, format, xrefList.flatten()]
+
 
     emit:
         xref = filtered_xrefs
@@ -66,3 +69,4 @@ workflow MAP_XREFS_WF {
     emit:
         xref_db = MAP_XREFS.out.xref_match
 }
+

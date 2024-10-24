@@ -26,13 +26,13 @@ process FILTER_AND_SPLIT {
         path tax_traverse_pkl     // this file is implicitly used and must be located at the same place as tax_sqlite
 
     output:
-        tuple path("xref*.gz"), val(format), val(source), emit: split_xref
+        tuple path("xref-${source}*.gz"), val(format), val(source), emit: split_xref
 
     script:
         """
         oma-build -vv filter-xref \\
             --xref $xref \\
-            --out-prefix ./xref \\
+            --out-prefix ./xref-${source}- \\
             --format $format \\
             --gs-tsv $gs_tsv \\
             --tax-sqlite $tax_sqlite
@@ -55,8 +55,7 @@ process MAP_XREFS {
         path(tax_traverse_pkl)
 
     output:
-        tuple path("xref.pkl"), val(source), emit: xref_match
-        tuple path(xref_in), val(format), emit: xref_chunk
+        tuple val(source), path("xref-${source}.pkl"), val(format), path(xref_in), emit: matched_xrefs
 
     script:
         """
@@ -70,5 +69,27 @@ process MAP_XREFS {
             --db $db \\
             --seq-idx-db $seq_idx_db \\
             --xref-source-db $src_xref_db
+        """
+}
+
+process COLLECT_XREFS {
+    label "process_single"
+    container "dessimozlab/omabuild:nf-latest"
+    tag "Collecting xrefs for $source"
+
+    input:
+        tuple val(source), path(map_results, stageAs: "?/*" ), val(format), path(xref_in, stageAs: "?/*")
+
+    output:
+        tuple val(source), path("xref-${source}.h5"), emit: xref_by_source_h5
+
+    script:
+        """
+        oma-build -vv collect-xrefs \\
+            --map-results $map_results \\
+            --xrefs $xref_in \\
+            --format $format \\
+            --source $source \\
+            --out ./xref-${source}.h5
         """
 }
