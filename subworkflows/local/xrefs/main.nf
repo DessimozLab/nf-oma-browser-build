@@ -1,6 +1,6 @@
 #!/usr/bin/env nextflow
 
-include { FETCH_REFSEQ; FILTER_AND_SPLIT; MAP_XREFS } from "./../../../modules/local/xref_fetch"
+include { FETCH_REFSEQ; FILTER_AND_SPLIT; MAP_XREFS; COLLECT_XREFS } from "./../../../modules/local/xref_fetch"
 
 workflow PREPARE_XREFS {
     take:
@@ -36,10 +36,6 @@ workflow PREPARE_XREFS {
                 def fileList = files instanceof List ? files : [files]
                 fileList.collect { file -> tuple(file, format, source)}
             }
-        filtered_xrefs
-            .groupTuple()
-            .map { source, map_resList, format, xrefList -> [source, map_resList, format, xrefList.flatten()]
-
 
     emit:
         xref = filtered_xrefs
@@ -65,8 +61,11 @@ workflow MAP_XREFS_WF {
            .combine(seq_idx_db)
            .combine(source_xref_db) 
         MAP_XREFS(map_xref_params, taxonomy_sqlite, tax_traverse_pkl)
-
+        grouped_by_source = MAP_XREFS.out.matched_xrefs
+            .groupTuple()
+            .map { source, map_resList, format, xrefList -> [source, map_resList, format, xrefList.flatten()]
+        COLLECT_XREFS(grouped_by_source)
     emit:
-        xref_db = MAP_XREFS.out.xref_match
+        xref_db = COLLECT_XREFS.out.xref_by_source_h5
 }
 
