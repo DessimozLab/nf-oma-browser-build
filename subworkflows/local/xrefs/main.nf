@@ -1,6 +1,6 @@
 #!/usr/bin/env nextflow
 
-include { FETCH_REFSEQ; FILTER_AND_SPLIT; MAP_XREFS; COLLECT_XREFS } from "./../../../modules/local/xref_fetch"
+include { FETCH_REFSEQ; FILTER_AND_SPLIT; MAP_XREFS; COLLECT_XREFS; COMBINE_ALL_XREFS } from "./../../../modules/local/xref_fetch"
 
 workflow PREPARE_XREFS {
     take:
@@ -65,7 +65,12 @@ workflow MAP_XREFS_WF {
             .groupTuple()
             .map { source, map_resList, format, xrefList -> [source, map_resList, format, xrefList.flatten()]
         COLLECT_XREFS(grouped_by_source)
+        xref_dbs_list = COLLECT_XREFS.out.xref_by_source_h5
+            .map{ source, db -> db}
+            .mix(source_xref_db)
+            .collect()
+        COMBINE_ALL_XREFS(xref_dbs_list)
     emit:
-        xref_db = COLLECT_XREFS.out.xref_by_source_h5
+        xref_db = COMBINE_ALL_XREFS.out.xref_db_h5
 }
 

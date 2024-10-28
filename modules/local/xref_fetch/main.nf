@@ -93,3 +93,23 @@ process COLLECT_XREFS {
             --out ./xref-${source}.h5
         """
 }
+
+
+process COMBINE_ALL_XREFS {
+    label "process_single"
+    container "dessimozlab/omabuild:nf-latest"
+    tag "Collecting xrefs for $source"
+
+    input:
+        path xref_dbs
+
+    output:
+        tuple "XRef-db.h5", emit: xref_db_h5
+
+    script:
+        """
+        oma-build -vv combine-xrefs \\
+            --out "XRef-db.h5"
+            --xrefs $xref_dbs \\
+        """
+}
