@@ -63,7 +63,7 @@ workflow MAP_XREFS_WF {
         MAP_XREFS(map_xref_params, taxonomy_sqlite, tax_traverse_pkl)
         grouped_by_source = MAP_XREFS.out.matched_xrefs
             .groupTuple()
-            .map { source, map_resList, format, xrefList -> [source, map_resList, format, xrefList.flatten()]
+            .map { source, map_resList, format, xrefList -> [source, map_resList, format[0], xrefList.flatten()] }
         COLLECT_XREFS(grouped_by_source)
         xref_dbs_list = COLLECT_XREFS.out.xref_by_source_h5
             .map{ source, db -> db}

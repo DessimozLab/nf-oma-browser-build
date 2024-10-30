@@ -28,9 +28,10 @@ workflow IMPORT_HDF5 {
             pw_h5 = null
         }
         if (params.known_domains != null) {
-            domains = Channel.fromPath(params.known_domains).collect()
+            domains = Channel.fromPath("${params.known_domains}/*")
             cath_names = Channel.fromPath(params.cath_names_path)
             pfam_names = Channel.fromPath(params.pfam_names_path)
+
             ADD_DOMAINS(ADD_GENOMES.out.db_h5, domains, cath_names, pfam_names)
             domains_h5 = ADD_DOMAINS.out.domains_h5
         } else {

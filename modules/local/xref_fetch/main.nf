@@ -32,7 +32,7 @@ process FILTER_AND_SPLIT {
         """
         oma-build -vv filter-xref \\
             --xref $xref \\
-            --out-prefix ./xref-${source}- \\
+            --out-prefix ./xref-${source} \\
             --format $format \\
             --gs-tsv $gs_tsv \\
             --tax-sqlite $tax_sqlite
@@ -65,7 +65,7 @@ process MAP_XREFS {
             --source $source \\
             --gs-tsv $gs_tsv \\
             --tax-sqlite $tax_sqlite \\
-            --out xref.pkl \\
+            --out xref-${source}.pkl \\
             --db $db \\
             --seq-idx-db $seq_idx_db \\
             --xref-source-db $src_xref_db
@@ -98,18 +98,18 @@ process COLLECT_XREFS {
 process COMBINE_ALL_XREFS {
     label "process_single"
     container "dessimozlab/omabuild:nf-latest"
-    tag "Collecting xrefs for $source"
+    tag "Combining all xrefs into single hdf5 db"
 
     input:
         path xref_dbs
 
     output:
-        tuple "XRef-db.h5", emit: xref_db_h5
+        path("XRef-db.h5"), emit: xref_db_h5
 
     script:
         """
         oma-build -vv combine-xrefs \\
-            --out "XRef-db.h5"
+            --out XRef-db.h5 \\
             --xrefs $xref_dbs \\
         """
 }
