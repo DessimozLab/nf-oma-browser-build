@@ -7,8 +7,7 @@ workflow EXTRACT_DARWIN {
     take:
         genomes_folder
         matrix_file
-        hog_orthoxml
-
+        
     main:
         def summaries = genomes_folder / "Summaries.drw"
         def taxonomy = genomes_folder / "taxonomy.sqlite"

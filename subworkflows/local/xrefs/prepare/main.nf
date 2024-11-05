@@ -41,6 +41,6 @@ workflow PREPARE_XREFS {
 
     emit:
         taxmap = RELEVANT_TAXID_MAP.out.tax_map
-        xref = filtered_xrefs
+        xref_chunks = filtered_xrefs
 
 }
