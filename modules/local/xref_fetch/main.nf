@@ -21,10 +21,7 @@ process FILTER_AND_SPLIT {
 
     input:
         tuple path(xref), val(format), val(source)
-        path gs_tsv
-        path tax_sqlite
-        path tax_traverse_pkl     // this file is implicitly used and must be located at the same place as tax_sqlite
-
+        path tax_map
     output:
         tuple path("xref-${source}*.gz"), val(format), val(source), emit: split_xref
 
@@ -34,8 +31,33 @@ process FILTER_AND_SPLIT {
             --xref $xref \\
             --out-prefix ./xref-${source} \\
             --format $format \\
+            --tax-map $tax_map
+        """
+}
+
+process RELEVANT_TAXID_MAP {
+    label "process_single"
+    container "dessimozlab/omabuild:nf-latest"
+
+    input:
+        path gs_tsv
+        path tax_sqlite
+        path tax_traverse_pkl     // this file is implicitly used and must be located at the same place as tax_sqlite
+    
+    output:
+        path "taxmap.pkl", emit: tax_map
+    
+    script:
+        """
+        oma-build -vv tax-map \\
             --gs-tsv $gs_tsv \\
-            --tax-sqlite $tax_sqlite
+            --tax-sqlite $tax_sqlite \\
+            --out taxmap.pkl
+        """
+
+    stub:
+        """
+        touch taxmap.pkl
         """
 }
 
@@ -47,12 +69,10 @@ process MAP_XREFS {
 
     input:
         tuple path(xref_in), val(format), val(source), 
-              path(gs_tsv),
+              path(tax_map),
               path(db),
               path(seq_idx_db),
               path(src_xref_db)
-        path(tax_sqlite)
-        path(tax_traverse_pkl)
 
     output:
         tuple val(source), path("xref-${source}.pkl"), val(format), path(xref_in), emit: matched_xrefs
@@ -63,8 +83,7 @@ process MAP_XREFS {
             --xref $xref_in \\
             --format $format \\
             --source $source \\
-            --gs-tsv $gs_tsv \\
-            --tax-sqlite $tax_sqlite \\
+            --tax-map $tax_map \\
             --out xref-${source}.pkl \\
             --db $db \\
             --seq-idx-db $seq_idx_db \\

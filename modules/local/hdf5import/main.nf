@@ -115,35 +115,6 @@ process ADD_PAIRWISE_ORTHOLOGS {
         """
 }
 
-process ADD_DOMAINS {
-    label "process_medium"
-    cpus { 1 }
-    container "dessimozlab/omabuild:nf-latest"
-
-    input:
-        path database
-        path domain_files
-        path cath_names
-        path pfam_names
-
-    output:
-        path "domains.h5", emit: domains_h5
-
-    script:
-        """
-        oma-build -vv domains \
-            --db $database \
-            --hdf5-out domains.h5 \
-            --domains $domain_files \
-            --cath-names $cath_names \
-            --pfam-names $pfam_names
-        """
-
-    stub:
-        """
-        touch domains.h5
-        """
-}
 
 
 process COMBINE_H5_FILES {
@@ -154,7 +125,6 @@ process COMBINE_H5_FILES {
         path input_db, stageAs: 'OmaServer_input.h5'
         path hogs_h5
         path vps
-        path domains
         path splice_json
 
     output:
@@ -165,7 +135,6 @@ process COMBINE_H5_FILES {
         cp $input_db OmaServer.h5
         ptrepack --keep-source-filters --propindexes $hogs_h5:/ OmaServer.h5:/
         ptrepack --keep-source-filters --propindexes $vps:/ OmaServer.h5:/
-        ptrepack --keep-source-filters --propindexes $domains:/ OmaServer.h5:/
 
         oma-build -vv splice \
             --db OmaServer.h5 \
