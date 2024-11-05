@@ -22,8 +22,7 @@ workflow oma_browser_build {
                     EXTRACT_DARWIN.out.protein_files,
                     hog_orthoxml,
                     vps_base,
-                    EXTRACT_DARWIN.out.splice_json,
-                    genomes_folder)
+                    EXTRACT_DARWIN.out.splice_json)
         
         if (params.known_domains != null) {
             domains = Channel.fromPath("${params.known_domains}/*")
