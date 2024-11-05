@@ -49,7 +49,7 @@ process RELEVANT_TAXID_MAP {
     
     script:
         """
-        oma-build -vv tax-map \\
+        oma-build -vv build-taxid-map \\
             --gs-tsv $gs_tsv \\
             --tax-sqlite $tax_sqlite \\
             --out taxmap.pkl
