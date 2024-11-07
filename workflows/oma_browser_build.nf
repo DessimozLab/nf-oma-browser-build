@@ -6,6 +6,7 @@ include { IMPORT_HDF5    } from "./../subworkflows/local/hdf5import"
 include { DOMAINS        } from "./../subworkflows/local/domains"
 include { GENERATE_XREFS } from "./../subworkflows/local/xrefs"
 include { GO_IMPORT      } from "./../modules/local/go_import"
+include { CACHE_BUILDER  } from "./../subworkflows/local/cache_builder"
 
 workflow oma_browser_build {
     take:
@@ -34,6 +35,7 @@ workflow oma_browser_build {
         } else {
             domains_h5 = null
         }
+        CACHE_BUILDER(IMPORT_HDF5.out.db_h5)
 
         // create crossreferences
         GENERATE_XREFS(EXTRACT_DARWIN.out.gs_file,
