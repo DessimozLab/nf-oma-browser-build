@@ -27,6 +27,7 @@ process GENERATE_JOBS {
 
 process COMPUTE_CACHE {
     label "process_single"
+    label "HIGH_IO_ACCESS"
     container "dessimozlab/omabuild:nf-latest"
     tag "Cache builder ${job_file}"
 

@@ -2,6 +2,7 @@
 
 process GO_IMPORT {
     label "process_single"
+    label "HIGH_IO_ACCESS"
     container "dessimozlab/omabuild:nf-latest"
     
     input:

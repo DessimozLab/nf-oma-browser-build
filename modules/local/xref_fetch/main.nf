@@ -65,7 +65,9 @@ process RELEVANT_TAXID_MAP {
 process MAP_XREFS {
     label "process_single"
     label "process_long"
+    label "HIGH_IO_ACCESS"
     container "dessimozlab/omabuild:nf-latest"
+    scratch = true
 
     input:
         tuple path(xref_in), val(format), val(source), 
