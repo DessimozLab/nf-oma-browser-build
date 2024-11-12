@@ -21,7 +21,7 @@ process GO_IMPORT {
             --out ./GO.h5 \\
             --tax-map $tax_map \\
             --obo $obo \\
-            --gafs $gaf \\
+            --gaf $gaf \\
         """
 
     stub:

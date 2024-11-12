@@ -57,7 +57,7 @@ process COMBINE_JOBS {
     container "dessimozlab/omabuild:nf-latest"
     
     input:
-        path(job_res)
+        path(job_res, stageAs: "res???/*")
     
     output:
         path("cache.h5"), emit: cache_h5
