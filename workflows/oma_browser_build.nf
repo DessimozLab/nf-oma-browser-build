@@ -6,6 +6,7 @@ include { IMPORT_HDF5    } from "./../subworkflows/local/hdf5import"
 include { DOMAINS        } from "./../subworkflows/local/domains"
 include { GENERATE_XREFS } from "./../subworkflows/local/xrefs"
 include { GO_IMPORT      } from "./../modules/local/go_import"
+include { COMBINE_HDF    } from "./../modules/local/h5_combine"
 include { CACHE_BUILDER  } from "./../subworkflows/local/cache_builder"
 
 workflow oma_browser_build {
@@ -51,10 +52,18 @@ workflow oma_browser_build {
                   GENERATE_XREFS.out.taxmap,
                   obo,
                   gaf)
+
+        h5_dbs_to_combine = IMPORT_HDF5.out.h5_db.mix(
+             domains_h5,
+             GENERATE_XREFS.out.xref_db,
+             GO_IMPORT.out.go_h5,
+             CACHE_BUILDER.out.cache_h5)
+        COMBINE_HDF(h5_dbs_to_combine.collect())
     
     emit:
-        db        = IMPORT_HDF5.out.db_h5
+        db        = COMBINE_HDF.out.combined_h5
         seqidx_h5 = IMPORT_HDF5.out.seqidx_h5
+        
 
 }
 

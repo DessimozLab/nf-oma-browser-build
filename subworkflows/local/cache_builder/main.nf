@@ -14,5 +14,5 @@ workflow CACHE_BUILDER {
         COMBINE_JOBS(COMPUTE_CACHE.out.cache_chunk.collect())
         
     emit:
-        COMBINE_JOBS.out.cache_h5
+        cache_h5 = COMBINE_JOBS.out.cache_h5
 }
