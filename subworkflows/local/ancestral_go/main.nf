@@ -1,7 +1,7 @@
 #!/usr/bin/env nextflow
 
 // Modules
-include {HOGPROP, HOGPROP_COLLECT} from "./../../../modules/local/hogprop"
+include {HOGPROP; HOGPROP_COLLECT} from "./../../../modules/local/hogprop"
 
 workflow ANCESTRAL_GO {
     take:
