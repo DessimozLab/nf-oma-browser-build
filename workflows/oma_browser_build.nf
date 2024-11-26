@@ -53,13 +53,14 @@ workflow oma_browser_build {
                   obo,
                   gaf)
 
-        h5_dbs_to_combine = IMPORT_HDF5.out.h5_db.mix(
+        h5_dbs_to_combine = IMPORT_HDF5.out.db_h5.mix(
              domains_h5,
              GENERATE_XREFS.out.xref_db,
              GO_IMPORT.out.go_h5,
              CACHE_BUILDER.out.cache_h5)
+        h5_dbs_to_combine.view()
         COMBINE_HDF(h5_dbs_to_combine.collect())
-    
+   
     emit:
         db        = COMBINE_HDF.out.combined_h5
         seqidx_h5 = IMPORT_HDF5.out.seqidx_h5
