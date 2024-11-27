@@ -1,7 +1,7 @@
 process CONVERT_GS {
     tag "Convert GenomeSummaries to JSON format"
     label "process_single"
-    container = "dessimozlab/omadarwin:nf-latest"
+    container "dessimozlab/omadarwin:nf-latest"
 
     input:
         path genomes

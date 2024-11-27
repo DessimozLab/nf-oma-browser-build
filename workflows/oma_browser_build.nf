@@ -9,7 +9,7 @@ include { GO_IMPORT      } from "./../modules/local/go_import"
 include { COMBINE_HDF    } from "./../modules/local/h5_combine"
 include { CACHE_BUILDER  } from "./../subworkflows/local/cache_builder"
 
-workflow oma_browser_build {
+workflow OMA_BROWSER_BUILD {
     take:
         genomes_folder
         matrix_file
