@@ -11,13 +11,13 @@ def logo() {
     c_cyan = "\033[0;36m";
     c_white = "\033[0;37m";
 
-    return """    ${c_dim}----------------------------------------------------${c_reset}${c_green}
-       ____  __  ______
-      / __ \\/  |/  /   |
-     / / / / /|_/ / /| |
-    / /_/ / /  / / ___ |
-    \\____/_/  /_/_/  |_|
-    ${c_reset}${c_dim}----------------------------------------------------${c_reset}""".stripIndent()
+    return """    ${c_dim}------------------------------------------------------------------------------${c_reset}${c_green}
+       ____  __  ______       ____                                       ____        _ __    __
+      / __ \/  |/  /   |     / __ )_________ _      __________  _____   / __ )__  __(_) /___/ /
+     / / / / /|_/ / /| |    / __  / ___/ __ \ | /| / / ___/ _ \/ ___/  / __  / / / / / / __  /
+    / /_/ / /  / / ___ |   / /_/ / /  / /_/ / |/ |/ (__  )  __/ /     / /_/ / /_/ / / / /_/ /
+    \____/_/  /_/_/  |_|  /_____/_/   \____/|__/|__/____/\___/_/     /_____/\__,_/_/_/\__,_/
+    ${c_reset}${c_dim}------------------------------------------------------------------------------${c_reset}""".stripIndent()
 }
 
 // Print the logo
@@ -26,11 +26,11 @@ log.info logo()
 // Load Plugins
 include { validateParameters; paramsHelp; paramsSummaryLog } from 'plugin/nf-schema'
 
-    // Print help message if needed
-    if (params.help){
-        log.info paramsHelp("nextflow run main.nf required [optional]")
-        exit 0
-    }
+// Print help message if needed
+if (params.help){
+    log.info paramsHelp("nextflow run main.nf required [optional]")
+    exit 0
+}
 
 // Validate input parameters
 validateParameters()
@@ -63,19 +63,21 @@ output {
             { file -> "data/OmaServer.h5" }
         }
     }
+
+    'data' { mode 'copy'}
 }
 
 workflow {
     OMA_browser_build()
-}
 
-workflow.onComplete {
-    println "Pipeline completed at: ${workflow.complete}"
-    println "Time to complete workflow execution: ${workflow.duration}"
-    println "Execution status: ${workflow.success ? 'Successful' : 'Failed'}"
-    println "Reports stored in ${params.outputDir}/reports/nextflow"
-}
+    workflow.onComplete {
+        println "Pipeline completed at: ${workflow.complete}"
+        println "Time to complete workflow execution: ${workflow.duration}"
+        println "Execution status: ${workflow.success ? 'Successful' : 'Failed'}"
+        println "Reports stored in ${params.outputDir}/reports/nextflow"
+    }
 
-workflow.onError {
-    println "Error... Pipeline execution stopped with the following message: $workflow.errorMessage"
+    workflow.onError {
+        println "Error... Pipeline execution stopped with the following message: $workflow.errorMessage"
+    }
 }

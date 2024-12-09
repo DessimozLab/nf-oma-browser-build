@@ -1,26 +1,10 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$schema": "http://json-schema.org/draft-07/schema",
   "$id": "https://raw.githubusercontent.com/oma-browser-build/master/nextflow_schema.json",
   "title": "oma-browser-build pipeline parameters",
   "description": "Convert OMA run into OMA Browser release",
   "type": "object",
-  "defs": {
-    "input_output_options": {
-      "title": "Input/output options",
-      "type": "object",
-      "fa_icon": "fas fa-terminal",
-      "description": "Define where the pipeline should find input data and save output data.",
-      "required": ["outdir"],
-      "properties": {
-        "outdir": {
-          "type": "string",
-          "format": "directory-path",
-          "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-          "fa_icon": "fas fa-folder-open",
-          "default": "./results"
-        }
-      }
-    },
+  "definitions": {
     "generic_options": {
       "title": "Generic options",
       "type": "object",
@@ -39,27 +23,63 @@
   },
   "allOf": [
     {
-      "$ref": "#/defs/input_output_options"
-    },
-    {
-      "$ref": "#/defs/generic_options"
+      "$ref": "#/definitions/generic_options"
     }
   ],
   "properties": {
-    "orthoxml": {
+    "hog_orthoxml": {
       "type": "string"
     },
-    "genomes": {
+    "matrix_file": {
       "type": "string"
+    },
+    "pairwise_orthologs_folder": {
+      "type": "string"
+    },
+    "genomes_dir": {
+      "type": "string"
+    },
+    "known_domains": {
+      "type": "string"
+    },
+    "cath_names_path": {
+      "type": "string",
+      "default": "http://download.cathdb.info/cath/releases/latest-release/cath-classification-data/cath-names.txt"
+    },
+    "pfam_names_path": {
+      "type": "string",
+      "default": "https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.clans.tsv.gz"
+    },
+    "xref_uniprot_swissprot": {
+      "type": "string",
+      "default": "https://ftp.ebi.ac.uk/pub/databases/uniprot/knowledgebase/uniprot_sprot.dat.gz"
+    },
+    "xref_uniprot_trembl": {
+      "type": "string",
+      "default": "/dev/null"
+    },
+    "xref_refseq": {
+      "type": "string"
+    },
+    "go_obo": {
+      "type": "string",
+      "default": "http://purl.obolibrary.org/obo/go/go-basic.obo"
+    },
+    "go_gaf": {
+      "type": "string",
+      "default": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/goa_uniprot_all.gaf.gz"
     },
     "oma_browser_data_dir": {
       "type": "string",
-      "format": "directory-path",
       "default": "test/bla"
     },
     "nr_medium_procs": {
       "type": "integer",
       "default": 10
+    },
+    "outputDir": {
+      "type": "string",
+      "default": "./results"
     }
   }
 }
