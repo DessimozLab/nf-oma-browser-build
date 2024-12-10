@@ -38,6 +38,7 @@ validateParameters()
 // Subworkflows
 // include {parse_inputs} from "./subworkflows/local/parse_inputs"
 include {OMA_BROWSER_BUILD} from "./workflows/oma_browser_build"
+nextflow.preview.output = true
 
 workflow OMA_browser_build {
     main:
