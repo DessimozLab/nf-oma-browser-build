@@ -159,7 +159,7 @@
                 "sha256:ee3566f6dc3acf20e238540daf896f0af20cff531521bf41fdf5143f73e209ae",
                 "sha256:f4c1c9ad7da9eaf8d8f4515bf931a7f6548a468e7ef29b8429e31aaff2d95f4c"
             ],
-            "markers": "python_version >= '3.9'",
+            "markers": "python_version >= '3.6'",
             "version": "==1.84"
         },
         "bleach": {
@@ -2059,7 +2059,7 @@
             ],
             "git": "${LABGIT}/pyoma.git",
             "markers": "python_version >= '3.6'",
-            "ref": "a20780b3aa3e9b3a97c08b6c052ee44b5416288c"
+            "ref": "704daf9571253e8e1ede10498e8c9bf70c87611b"
         },
         "pyopa": {
             "hashes": [

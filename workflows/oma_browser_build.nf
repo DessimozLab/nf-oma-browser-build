@@ -8,6 +8,7 @@ include { GENERATE_XREFS } from "./../subworkflows/local/xrefs"
 include { GO_IMPORT      } from "./../modules/local/go_import"
 include { COMBINE_HDF    } from "./../modules/local/h5_combine"
 include { CACHE_BUILDER  } from "./../subworkflows/local/cache_builder"
+include { GEN_BROWSER_AUX_FILES } from "./../modules/local/browser_aux"
 
 workflow OMA_BROWSER_BUILD {
     take:
@@ -37,6 +38,7 @@ workflow OMA_BROWSER_BUILD {
             domains_h5 = null
         }
         CACHE_BUILDER(IMPORT_HDF5.out.db_h5)
+        GEN_BROWSER_AUX_FILES(IMPORT_HDF5.out.db_h5)
 
         // create crossreferences
         GENERATE_XREFS(EXTRACT_DARWIN.out.gs_file,
