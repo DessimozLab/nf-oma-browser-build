@@ -29,3 +29,4 @@ workflow EXTRACT_FASTOMA {
         tax_tsv = CONVERT_TAXONOMY.out.tax_tsv
         oma_groups = CONVERT_OMA_GROUPS.out.oma_groups_json
         splice_json = CONVERT_SPLICE_MAP.out.splice_json
+}
