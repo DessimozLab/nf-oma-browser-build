@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-import omataxonomy
+import collections
 import csv
+import omataxonomy
 
 def subtaxonomy_from_genomes(tax, genomes):
     tree = tax.get_topology(genomes.keys(), intermediate_nodes=True, collapse_subspecies=False, annotate=True)
