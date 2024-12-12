@@ -12,6 +12,10 @@ def subtaxonomy_from_genomes(tax, genomes):
 
     for node in tree.traverse(strategy="preorder"):
         parent_taxid = node.up.taxid if node.up is not None and node != tree else 0
+        if node.taxid == parent_taxid:
+            continue
+        
+        is_genome_level = False
         if node.taxid in (131567, 1):
             node.taxid = 0
             parent_taxid = -1
@@ -22,17 +26,30 @@ def subtaxonomy_from_genomes(tax, genomes):
         else:
             sciname = node.sci_name
             if node.taxid in genomes:
-                sciname = genomes[node.taxid]
-        if node.taxid == parent_taxid:
-            continue
-        taxtab.append((node.taxid, parent_taxid, sciname))
+                # this taxid has at least one genome
+                # check, if there exist also sub-clades with genomes
+                has_sub_clades = len(node.children) > 0
+
+                if len(genomes[node.taxid]) == 1 and not has_sub_clades:
+                    genome = genomes[node.taxid][0]
+                    sciname = genome['SciName']
+                    is_genome_level = True
+                else:
+                    # create the current ncbi taxlevel node
+                    taxtab.append((node.taxid, parent_taxid, sciname, False))
+                    for genome in genomes[node.taxid]:
+                        taxtab.append((genome['GenomeId'], node.taxid, genome['SciName'], True))
+                    continue
+        taxtab.append((node.taxid, parent_taxid, sciname, is_genome_level))
     return taxtab
 
 
 def parse_genomes_tsv(genomes_tsv):
+    genomes = collections.defautdict(list)
     with open(genomes_tsv, 'r') as f:
         reader = csv.DictReader(f, dialect="excel-tab")
-        genomes = {int(row['NCBITaxonId']): row['SciName'] for row in reader}
+        for row in reader:
+            genomes[int(row['NCBITaxonId'])].append(row)
     return genomes
 
 
