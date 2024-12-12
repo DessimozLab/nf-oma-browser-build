@@ -26,7 +26,7 @@ workflow OMA_BROWSER_BUILD {
                     hog_orthoxml,
                     vps_base,
                     EXTRACT_DARWIN.out.splice_json)
-        
+
         if (params.known_domains != null) {
             domains = Channel.fromPath("${params.known_domains}/*")
             cath_names = Channel.fromPath(params.cath_names_path)
@@ -46,7 +46,7 @@ workflow OMA_BROWSER_BUILD {
                        IMPORT_HDF5.out.db_h5,
                        IMPORT_HDF5.out.seqidx_h5,
                        IMPORT_HDF5.out.source_xref_db)
-        
+
         // integrate Gene Ontology data
         obo = Channel.fromPath(params.go_obo)
         gaf = Channel.fromPath(params.go_gaf).collect()
