@@ -10,7 +10,7 @@ edgehog = "*"
 hogprop = {git = "git+${LABGIT}/hogprop2"}
          #branch = "nf-convert",
          #ref = "v0.13.3"
-pyoma = {git = "git+${LABGIT}/pyoma.git", branch = "nf-convert", extras = ["create_db", "enrichment", "notebooks"]}
+pyoma = {git = "git+${LABGIT}/pyoma.git", ref = "nf-convert", extras = ["create_db", "enrichment", "notebooks"]}
 omataxonomy = "*"
 
 [dev-packages]

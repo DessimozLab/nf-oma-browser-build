@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f85b32902f41dec52cbe24684d01ae803043629c34494e88d8063dfebabf9d98"
+            "sha256": "09cd2740d35fcf15dba1073870631d13e17ae3809274a8a3342a805d295789ea"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -617,13 +617,6 @@
             "markers": "python_version >= '3.8'",
             "version": "==2.1.0"
         },
-        "familyanalyzer": {
-            "hashes": [
-                "sha256:510c80df75164b9f5d59abec6d8ac89a89815799512ea099a035de4e87d0109a",
-                "sha256:69c219d29611c974903e120e0d6762e7dea5874d9193cb5496edd61410a08324"
-            ],
-            "version": "==0.7.3"
-        },
         "fastjsonschema": {
             "hashes": [
                 "sha256:794d4f0a58f848961ba16af7b9c85a3e88cd360df008c59aac6fc5ae9323b5d4",
@@ -699,7 +692,7 @@
                 "sha256:929292d34f5872e70396626ef385ec22355a1fae8ad29e1a734c3e43f9fbc216",
                 "sha256:bd2968309307861edae1458a4f8a4f3598c03be43b97521076aebf5d94c07b05"
             ],
-            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.6' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==1.0.0"
         },
         "fuzzyset2": {
@@ -1124,13 +1117,6 @@
             ],
             "markers": "python_version >= '3.8'",
             "version": "==1.4.7"
-        },
-        "lark-parser": {
-            "hashes": [
-                "sha256:0eaf30cb5ba787fe404d73a7d6e61df97b21d5a63ac26c5008c78a494373c675",
-                "sha256:15967db1f1214013dca65b1180745047b9be457d73da224fcda3d9dd4e96a138"
-            ],
-            "version": "==0.12.0"
         },
         "llvmlite": {
             "hashes": [
@@ -1836,13 +1822,6 @@
             "markers": "python_version >= '3.6'",
             "version": "==1.0.1"
         },
-        "pebble": {
-            "hashes": [
-                "sha256:530a398299ecd3a4ed1baf2e4b8045d8280b1e665560b0b409f8d8e58db60111",
-                "sha256:5c30376f1827b21ecec4126ff90e7f22ad5501cac1ff2b32c86ff2601681f932"
-            ],
-            "version": "==5.1.0"
-        },
         "pexpect": {
             "hashes": [
                 "sha256:7236d1e080e4936be2dc3e326cec0af72acf9212a7e1d060210e70a47e253523",
@@ -1947,12 +1926,6 @@
             ],
             "version": "==5.24.1"
         },
-        "progressbar-latest": {
-            "hashes": [
-                "sha256:920946e104553f2541d7fefcb2892083e7eaf2b2756956c6d821287f9db7a060"
-            ],
-            "version": "==2.4"
-        },
         "prometheus-client": {
             "hashes": [
                 "sha256:252505a722ac04b0456be05c05f75f45d760c2911ffc45f2a06bcaed9f3ae3fb",
@@ -2052,7 +2025,7 @@
             ],
             "git": "${LABGIT}/pyoma.git",
             "markers": "python_version >= '3.6'",
-            "ref": "6b704804a5e41e75b440929bb9238841cfd22906"
+            "ref": "d03cba57a84d633c6130069986b4f54dccca47ae"
         },
         "pyopa": {
             "hashes": [
@@ -2101,7 +2074,7 @@
                 "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3",
                 "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==2.9.0.post0"
         },
         "python-json-logger": {
@@ -2651,7 +2624,7 @@
                 "sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
                 "sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==1.17.0"
         },
         "sniffio": {
