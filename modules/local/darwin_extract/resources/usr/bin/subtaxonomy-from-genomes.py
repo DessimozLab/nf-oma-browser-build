@@ -46,7 +46,7 @@ def subtaxonomy_from_genomes(tax, genomes):
 
 
 def parse_genomes_tsv(genomes_tsv):
-    genomes = collections.defautdict(list)
+    genomes = collections.defaultdict(list)
     with open(genomes_tsv, 'r') as f:
         reader = csv.DictReader(f, dialect="excel-tab")
         for row in reader:
