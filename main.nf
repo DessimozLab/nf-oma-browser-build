@@ -74,7 +74,7 @@ workflow.onComplete {
     println "Pipeline completed at: ${workflow.complete}"
     println "Time to complete workflow execution: ${workflow.duration}"
     println "Execution status: ${workflow.success ? 'Successful' : 'Failed'}"
-    println "Reports stored in ${params.outputDir}/reports/nextflow"
+    println "Reports stored in ${workflow.outputDir}/reports/nextflow"
 }
 
 workflow.onError {
@@ -82,15 +82,16 @@ workflow.onError {
 }
 
 
-//output {
-//   main_db {
-//       path { db ->
-//           { file -> "data/OmaServer.h5" }
-//       }
-//   }
-//
-//   data      { mode 'copy' }
-//   downloads { mode 'copy' }
-//}
+output {
+   main_db {
+       path { db ->
+           { file -> "data/OmaServer.h5" }
+       }
+       mode 'copy'
+   }
+
+   data      { mode 'copy' }
+   downloads { mode 'copy' }
+}
 
 
