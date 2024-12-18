@@ -39,6 +39,7 @@ workflow OMA_BROWSER_BUILD {
         }
         CACHE_BUILDER(IMPORT_HDF5.out.db_h5)
         GEN_BROWSER_AUX_FILES(IMPORT_HDF5.out.db_h5)
+        download_files = GEN_BROWSER_AUX_FILES.out.genomes_json.mix(GEN_BROWSER_AUX_FILES.out.speciestree)
 
         // create crossreferences
         GENERATE_XREFS(EXTRACT_DARWIN.out.gs_file,
@@ -66,7 +67,7 @@ workflow OMA_BROWSER_BUILD {
     emit:
         db        = COMBINE_HDF.out.combined_h5
         seqidx_h5 = IMPORT_HDF5.out.seqidx_h5
-        
+        downloads = download_files
 
 }
 

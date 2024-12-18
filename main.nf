@@ -53,32 +53,44 @@ workflow OMA_browser_build {
         def vps_base = params.pairwise_orthologs_folder
         OMA_BROWSER_BUILD(genomes_dir, matrix_file, hog_orthoxml, vps_base)
 
-    publish:
-        OMA_BROWSER_BUILD.out.db >> "main_db"
-        OMA_BROWSER_BUILD.out.seqidx_h5 >> "data"
-}
-
-output {
-    'main_db' {
-        path { db ->
-            { file -> "data/OmaServer.h5" }
-        }
-    }
-
-    'data' { mode 'copy'}
+    emit:
+        db = OMA_BROWSER_BUILD.out.db
+        seqidx = OMA_BROWSER_BUILD.out.seqidx_h5
+        downloads = OMA_BROWSER_BUILD.out.downloads
 }
 
 workflow {
-    OMA_browser_build()
+    main:
+        OMA_browser_build()
 
-    workflow.onComplete {
-        println "Pipeline completed at: ${workflow.complete}"
-        println "Time to complete workflow execution: ${workflow.duration}"
-        println "Execution status: ${workflow.success ? 'Successful' : 'Failed'}"
-        println "Reports stored in ${params.outputDir}/reports/nextflow"
-    }
+    publish:
+        OMA_browser_build.out.db          >> 'main_db'
+        OMA_browser_build.out.seqidx      >> 'data'
+        OMA_browser_build.out.downloads   >> 'downloads'
 
-    workflow.onError {
-        println "Error... Pipeline execution stopped with the following message: $workflow.errorMessage"
-    }
 }
+
+workflow.onComplete {
+    println "Pipeline completed at: ${workflow.complete}"
+    println "Time to complete workflow execution: ${workflow.duration}"
+    println "Execution status: ${workflow.success ? 'Successful' : 'Failed'}"
+    println "Reports stored in ${params.outputDir}/reports/nextflow"
+}
+
+workflow.onError {
+    println "Error... Pipeline execution stopped with the following message: $workflow.errorMessage"
+}
+
+
+//output {
+//   main_db {
+//       path { db ->
+//           { file -> "data/OmaServer.h5" }
+//       }
+//   }
+//
+//   data      { mode 'copy' }
+//   downloads { mode 'copy' }
+//}
+
+
