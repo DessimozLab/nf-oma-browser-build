@@ -2,6 +2,7 @@
 
 import collections
 import csv
+from os.path import commonprefix
 import omataxonomy
 
 def subtaxonomy_from_genomes(tax, genomes):
@@ -36,7 +37,15 @@ def subtaxonomy_from_genomes(tax, genomes):
                     sciname = genome['SciName']
                     is_genome_level = True
                 else:
+                    if len(genomes[node.taxid]) > 1:
+                        genomes_scinames = [g['SciName'] for g in genomes[node.taxid]]
+                        print(f"node: {node.taxid}; sciname: {sciname}; genomes_scinames: {genomes_scinames}")
+                        assert min((len(z) for z in genomes_scinames)) == max((len(z) for z in genomes_scinames))
+                        # at least two genomes which contains expected species sciname - os_code. 
+                        # We use the expected species sciname as the ancestral taxonomy name
+                        sciname = commonprefix(genomes_scinames)[:len(genomes_scinames[0])-8].strip()
                     # create the current ncbi taxlevel node
+                    print(f"node: {node.taxid}; sciname: {sciname}")
                     taxtab.append((node.taxid, parent_taxid, sciname, False))
                     for genome in genomes[node.taxid]:
                         taxtab.append((genome['GenomeId'], node.taxid, genome['SciName'], True))
