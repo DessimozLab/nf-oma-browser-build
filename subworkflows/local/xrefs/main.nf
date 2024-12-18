@@ -1,6 +1,7 @@
 #!/usr/bin/env nextflow
 include { PREPARE_XREFS } from "./prepare"
 include { MAP_XREFS_WF  } from "./map"
+include { BUILD_REDUCED_XREFS } from "./../../../../modules/local/xref_fetch"
 
 workflow GENERATE_XREFS {
     take:
