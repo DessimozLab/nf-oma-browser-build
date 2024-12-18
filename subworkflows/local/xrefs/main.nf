@@ -22,9 +22,11 @@ workflow GENERATE_XREFS {
                      db_h5, 
                      seqidx_h5,
                      source_xref_h5)
+        BUILD_REDUCED_XREFS(db_h5, MAP_XREFS_WF.out.xref_db)
 
 
     emit:
         taxmap  = PREPARE_XREFS.out.taxmap
         xref_db = MAP_XREFS_WF.out.xref_db
+        red_xref_db = BUILD_REDUCED_XREFS.out.red_xref_db_h5
 }

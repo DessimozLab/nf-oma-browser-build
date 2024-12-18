@@ -135,3 +135,25 @@ process COMBINE_ALL_XREFS {
             --xrefs $xref_dbs \\
         """
 }
+
+process BUILD_REDUCED_XREFS {
+    label "process_low"
+    container "dessimozlab/omabuild:nf-latest"
+    tag "Building a reduced set of xrefs for lookup and search"
+
+    input:
+        path db
+        path xref_db
+
+    output:
+        path("reduced-xrefs-db.h5"), emit: red_xref_db_h5
+
+    script:
+        """
+        oma-build -vv reduced-xrefs \\
+            --out reduced-xrefs-db.h5 \\
+            --xrefs $xref_dbs \\
+            --db $db \\
+            --nr-procs ${task.cpus}
+        """
+}

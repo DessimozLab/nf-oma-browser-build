@@ -35,7 +35,7 @@ workflow OMA_BROWSER_BUILD {
             DOMAINS(IMPORT_HDF5.out.db_h5, domains, cath_names, pfam_names)
             domains_h5 = DOMAINS.out.domains_h5
         } else {
-            domains_h5 = null
+            domains_h5 = Channel.empty()
         }
         CACHE_BUILDER(IMPORT_HDF5.out.db_h5)
         GEN_BROWSER_AUX_FILES(IMPORT_HDF5.out.db_h5)
@@ -60,7 +60,8 @@ workflow OMA_BROWSER_BUILD {
              domains_h5,
              GENERATE_XREFS.out.xref_db,
              GO_IMPORT.out.go_h5,
-             CACHE_BUILDER.out.cache_h5)
+             CACHE_BUILDER.out.cache_h5,
+             GENERATE_XREFS.out.red_xref_db)
         h5_dbs_to_combine.view()
         COMBINE_HDF(h5_dbs_to_combine.collect())
    
