@@ -41,6 +41,7 @@ process RELEVANT_TAXID_MAP {
 
     input:
         path gs_tsv
+        path db
         path tax_sqlite
         path tax_traverse_pkl     // this file is implicitly used and must be located at the same place as tax_sqlite
     
@@ -51,6 +52,7 @@ process RELEVANT_TAXID_MAP {
         """
         oma-build -vv build-taxid-map \\
             --gs-tsv $gs_tsv \\
+            --db $db \\
             --tax-sqlite $tax_sqlite \\
             --out taxmap.pkl
         """

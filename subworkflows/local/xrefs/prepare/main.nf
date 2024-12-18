@@ -4,6 +4,7 @@ include { FETCH_REFSEQ; FILTER_AND_SPLIT; RELEVANT_TAXID_MAP } from "./../../../
 workflow PREPARE_XREFS {
     take:
         gs_tsv
+        database
         genome_folder
         uniprot_swissprot
         uniprot_trembl
@@ -13,7 +14,7 @@ workflow PREPARE_XREFS {
         // compute relevant taxid mapping for crossreference mappings
         def taxonomy_sqlite = genome_folder / "taxonomy.sqlite"
         def tax_traverse_pkl = genome_folder / "taxonomy.sqlite.traverse.pkl"
-        RELEVANT_TAXID_MAP(gs_tsv, taxonomy_sqlite, tax_traverse_pkl)
+        RELEVANT_TAXID_MAP(gs_tsv, database, taxonomy_sqlite, tax_traverse_pkl)
 
 
         // Transform swissprot and trembl channels into tuples
