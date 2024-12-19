@@ -32,7 +32,7 @@ process CONVERT_PROTEINS {
     container "dessimozlab/omadarwin:nf-latest"
 
     input:
-        tuple val(genome), path(dbpath)
+        tuple val(genome), path(dbpath), path(subgenome)
 
     output:
         path "${genome.UniProtSpeciesCode}.json",   emit: prot_json
@@ -44,6 +44,8 @@ process CONVERT_PROTEINS {
           dbpath := '${dbpath}';
           tot_entries := ${genome.TotEntries};
           tot_aa := ${genome.TotAA};
+          is_polyploid := '${genome.IsPolyploid}';
+          subgenome_path := '${subgenome}';
 
           ReadProgram('\${CODE_REPOS_ROOT}/pyoma/pyoma/browser/build/convert_database.drw');
           done
