@@ -12,6 +12,9 @@ process COMBINE_HDF {
         """
         rm -f combined_file.h5
         h5-merge -vv --out combined_file.h5 $h5files
+
+        oma-build -vv update-summary \\
+            --db combined_file.h5
         """
 
     stub:
