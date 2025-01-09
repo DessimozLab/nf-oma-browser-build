@@ -1,4 +1,4 @@
-FROM cbrg/darwin:latest as builder
+FROM cbrg/darwin:master AS builder
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -20,7 +20,7 @@ RUN --mount=type=ssh \
     git clone -b nf-convert ${LABGIT}/pyoma && \
     rm -rf OMA/.git browser/.git pyoma/.git
 
-FROM cbrg/darwin:latest as runtime
+FROM cbrg/darwin:master AS runtime
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
