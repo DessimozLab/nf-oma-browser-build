@@ -1,7 +1,7 @@
 
 process ADD_DOMAINS {
-    label "process_medium"
-    cpus 1
+    label "process_single"
+    label "process_medium_memory"
     container "dessimozlab/omabuild:nf-latest"
 
     input:

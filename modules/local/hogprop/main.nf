@@ -35,8 +35,8 @@ process HOGPROP {
 }
 
 process HOGPROP_COLLECT {
-    label "process_high"
-    label "single_cpu"
+    label "process_single"
+    label "process_high_memory"
     container "${workflow.projectDir}/container/omabuild.sif"
 
     input:

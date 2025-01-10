@@ -152,7 +152,7 @@ process BUILD_REDUCED_XREFS {
         """
         oma-build -vv reduced-xrefs \\
             --out reduced-xrefs-db.h5 \\
-            --xrefs $xref_dbs \\
+            --xrefs $xref_db \\
             --db $db \\
             --nr-procs ${task.cpus}
         """
