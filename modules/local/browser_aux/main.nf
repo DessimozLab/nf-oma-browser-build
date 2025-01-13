@@ -6,7 +6,7 @@ process GEN_BROWSER_AUX_FILES {
         path db
 
     output:
-        path "genomes.json", emit: genomes_json
+        path "*genomes.json", emit: genomes_json
         path "speciestree.*", emit: speciestree
 
     script:
