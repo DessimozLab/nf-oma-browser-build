@@ -14,7 +14,9 @@ def parse_matrix_file(matrix_file):
                 raise ValueError("'genomes' line missing from matrix file")
             m = genomes_re.match(line)
             if m is not None:
-                genomes = [z.strip() for z in m.group('genomes').split(',')]
+                import string
+                chars_to_strip = string.whitespace + "'"
+                genomes = [z.strip(chars_to_strip) for z in m.group('genomes').split(',')]
                 break
 
         grps = [collections.defaultdict(int) for _ in genomes]
