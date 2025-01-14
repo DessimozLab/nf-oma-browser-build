@@ -23,7 +23,7 @@ jobs:
             type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            type=sha
+            type=edge
 
 
       - name: Set up QEMU
