@@ -37,7 +37,7 @@ process HOGPROP {
 process HOGPROP_COLLECT {
     label "process_single"
     label "process_high_memory"
-    container "${workflow.projectDir}/container/omabuild.sif"
+    container "dessimozlab/omabuild:edge"
 
     input:
         path "results/*"

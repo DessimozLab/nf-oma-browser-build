@@ -28,16 +28,25 @@
   ],
   "properties": {
     "hog_orthoxml": {
-      "type": "string"
+      "type": "string",
+      "description": "Hierarchcial orthologous groups (HOGs) in orthoxml format",
+      "format": "file-path",
+      "mimetype": "application/xml"
     },
     "matrix_file": {
-      "type": "string"
+      "type": "string",
+      "description": "OMA Groups file",
+      "format": "file-path"
     },
     "pairwise_orthologs_folder": {
-      "type": "string"
+      "type": "string",
+      "description": "Pairwise Orthologs (only by Standard OMA pipeline)",
+      "format": "directory-path"
     },
     "genomes_dir": {
-      "type": "string"
+      "type": "string",
+      "description": "Folder containing genomes",
+      "format": "directory-path"
     },
     "known_domains": {
       "type": "string"
@@ -69,17 +78,10 @@
       "type": "string",
       "default": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/goa_uniprot_all.gaf.gz"
     },
-    "oma_browser_data_dir": {
-      "type": "string",
-      "default": "test/bla"
-    },
     "nr_medium_procs": {
       "type": "integer",
       "default": 10
-    },
-    "outputDir": {
-      "type": "string",
-      "default": "./results"
     }
-  }
+  },
+  "required": ["hog_orthoxml", "genomes_dir"]
 }

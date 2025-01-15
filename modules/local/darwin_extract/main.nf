@@ -1,7 +1,7 @@
 process CONVERT_GS {
     tag "Convert GenomeSummaries to JSON format"
     label "process_single"
-    container "dessimozlab/omadarwin:nf-latest"
+    container "dessimozlab/omadarwin:edge"
 
     input:
         path genomes
@@ -29,7 +29,7 @@ process CONVERT_GS {
 process CONVERT_PROTEINS {
     tag "Convert Proteins from ${genome.UniProtSpeciesCode} to JSON format"
     label "process_single"
-    container "dessimozlab/omadarwin:nf-latest"
+    container "dessimozlab/omadarwin:edge"
 
     input:
         tuple val(genome), path(dbpath), path(subgenome)
@@ -56,7 +56,7 @@ process CONVERT_PROTEINS {
 process CONVERT_OMA_GROUPS {
     tag "Extract OMA Groups"
     label "process_single"
-    container "dessimozlab/omabuild:nf-latest"
+    container "dessimozlab/omabuild:edge"
 
     input:
         path matrix_file
@@ -73,7 +73,7 @@ process CONVERT_OMA_GROUPS {
 process CONVERT_SPLICE_MAP {
     tag "Convert Splicing information to json"
     label "process_single"
-    container "dessimozlab/omadarwin:nf-latest"
+    container "dessimozlab/omadarwin:edge"
 
     input:
         path splice_drw
@@ -99,7 +99,7 @@ process CONVERT_SPLICE_MAP {
 process CONVERT_TAXONOMY {
     tag "Convert Taxonomy of genomes using omataxonomy"
     label "process_single"
-    container "dessimozlab/omabuild:nf-latest"
+    container "dessimozlab/omabuild:edge"
 
     input:
         path gs_tsv
