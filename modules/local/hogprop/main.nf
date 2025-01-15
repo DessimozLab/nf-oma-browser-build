@@ -37,7 +37,7 @@ process HOGPROP {
 process HOGPROP_COLLECT {
     label "process_single"
     label "process_high_memory"
-    container "dessimozlab/omabuild:edge"
+    container "dessimozlab/omabuild:1.0.0"
 
     input:
         path "results/*"

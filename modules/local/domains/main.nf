@@ -2,7 +2,7 @@
 process ADD_DOMAINS {
     label "process_single"
     label "process_medium_memory"
-    container "dessimozlab/omabuild:edge"
+    container "dessimozlab/omabuild:1.0.0"
 
     input:
         path database
