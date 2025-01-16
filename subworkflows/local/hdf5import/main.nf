@@ -19,15 +19,14 @@ workflow IMPORT_HDF5 {
         ADD_GENOMES(gs_tsv, tax_tsv, oma_groups, genomes_json.collect())
         BUILD_SEQINDEX(ADD_GENOMES.out.db_h5)
         BUILD_HOG_H5(ADD_GENOMES.out.db_h5, hogs)
-        if (vps_base != null) {
-            ADD_PAIRWISE_ORTHOLOGS(ADD_GENOMES.out.db_h5, vps_base)
-            pw_h5 = ADD_PAIRWISE_ORTHOLOGS.out.vps_h5
-        } else {
-            pw_h5 = null
-        }
-       
-        COMBINE_H5_FILES(ADD_GENOMES.out.db_h5, BUILD_HOG_H5.out.hog_h5, pw_h5, splice_json)
 
+        vp = (vps_base != null) ? file(vps_base) : file("$projectDir/assets/NO_FILE")
+        ADD_PAIRWISE_ORTHOLOGS(ADD_GENOMES.out.db_h5, vp)
+
+        COMBINE_H5_FILES(ADD_GENOMES.out.db_h5,
+                         BUILD_HOG_H5.out.hog_h5,
+                         ADD_PAIRWISE_ORTHOLOGS.out.vps_h5,
+                         splice_json)
 
     emit:
         db_h5 = COMBINE_H5_FILES.out.db_h5

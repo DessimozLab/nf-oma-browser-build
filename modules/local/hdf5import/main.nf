@@ -102,10 +102,11 @@ process ADD_PAIRWISE_ORTHOLOGS {
         path "vps.h5", emit: vps_h5
 
     script:
+        def vps = vps_base.name != 'NO_FILE' ? "--vps-base $vps_base" : ''
         """
-        oma-build -vv vps \
-            --db $database \
-            --vps-base $vps_base \
+        oma-build -vv vps \\
+            --db $database \\
+            $vps \\
             --hdf5-out vps.h5
         """
 
