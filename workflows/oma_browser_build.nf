@@ -27,16 +27,9 @@ workflow OMA_BROWSER_BUILD {
                     vps_base,
                     EXTRACT_DARWIN.out.splice_json)
 
-        if (params.known_domains != null) {
-            domains = Channel.fromPath("${params.known_domains}/*")
-            cath_names = Channel.fromPath(params.cath_names_path)
-            pfam_names = Channel.fromPath(params.pfam_names_path)
+        // import Domains
+        DOMAINS(IMPORT_HDF5.out.db_h5)
 
-            DOMAINS(IMPORT_HDF5.out.db_h5, domains, cath_names, pfam_names)
-            domains_h5 = DOMAINS.out.domains_h5
-        } else {
-            domains_h5 = Channel.empty()
-        }
         CACHE_BUILDER(IMPORT_HDF5.out.db_h5)
         GEN_BROWSER_AUX_FILES(IMPORT_HDF5.out.db_h5)
         download_files = GEN_BROWSER_AUX_FILES.out.genomes_json.mix(GEN_BROWSER_AUX_FILES.out.speciestree)
@@ -57,7 +50,7 @@ workflow OMA_BROWSER_BUILD {
                   gaf)
 
         h5_dbs_to_combine = IMPORT_HDF5.out.db_h5.mix(
-             domains_h5,
+             DOMAINS.out.domains_h5,
              GENERATE_XREFS.out.xref_db,
              GO_IMPORT.out.go_h5,
              CACHE_BUILDER.out.cache_h5,

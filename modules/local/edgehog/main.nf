@@ -3,7 +3,7 @@ process EDGEHOG {
     label "single_process"
     label "process_long"
     label "process_high_memory"
-    container "dessimozlab/omabuild:1.0.0"
+    container "dessimozlab/omabuild:1.0.1"
 
     input:
         path augmented_orthoxml

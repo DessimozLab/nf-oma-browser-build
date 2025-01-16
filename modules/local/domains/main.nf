@@ -2,7 +2,7 @@
 process ADD_DOMAINS {
     label "process_single"
     label "process_medium_memory"
-    container "dessimozlab/omabuild:1.0.0"
+    container "dessimozlab/omabuild:1.0.1"
 
     input:
         path database
@@ -15,11 +15,11 @@ process ADD_DOMAINS {
 
     script:
         """
-        oma-build -vv domains \
-            --db $database \
-            --hdf5-out domains.h5 \
-            --domains $domain_files \
-            --cath-names $cath_names \
+        oma-build -vv domains \\
+            --db $database \\
+            --hdf5-out domains.h5 \\
+            --domains $domain_files \\
+            --cath-names $cath_names \\
             --pfam-names $pfam_names
         """
 

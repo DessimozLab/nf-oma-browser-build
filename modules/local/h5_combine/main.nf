@@ -1,6 +1,6 @@
 process COMBINE_HDF {
     label "process_single"
-    container "dessimozlab/omabuild:1.0.0"
+    container "dessimozlab/omabuild:1.0.1"
 
     input:
         path h5files

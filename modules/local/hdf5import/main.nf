@@ -2,7 +2,7 @@
 process ADD_GENOMES {
     label "process_single"
     label "process_long"
-    container "dessimozlab/omabuild:1.0.0"
+    container "dessimozlab/omabuild:1.0.1"
 
     input:
         path gs_tsv
@@ -35,7 +35,7 @@ process ADD_GENOMES {
 process BUILD_SEQINDEX {
     label "process_single"
     label "process_medium_memory"
-    container "dessimozlab/omabuild:1.0.0"
+    container "dessimozlab/omabuild:1.0.1"
 
 
     input:
@@ -59,7 +59,7 @@ process BUILD_SEQINDEX {
 process BUILD_HOG_H5 {
     label "process_low"
     label "process_medium_memory"
-    container "dessimozlab/omabuild:1.0.0"
+    container "dessimozlab/omabuild:1.0.1"
 
 
     input:
@@ -92,7 +92,7 @@ process BUILD_HOG_H5 {
 
 process ADD_PAIRWISE_ORTHOLOGS {
     label "process_medium"
-    container "dessimozlab/omabuild:1.0.0"
+    container "dessimozlab/omabuild:1.0.1"
 
     input:
         path database
@@ -102,10 +102,11 @@ process ADD_PAIRWISE_ORTHOLOGS {
         path "vps.h5", emit: vps_h5
 
     script:
+        def vps = vps_base.name != 'NO_FILE' ? "--vps-base $vps_base" : ''
         """
-        oma-build -vv vps \
-            --db $database \
-            --vps-base $vps_base \
+        oma-build -vv vps \\
+            --db $database \\
+            $vps \\
             --hdf5-out vps.h5
         """
 
@@ -119,7 +120,7 @@ process ADD_PAIRWISE_ORTHOLOGS {
 
 process COMBINE_H5_FILES {
     label "process_single"
-    container "dessimozlab/omabuild:1.0.0"
+    container "dessimozlab/omabuild:1.0.1"
 
     input:
         path input_db, stageAs: 'OmaServer_input.h5'
