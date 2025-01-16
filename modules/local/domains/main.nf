@@ -14,13 +14,12 @@ process ADD_DOMAINS {
         path "domains.h5", emit: domains_h5
 
     script:
-        def domains = ($domain_files.name != "NO_FILE") ? "--domains $domain_files" : ''
         """
         oma-build -vv domains \\
             --db $database \\
             --hdf5-out domains.h5 \\
-            $domains \\
-            --cath-names $cath_names \
+            --domains $domain_files \\
+            --cath-names $cath_names \\
             --pfam-names $pfam_names
         """
 
