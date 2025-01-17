@@ -49,38 +49,43 @@
       "format": "directory-path"
     },
     "known_domains": {
-      "type": "string"
+      "type": "string",
+      "description": "Folder containing known domain assignments files",
+      "format": "directory-path"
     },
     "cath_names_path": {
       "type": "string",
-      "default": "http://download.cathdb.info/cath/releases/latest-release/cath-classification-data/cath-names.txt"
+      "default": "http://download.cathdb.info/cath/releases/latest-release/cath-classification-data/cath-names.txt",
+      "description": "File containing CATH domain descriptions"
     },
     "pfam_names_path": {
       "type": "string",
-      "default": "https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.clans.tsv.gz"
+      "default": "https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.clans.tsv.gz",
+      "description": "File containing Pfam descriptions"
     },
     "xref_uniprot_swissprot": {
       "type": "string",
-      "default": "https://ftp.ebi.ac.uk/pub/databases/uniprot/knowledgebase/uniprot_sprot.dat.gz"
+      "default": "https://ftp.ebi.ac.uk/pub/databases/uniprot/knowledgebase/uniprot_sprot.dat.gz",
+      "description": "UniProtKB/SwissProt annotation in text format"
     },
     "xref_uniprot_trembl": {
       "type": "string",
-      "default": "/dev/null"
+      "default": "/dev/null",
+      "description": "UniProtKB/TrEMBL annotations in text format"
     },
     "xref_refseq": {
-      "type": "string"
+      "type": "string",
+      "description": "Folder containing RefSeq gbff files."
     },
     "go_obo": {
       "type": "string",
-      "default": "http://purl.obolibrary.org/obo/go/go-basic.obo"
+      "default": "http://purl.obolibrary.org/obo/go/go-basic.obo",
+      "description": "Gene Ontology OBO file"
     },
     "go_gaf": {
       "type": "string",
-      "default": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/goa_uniprot_all.gaf.gz"
-    },
-    "nr_medium_procs": {
-      "type": "integer",
-      "default": 10
+      "default": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/goa_uniprot_all.gaf.gz",
+      "description": "Gene Ontology annotations (GAF format)"
     }
   },
   "required": ["hog_orthoxml", "genomes_dir"]
