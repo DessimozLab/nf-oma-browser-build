@@ -14,14 +14,13 @@ workflow EXTRACT_DARWIN {
         def splice_data = genomes_folder / "Splicings.drw"
         def subgenome = genomes_folder / "SubGenomes.drw"
         CONVERT_GS(genomes_folder, matrix_file, summaries)
-        CONVERT_GS.out.gs_tsv
+        convert_jobs = CONVERT_GS.out.gs_tsv
             | splitCsv(sep: "\t", header: true)
             | map { row ->
                 def dbfile = file(row.DBpath)
                 return tuple( row, dbfile, subgenome )
                 }
             | transpose
-            | set { convert_jobs }
         CONVERT_PROTEINS(convert_jobs)
         CONVERT_OMA_GROUPS(matrix_file)
         CONVERT_SPLICE_MAP(splice_data)

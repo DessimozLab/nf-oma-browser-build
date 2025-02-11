@@ -32,4 +32,5 @@ workflow IMPORT_HDF5 {
         db_h5 = COMBINE_H5_FILES.out.db_h5
         seqidx_h5 = BUILD_SEQINDEX.out.seqidx_h5
         source_xref_db = ADD_GENOMES.out.source_xref_h5
+        augmented_orthoxml = BUILD_HOG_H5.out.hogs_augmented_orthoxml
 }

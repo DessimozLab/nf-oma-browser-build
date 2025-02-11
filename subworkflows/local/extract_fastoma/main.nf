@@ -1,32 +1,48 @@
+#!/usr/bin/env nextflow
+
+// Modules
+include { CONVERT_SPECIES_TREE; CONVERT_PROTEOME; CONVERT_SPLICINGS ; FINALIZE_GS ; MERGE_JSON } from "./../../../modules/local/fastoma_extract"
 
 workflow EXTRACT_FASTOMA {
     take:
-        proteome_folder
-        base_folder
+        speciestree
+        species_mapping
+        
 
     main:
-        def summaries = base_folder / "Summaries.drw"
-        def taxonomy = genomes_folder / "taxonomy.sqlite"
-        def splice_data = genomes_folder / "Splicings.drw"
-        CONVERT_GS(genomes_folder, matrix_file, summaries)
-        CONVERT_GS.out.gs_tsv
+        CONVERT_SPECIES_TREE(speciestree, species_mapping)
+        convert_jobs = CONVERT_SPECIES_TREE.out.gs_tsv
             | splitCsv(sep: "\t", header: true)
             | map { row ->
-                def dbfile = file(row.DBpath)
-                return tuple( row, dbfile )
+                println "Processing row: ${row}"
+                def dbfile = file("${params.fastoma_proteomes}/${row.Name}.fa")
+                //def dbfile = file("${proteome_folder}/${row.Name}.fa")
+                //println "dbfile: ${dbfile}"
+                def matrix = (params.matrix_file != null) ? file("${params.matrix_file}") : file("$projectDir/assets/NO_FILE")
+                return tuple( row, dbfile, matrix )
                 }
             | transpose
-            | set { convert_jobs }
-        CONVERT_PROTEINS(convert_jobs)
-        CONVERT_OMA_GROUPS(matrix_file)
-        CONVERT_SPLICE_MAP(splice_data)
-        CONVERT_TAXONOMY(CONVERT_GS.out.gs_tsv, taxonomy)
-
+        convert_jobs.view()
+        CONVERT_PROTEOME(convert_jobs)
+        CONVERT_SPLICINGS(file(params.fastoma_proteomes))
+        FINALIZE_GS(
+             CONVERT_SPECIES_TREE.out.gs_tsv,
+             CONVERT_PROTEOME.out.meta.collect()
+        )
+        MERGE_JSON(CONVERT_PROTEOME.out.oma_groups.collect())
+            
 
     emit:
-        gs_file = CONVERT_GS.out.gs_tsv
-        protein_files = CONVERT_PROTEINS.out.prot_json.collect()
-        tax_tsv = CONVERT_TAXONOMY.out.tax_tsv
-        oma_groups = CONVERT_OMA_GROUPS.out.oma_groups_json
-        splice_json = CONVERT_SPLICE_MAP.out.splice_json
+        gs_file = FINALIZE_GS.out.genome_summaries
+        protein_files = CONVERT_PROTEOME.out.genome_json.collect()
+        tax_tsv = CONVERT_SPECIES_TREE.out.tax_tsv
+        oma_groups = MERGE_JSON.out.oma_groups
+        splice_json = CONVERT_SPLICINGS.out.splice_json
+}
+
+workflow {
+    speciestree = Channel.fromPath(params.fastoma_speciestree, type: "file", checkIfExists: true)
+    species_mapping = (params.fastoma_speciesdata != null) ? Channel.fromPath(params.fastoma_speciesdata, type: "file") : Channel.fromPath("$projectDir/assets/NO_FILE")
+    EXTRACT_FASTOMA(speciestree, species_mapping)
+
 }
