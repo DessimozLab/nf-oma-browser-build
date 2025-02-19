@@ -44,7 +44,7 @@ class DummyLocusProvider(LocusProvider):
 
 
 def convert_entry(rec, cds, loc_provider):
-    res = {"id": [rec.id],
+    res = {"id": rec.id,
            "ac": [rec.id], 
            "de": rec.description,
            "seq": clean_sequence(str(rec.seq)),          # ensure only valid aa
@@ -54,13 +54,13 @@ def convert_entry(rec, cds, loc_provider):
     return res
 
 
-def convert_matrix(matrix_fname: Optional[PathLike], ids:List[List[str]]):
+def convert_matrix(matrix_fname: Optional[PathLike], ids:List[str]):
     prot_to_group = {}
     if matrix_fname is not None:
         with auto_open(matrix_fname, 'rt') as fh:
             csv_reader = csv.DictReader(fh, dialect='excel-tab')
             prot_to_group = {row['Protein']: int(row['Group'][3:]) for row in csv_reader}
-    return [prot_to_group.get(id[0], 0) for id in ids]
+    return {f"{k+1}": prot_to_group.get(id, 0) for k, id in enumerate(ids)}
 
 
 def get_formatted_mtime(filepath: str, time_format: str = "%Y-%m-%d") -> str:

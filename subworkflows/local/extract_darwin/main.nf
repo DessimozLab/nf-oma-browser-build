@@ -4,11 +4,11 @@
 include { CONVERT_GS; CONVERT_PROTEINS; CONVERT_TAXONOMY; CONVERT_OMA_GROUPS; CONVERT_SPLICE_MAP } from "./../../../modules/local/darwin_extract"
 
 workflow EXTRACT_DARWIN {
-    take:
-        genomes_folder
-        matrix_file
         
     main:
+        def genomes_folder = file(params.genomes_dir)
+        def matrix_file = file(params.matrix_file)
+
         def summaries = genomes_folder / "Summaries.drw"
         def taxonomy = genomes_folder / "taxonomy.sqlite"
         def splice_data = genomes_folder / "Splicings.drw"

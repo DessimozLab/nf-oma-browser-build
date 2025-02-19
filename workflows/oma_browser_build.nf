@@ -9,23 +9,37 @@ include { GO_IMPORT      } from "./../modules/local/go_import"
 include { COMBINE_HDF    } from "./../modules/local/h5_combine"
 include { CACHE_BUILDER  } from "./../subworkflows/local/cache_builder"
 include { GEN_BROWSER_AUX_FILES } from "./../modules/local/browser_aux"
+//include { EDGEHOG        } from "./../modules/local/edgehog"
+include { EXTRACT_FASTOMA } from '../subworkflows/local/extract_fastoma/main.nf'
 
 workflow OMA_BROWSER_BUILD {
-    take:
-        genomes_folder
-        matrix_file
-        hog_orthoxml
-        vps_base
 
     main:
-        EXTRACT_DARWIN(genomes_folder, matrix_file)
-        IMPORT_HDF5(EXTRACT_DARWIN.out.gs_file,
-                    EXTRACT_DARWIN.out.tax_tsv,
-                    EXTRACT_DARWIN.out.oma_groups,
-                    EXTRACT_DARWIN.out.protein_files,
+        def hog_orthoxml = file(params.hog_orthoxml)
+        def vps_base = params.pairwise_orthologs_folder
+        
+        if (params.oma_source == "FastOMA"){
+            EXTRACT_FASTOMA()
+            gs_file = EXTRACT_FASTOMA.out.gs_file
+            tax_tsv = EXTRACT_FASTOMA.out.tax_tsv
+            oma_groups = EXTRACT_FASTOMA.out.oma_groups
+            protein_files = EXTRACT_FASTOMA.out.protein_files
+            splice_json = EXTRACT_FASTOMA.out.splice_json
+        } else if (params.oma_source == "Production"){
+            EXTRACT_DARWIN()
+            gs_file = EXTRACT_DARWIN.out.gs_file
+            tax_tsv = EXTRACT_DARWIN.out.tax_tsv
+            oma_groups = EXTRACT_DARWIN.out.oma_groups
+            protein_files = EXTRACT_DARWIN.out.protein_files
+            splice_json = EXTRACT_DARWIN.out.splice_json
+        }
+        IMPORT_HDF5(gs_file,
+                    tax_tsv,
+                    oma_groups,
+                    protein_files,
                     hog_orthoxml,
                     vps_base,
-                    EXTRACT_DARWIN.out.splice_json)
+                    splice_json)
 
         // import Domains
         DOMAINS(IMPORT_HDF5.out.db_h5)
@@ -35,8 +49,7 @@ workflow OMA_BROWSER_BUILD {
         download_files = GEN_BROWSER_AUX_FILES.out.genomes_json.mix(GEN_BROWSER_AUX_FILES.out.speciestree)
 
         // create crossreferences
-        GENERATE_XREFS(EXTRACT_DARWIN.out.gs_file,
-                       genomes_folder, 
+        GENERATE_XREFS(gs_file,
                        IMPORT_HDF5.out.db_h5,
                        IMPORT_HDF5.out.seqidx_h5,
                        IMPORT_HDF5.out.source_xref_db)

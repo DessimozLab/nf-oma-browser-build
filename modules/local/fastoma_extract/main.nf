@@ -30,7 +30,7 @@ process CONVERT_PROTEOME {
 
     output:
         val meta
-        path "${meta.Name}-proteins.json", emit: genome_json
+        path "${meta.Name}.json", emit: genome_json
         path "${meta.Name}-meta.json", emit: meta
         path "${meta.Name}-groups.json", emit: oma_groups
 
@@ -42,7 +42,7 @@ process CONVERT_PROTEOME {
             --name "${meta.Name}" \\
             --fasta $genome \\
             $opt_matrix \\
-            --out ${meta.Name}-proteins.json \\
+            --out ${meta.Name}.json \\
             --out-meta ${meta.Name}-meta.json \\
             --out-oma-groups ${meta.Name}-groups.json
         """

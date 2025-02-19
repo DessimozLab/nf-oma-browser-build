@@ -25,15 +25,15 @@ class TaxidProvider:
         scinames = tax.translate_to_names(num_id)
         mnemonic = tax.get_mnemonic_names(num_id)
         for taxid, sciname, v in zip(num_id, scinames, self.mapping.values()):
-            v['Taxid'] = taxid
+            v['NCBITaxonId'] = taxid
             v['SciName'] = sciname
             if taxid in mnemonic:
-                v['Mnemonic'] = mnemonic[taxid]
+                v['UniProtSpeciesCode'] = mnemonic[taxid]
 
     def get_node(self, name):
         node = self.mapping[name]
-        if not 'Taxid' in node or node['Taxid'] in ("", None):
-            node['Taxid'] = self._next_id
+        if not 'NCBITaxonId' in node or node['NCBITaxonId'] in ("", None):
+            node['NCBITaxonId'] = self._next_id
             self._next_id -= 1
         return node
 
@@ -47,19 +47,23 @@ def taxonomy_from_tree(tree: ete3.Tree, taxprovider:TaxidProvider) -> Tuple[List
             node.name = "Root"
         taxdata = taxprovider.get_node(node.name)
         logger.debug(f"Node {node} ({node.name}) -> {taxdata}")
-        node.add_feature('taxid', taxdata['Taxid'])
+        node.add_feature('taxid', taxdata['NCBITaxonId'])
         if node.is_leaf():
             if "SciName" not in taxdata:
                 taxdata['SciName'] = taxdata["Name"]
             if 'Mnemonic' not in taxdata:
                 if re.match(r"^[A-Z][A-Z0-9]{4}$", taxdata["Name"]):
-                    taxdata['Mnemonic'] = taxdata["Name"]
+                    taxdata['UniProtSpeciesCode'] = taxdata["Name"]
                 else:
                     sp_id_cnt += 1
-                    taxdata['Mnemonic'] = f"X{sp_id_cnt}"
+                    taxdata['UniProtSpeciesCode'] = f"X{sp_id_cnt}"
+            if "GenomeId" not in taxdata:
+                sp_id_cnt += 1
+                taxdata["GenomeId"] = sp_id_cnt
+            taxdata["OriginalNCBITaxonId"] = taxdata["NCBITaxonId"]
             gs.append(taxdata)
-        parent_taxid = node.up.taxid if node.up is not None else -1
-        tax.append((taxdata['Taxid'], parent_taxid, taxdata.get('SciName', taxdata['Name'])), )
+        parent_taxid = node.up.taxid if node.up is not None else 0
+        tax.append((taxdata['NCBITaxonId'], parent_taxid, taxdata.get('SciName', taxdata['Name'])), )
     return tax, gs
 
 def parse_genomes_tsv(genomes_tsv):

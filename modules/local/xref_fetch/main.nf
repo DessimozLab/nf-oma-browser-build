@@ -157,3 +157,23 @@ process BUILD_REDUCED_XREFS {
             --nr-procs ${task.cpus}
         """
 }
+
+
+process BUILD_NCBITAX_DB {
+    label "process_low"
+    container "dessimozlab/omabuild:edge"
+    tag "Verify / Build NCBITax database"
+
+    input:
+        path taxonomy_sqlite
+
+    output:
+        path "tax.sqlite", emit: tax_db
+        path "tax.sqlite.traversal.pkl", emit: tax_pkl, optional: true
+
+    script:
+        def opt = (taxonomy_sqlite.name == "NO_FILE") ? "" : "--path $taxonomy_sqlite"
+        """
+        build_verify_taxdb.py $opt --out-db tax.sqlite
+        """        
+}

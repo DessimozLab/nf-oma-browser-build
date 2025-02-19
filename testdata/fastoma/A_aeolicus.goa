@@ -1,0 +1,211 @@
+!gaf-version: 2.2
+!generated-by: UniProt
+!date-generated: 2024-12-21
+!GO-version: http://purl.obolibrary.org/obo/go/releases/2024-12-15/extensions/go-plus.owl
+!modified version - minimal data for testdata
+UniProtKB	O66429	tufA	enables	GO:0003746	GO_REF:0000002	IEA	InterPro:IPR004541	F	Elongation factor Tu	tufA|tufB|aq_005|aq_1928	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O66429	tufA	enables	GO:0003746	GO_REF:0000033	IBA	MGI:MGI:2137092|PANTHER:PTN001500717|PomBase:SPBC9B6.04c|SGD:S000005713|UniProtKB:O00178|UniProtKB:P49410|UniProtKB:P49411	F	Elongation factor Tu	tufA|tufB|aq_005|aq_1928	protein	taxon:224324	20240801	GO_Central		
+UniProtKB	O66429	tufA	enables	GO:0003746	GO_REF:0000043	IEA	UniProtKB-KW:KW-0251	F	Elongation factor Tu	tufA|tufB|aq_005|aq_1928	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66429	tufA	enables	GO:0003746	GO_REF:0000104	IEA	UniRule:UR000077068	F	Elongation factor Tu	tufA|tufB|aq_005|aq_1928	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66429	tufA	enables	GO:0003924	GO_REF:0000002	IEA	InterPro:IPR000795	F	Elongation factor Tu	tufA|tufB|aq_005|aq_1928	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O66429	tufA	enables	GO:0005525	GO_REF:0000002	IEA	InterPro:IPR000795|InterPro:IPR004161|InterPro:IPR004541|InterPro:IPR005225	F	Elongation factor Tu	tufA|tufB|aq_005|aq_1928	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O66429	tufA	enables	GO:0005525	GO_REF:0000043	IEA	UniProtKB-KW:KW-0342	F	Elongation factor Tu	tufA|tufB|aq_005|aq_1928	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66429	tufA	enables	GO:0005525	GO_REF:0000104	IEA	UniRule:UR000077068	F	Elongation factor Tu	tufA|tufB|aq_005|aq_1928	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66429	tufA	involved_in	GO:0006412	GO_REF:0000043	IEA	UniProtKB-KW:KW-0648	P	Elongation factor Tu	tufA|tufB|aq_005|aq_1928	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66429	tufA	involved_in	GO:0006414	GO_REF:0000002	IEA	InterPro:IPR004541	P	Elongation factor Tu	tufA|tufB|aq_005|aq_1928	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O66429	tufA	involved_in	GO:0006414	GO_REF:0000033	IBA	FB:FBgn0034627|MGI:MGI:1860138|MGI:MGI:2137092|PANTHER:PTN001500717|SGD:S000005713|UniProtKB:P49410|UniProtKB:P49411|UniProtKB:P57772|WB:WBGene00008133	P	Elongation factor Tu	tufA|tufB|aq_005|aq_1928	protein	taxon:224324	20241121	GO_Central		
+UniProtKB	O66429	tufA	involved_in	GO:0006414	GO_REF:0000043	IEA	UniProtKB-KW:KW-0251	P	Elongation factor Tu	tufA|tufB|aq_005|aq_1928	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66429	tufA	located_in	GO:0005737	GO_REF:0000043	IEA	UniProtKB-KW:KW-0963	C	Elongation factor Tu	tufA|tufB|aq_005|aq_1928	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66429	tufA	located_in	GO:0005737	GO_REF:0000044	IEA	UniProtKB-SubCell:SL-0086	C	Elongation factor Tu	tufA|tufB|aq_005|aq_1928	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66429	tufA	located_in	GO:0005737	GO_REF:0000104	IEA	UniRule:UR000077068	C	Elongation factor Tu	tufA|tufB|aq_005|aq_1928	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66686	tpiA	enables	GO:0004807	GO_REF:0000002	IEA	InterPro:IPR000652|InterPro:IPR020861|InterPro:IPR022896|InterPro:IPR035990	F	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O66686	tpiA	enables	GO:0004807	GO_REF:0000003	IEA	EC:5.3.1.1	F	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66686	tpiA	enables	GO:0004807	GO_REF:0000033	IBA	FB:FBgn0086355|MGI:MGI:98797|PANTHER:PTN000474559|PomBase:SPCC24B10.21|RGD:3896|SGD:S000002457|TAIR:locus:2047072|TAIR:locus:2099906|UniProtKB:P0A858|UniProtKB:P60174|UniProtKB:P9WG43|UniProtKB:Q7KQM0	F	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20230111	GO_Central		
+UniProtKB	O66686	tpiA	enables	GO:0004807	GO_REF:0000104	IEA	UniRule:UR000079063	F	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66686	tpiA	enables	GO:0004807	GO_REF:0000116	IEA	RHEA:18585	F	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20241216	RHEA		
+UniProtKB	O66686	tpiA	enables	GO:0016853	GO_REF:0000043	IEA	UniProtKB-KW:KW-0413	F	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66686	tpiA	involved_in	GO:0006094	GO_REF:0000033	IBA	MGI:MGI:98797|PANTHER:PTN000474559|UniProtKB:P0A858|UniProtKB:P9WG43	P	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20220415	GO_Central		
+UniProtKB	O66686	tpiA	involved_in	GO:0006094	GO_REF:0000041	IEA	UniPathway:UPA00138	P	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20240129	UniProt		
+UniProtKB	O66686	tpiA	involved_in	GO:0006094	GO_REF:0000043	IEA	UniProtKB-KW:KW-0312	P	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66686	tpiA	involved_in	GO:0006094	GO_REF:0000104	IEA	UniRule:UR000079063	P	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66686	tpiA	involved_in	GO:0006096	GO_REF:0000002	IEA	InterPro:IPR022896	P	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O66686	tpiA	involved_in	GO:0006096	GO_REF:0000033	IBA	FB:FBgn0086355|MGI:MGI:98797|PANTHER:PTN000474559|PomBase:SPCC24B10.21|SGD:S000002457|UniProtKB:P0A858|UniProtKB:P9WG43	P	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20240731	GO_Central		
+UniProtKB	O66686	tpiA	involved_in	GO:0006096	GO_REF:0000041	IEA	UniPathway:UPA00109	P	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20240129	UniProt		
+UniProtKB	O66686	tpiA	involved_in	GO:0006096	GO_REF:0000043	IEA	UniProtKB-KW:KW-0324	P	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66686	tpiA	involved_in	GO:0006096	GO_REF:0000104	IEA	UniRule:UR000079063	P	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66686	tpiA	involved_in	GO:0019563	GO_REF:0000033	IBA	PANTHER:PTN000474559|TAIR:locus:2047072	P	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20170228	GO_Central		
+UniProtKB	O66686	tpiA	involved_in	GO:0046166	GO_REF:0000033	IBA	PANTHER:PTN000474559|TAIR:locus:2047072|UniProtKB:P60174	P	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20200808	GO_Central		
+UniProtKB	O66686	tpiA	is_active_in	GO:0005829	GO_REF:0000033	IBA	MGI:MGI:98797|PANTHER:PTN000474559|UniProtKB:P0A858	C	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20230603	GO_Central		
+UniProtKB	O66686	tpiA	located_in	GO:0005737	GO_REF:0000043	IEA	UniProtKB-KW:KW-0963	C	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66686	tpiA	located_in	GO:0005737	GO_REF:0000044	IEA	UniProtKB-SubCell:SL-0086	C	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66686	tpiA	located_in	GO:0005737	GO_REF:0000104	IEA	UniRule:UR000079063	C	Triosephosphate isomerase	tpiA|timA|aq_360	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66778	eno	enables	GO:0000287	GO_REF:0000002	IEA	InterPro:IPR000941	F	Enolase	eno|aq_484	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O66778	eno	enables	GO:0000287	GO_REF:0000104	IEA	UniRule:UR000083263	F	Enolase	eno|aq_484	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66778	eno	enables	GO:0004634	GO_REF:0000002	IEA	InterPro:IPR000941	F	Enolase	eno|aq_484	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O66778	eno	enables	GO:0004634	GO_REF:0000003	IEA	EC:4.2.1.11	F	Enolase	eno|aq_484	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66778	eno	enables	GO:0004634	GO_REF:0000033	IBA	CGD:CAL0000185645|MGI:MGI:2441717|MGI:MGI:95393|MGI:MGI:95395|PANTHER:PTN000224401|RGD:2553|RGD:2554|RGD:2555|SGD:S000001217|SGD:S000003486|SGD:S000004942|SGD:S000006202|TAIR:locus:2031476|TAIR:locus:2044851|UniProtKB:P06733|UniProtKB:P0A6P9	F	Enolase	eno|aq_484	protein	taxon:224324	20200406	GO_Central		
+UniProtKB	O66778	eno	enables	GO:0004634	GO_REF:0000104	IEA	UniRule:UR000083263	F	Enolase	eno|aq_484	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66778	eno	enables	GO:0004634	GO_REF:0000116	IEA	RHEA:10164	F	Enolase	eno|aq_484	protein	taxon:224324	20241216	RHEA		
+UniProtKB	O66778	eno	enables	GO:0016829	GO_REF:0000043	IEA	UniProtKB-KW:KW-0456	F	Enolase	eno|aq_484	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66778	eno	enables	GO:0046872	GO_REF:0000043	IEA	UniProtKB-KW:KW-0479	F	Enolase	eno|aq_484	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66778	eno	involved_in	GO:0006096	GO_REF:0000002	IEA	InterPro:IPR000941	P	Enolase	eno|aq_484	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O66778	eno	involved_in	GO:0006096	GO_REF:0000033	IBA	CGD:CAL0000185645|MGI:MGI:2441717|MGI:MGI:95393|MGI:MGI:95395|PANTHER:PTN000224401|RGD:2553|RGD:2554|SGD:S000001217|SGD:S000003486|TAIR:locus:2044851|UniProtKB:P06733|UniProtKB:P0A6P9	P	Enolase	eno|aq_484	protein	taxon:224324	20240729	GO_Central		
+UniProtKB	O66778	eno	involved_in	GO:0006096	GO_REF:0000041	IEA	UniPathway:UPA00109	P	Enolase	eno|aq_484	protein	taxon:224324	20240129	UniProt		
+UniProtKB	O66778	eno	involved_in	GO:0006096	GO_REF:0000043	IEA	UniProtKB-KW:KW-0324	P	Enolase	eno|aq_484	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66778	eno	involved_in	GO:0006096	GO_REF:0000104	IEA	UniRule:UR000083263	P	Enolase	eno|aq_484	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66778	eno	located_in	GO:0005576	GO_REF:0000043	IEA	UniProtKB-KW:KW-0964	C	Enolase	eno|aq_484	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66778	eno	located_in	GO:0005576	GO_REF:0000044	IEA	UniProtKB-SubCell:SL-0243	C	Enolase	eno|aq_484	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66778	eno	located_in	GO:0005737	GO_REF:0000043	IEA	UniProtKB-KW:KW-0963	C	Enolase	eno|aq_484	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66778	eno	located_in	GO:0005737	GO_REF:0000044	IEA	UniProtKB-SubCell:SL-0086	C	Enolase	eno|aq_484	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66778	eno	located_in	GO:0005737	GO_REF:0000104	IEA	UniRule:UR000083263	C	Enolase	eno|aq_484	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66778	eno	located_in	GO:0009986	GO_REF:0000044	IEA	UniProtKB-SubCell:SL-0310	C	Enolase	eno|aq_484	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66778	eno	located_in	GO:0009986	GO_REF:0000104	IEA	UniRule:UR000083263	C	Enolase	eno|aq_484	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66778	eno	part_of	GO:0000015	GO_REF:0000002	IEA	InterPro:IPR000941	C	Enolase	eno|aq_484	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O66778	eno	part_of	GO:0000015	GO_REF:0000033	IBA	PANTHER:PTN000224401|RGD:2553|RGD:2554|SGD:S000001217|SGD:S000003486|UniProtKB:P06733|UniProtKB:P0A6P9	C	Enolase	eno|aq_484	protein	taxon:224324	20200406	GO_Central		
+UniProtKB	O66907	atpA	contributes_to	GO:0046933	GO_REF:0000033	IBA	PANTHER:PTN000389891|SGD:S000000195|UniProtKB:P25705	F	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241121	GO_Central		
+UniProtKB	O66907	atpA	enables	GO:0005524	GO_REF:0000002	IEA	InterPro:IPR000194|InterPro:IPR020003	F	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O66907	atpA	enables	GO:0005524	GO_REF:0000033	IBA	MGI:MGI:88115|PANTHER:PTN000389891|RGD:619993	F	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20180504	GO_Central		
+UniProtKB	O66907	atpA	enables	GO:0005524	GO_REF:0000043	IEA	UniProtKB-KW:KW-0067	F	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66907	atpA	enables	GO:0005524	GO_REF:0000104	IEA	UniRule:UR000101844	F	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66907	atpA	enables	GO:0043531	GO_REF:0000033	IBA	PANTHER:PTN000389891|RGD:619993	F	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20180504	GO_Central		
+UniProtKB	O66907	atpA	enables	GO:0046933	GO_REF:0000002	IEA	InterPro:IPR005294	F	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O66907	atpA	enables	GO:0046933	GO_REF:0000003	IEA	EC:7.1.2.2	F	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66907	atpA	enables	GO:0046933	GO_REF:0000104	IEA	UniRule:UR000101844	F	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66907	atpA	enables	GO:0046961	GO_REF:0000003	IEA	EC:7.1.2.2	F	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66907	atpA	involved_in	GO:0006754	GO_REF:0000043	IEA	UniProtKB-KW:KW-0066	P	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66907	atpA	involved_in	GO:0015986	GO_REF:0000002	IEA	InterPro:IPR000793|InterPro:IPR005294	P	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O66907	atpA	involved_in	GO:0015986	GO_REF:0000033	IBA	PANTHER:PTN000389891|SGD:S000000195|UniProtKB:P0ABB0|UniProtKB:P25705	P	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20240802	GO_Central		
+UniProtKB	O66907	atpA	involved_in	GO:0015986	GO_REF:0000104	IEA	UniRule:UR000101844	P	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66907	atpA	involved_in	GO:1902600	GO_REF:0000002	IEA	InterPro:IPR004100|InterPro:IPR036121	P	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O66907	atpA	involved_in	GO:1902600	GO_REF:0000043	IEA	UniProtKB-KW:KW-0375	P	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66907	atpA	located_in	GO:0005886	GO_REF:0000043	IEA	UniProtKB-KW:KW-0997|UniProtKB-KW:KW-1003	C	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66907	atpA	located_in	GO:0005886	GO_REF:0000044	IEA	UniProtKB-SubCell:SL-0037	C	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66907	atpA	located_in	GO:0005886	GO_REF:0000104	IEA	UniRule:UR000101844	C	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66907	atpA	part_of	GO:0045259	GO_REF:0000043	IEA	UniProtKB-KW:KW-0139	C	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66907	atpA	part_of	GO:0045259	GO_REF:0000117	IEA	ARBA:ARBA00027774	C	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O66907	atpA	part_of	GO:0045261	GO_REF:0000002	IEA	InterPro:IPR005294	C	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O66907	atpA	part_of	GO:0045261	GO_REF:0000033	IBA	PANTHER:PTN008732895|RGD:619993|SGD:S000000195|UniProtKB:P0ABB0|UniProtKB:Q57TX9	C	ATP synthase subunit alpha	atpA|aq_679	protein	taxon:224324	20241121	GO_Central		
+UniProtKB	O67032	prfA	enables	GO:0016149	GO_REF:0000002	IEA	InterPro:IPR004373	F	Peptide chain release factor 1	prfA|aq_876	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67032	prfA	enables	GO:0016149	GO_REF:0000104	IEA	UniRule:UR000001252	F	Peptide chain release factor 1	prfA|aq_876	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67032	prfA	involved_in	GO:0006412	GO_REF:0000043	IEA	UniProtKB-KW:KW-0648	P	Peptide chain release factor 1	prfA|aq_876	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67032	prfA	involved_in	GO:0006415	GO_REF:0000002	IEA	InterPro:IPR000352|InterPro:IPR004373|InterPro:IPR005139	P	Peptide chain release factor 1	prfA|aq_876	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67032	prfA	involved_in	GO:0006415	GO_REF:0000104	IEA	UniRule:UR000001252	P	Peptide chain release factor 1	prfA|aq_876	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67032	prfA	located_in	GO:0005737	GO_REF:0000043	IEA	UniProtKB-KW:KW-0963	C	Peptide chain release factor 1	prfA|aq_876	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67032	prfA	located_in	GO:0005737	GO_REF:0000044	IEA	UniProtKB-SubCell:SL-0086	C	Peptide chain release factor 1	prfA|aq_876	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67032	prfA	located_in	GO:0005737	GO_REF:0000104	IEA	UniRule:UR000001252	C	Peptide chain release factor 1	prfA|aq_876	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67032	prfA	located_in	GO:0005737	GO_REF:0000117	IEA	ARBA:ARBA00026971	C	Peptide chain release factor 1	prfA|aq_876	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67118	dnaK	enables	GO:0005524	GO_REF:0000002	IEA	InterPro:IPR012725|InterPro:IPR013126	F	Chaperone protein DnaK	dnaK|aq_996	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67118	dnaK	enables	GO:0005524	GO_REF:0000043	IEA	UniProtKB-KW:KW-0067	F	Chaperone protein DnaK	dnaK|aq_996	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67118	dnaK	enables	GO:0005524	GO_REF:0000104	IEA	UniRule:UR000084064	F	Chaperone protein DnaK	dnaK|aq_996	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67118	dnaK	enables	GO:0016887	GO_REF:0000033	IBA	FB:FBgn0001218|MGI:MGI:105384|PANTHER:PTN000452648|PomBase:SPAC664.11|RGD:621725|SGD:S000000004|SGD:S000000171|SGD:S000002388|SGD:S000003571|SGD:S000003806|SGD:S000004361|SGD:S000005153|UniProtKB:K7NTP5|UniProtKB:P0A6Z1|UniProtKB:P0DMV8|UniProtKB:P0DMV9|UniProtKB:P11021|UniProtKB:P17066|UniProtKB:P77319|UniProtKB:Q57VR7|UniProtKB:Q8IB24|WB:WBGene00002005	F	Chaperone protein DnaK	dnaK|aq_996	protein	taxon:224324	20240206	GO_Central		
+UniProtKB	O67118	dnaK	enables	GO:0031072	GO_REF:0000033	IBA	PANTHER:PTN000452648|RGD:1311806|UniProtKB:K7NTP5|UniProtKB:P0DMV8|UniProtKB:P0DMV9|UniProtKB:P11142|UniProtKB:P17066|UniProtKB:P34931|UniProtKB:Q8IB24	F	Chaperone protein DnaK	dnaK|aq_996	protein	taxon:224324	20230603	GO_Central		
+UniProtKB	O67118	dnaK	enables	GO:0044183	GO_REF:0000033	IBA	MGI:MGI:95835|MGI:MGI:96244|MGI:MGI:99517|PANTHER:PTN000452648|UniProtKB:P0A6Y8|UniProtKB:P0DMV8|UniProtKB:P0DMV9	F	Chaperone protein DnaK	dnaK|aq_996	protein	taxon:224324	20230603	GO_Central		
+UniProtKB	O67118	dnaK	enables	GO:0051082	GO_REF:0000002	IEA	InterPro:IPR012725	F	Chaperone protein DnaK	dnaK|aq_996	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67118	dnaK	enables	GO:0140662	GO_REF:0000002	IEA	InterPro:IPR013126	F	Chaperone protein DnaK	dnaK|aq_996	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67118	dnaK	involved_in	GO:0006457	GO_REF:0000002	IEA	InterPro:IPR012725	P	Chaperone protein DnaK	dnaK|aq_996	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67118	dnaK	involved_in	GO:0042026	GO_REF:0000033	IBA	PANTHER:PTN000452648|SGD:S000000004|SGD:S000003806|UniProtKB:P0DMV8|UniProtKB:P0DMV9|UniProtKB:P11142|UniProtKB:P17066|UniProtKB:P34931|UniProtKB:P54652	P	Chaperone protein DnaK	dnaK|aq_996	protein	taxon:224324	20221122	GO_Central		
+UniProtKB	O67118	dnaK	involved_in	GO:0051085	GO_REF:0000033	IBA	MGI:MGI:105384|PANTHER:PTN000452648|UniProtKB:P0A6Y8	P	Chaperone protein DnaK	dnaK|aq_996	protein	taxon:224324	20230111	GO_Central		
+UniProtKB	O67161	gap	enables	GO:0000166	GO_REF:0000043	IEA	UniProtKB-KW:KW-0547	F	Glyceraldehyde-3-phosphate dehydrogenase	gap|aq_1065	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67161	gap	enables	GO:0004365	GO_REF:0000003	IEA	EC:1.2.1.12	F	Glyceraldehyde-3-phosphate dehydrogenase	gap|aq_1065	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67161	gap	enables	GO:0004365	GO_REF:0000024	ISS	UniProtKB:P09124	F	Glyceraldehyde-3-phosphate dehydrogenase	gap|aq_1065	protein	taxon:224324	20150707	UniProt		
+UniProtKB	O67161	gap	enables	GO:0004365	GO_REF:0000033	IBA	PANTHER:PTN001652504|UniProtKB:P09124|UniProtKB:P0A9B6|UniProtKB:P47543|UniProtKB:P9WN83	F	Glyceraldehyde-3-phosphate dehydrogenase	gap|aq_1065	protein	taxon:224324	20170421	GO_Central		
+UniProtKB	O67161	gap	enables	GO:0004365	GO_REF:0000116	IEA	RHEA:10300	F	Glyceraldehyde-3-phosphate dehydrogenase	gap|aq_1065	protein	taxon:224324	20241216	RHEA		
+UniProtKB	O67161	gap	enables	GO:0016491	GO_REF:0000043	IEA	UniProtKB-KW:KW-0560	F	Glyceraldehyde-3-phosphate dehydrogenase	gap|aq_1065	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67161	gap	enables	GO:0016620	GO_REF:0000002	IEA	InterPro:IPR006424|InterPro:IPR020829|InterPro:IPR020830|InterPro:IPR020831	F	Glyceraldehyde-3-phosphate dehydrogenase	gap|aq_1065	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67161	gap	enables	GO:0050661	GO_REF:0000002	IEA	InterPro:IPR006424	F	Glyceraldehyde-3-phosphate dehydrogenase	gap|aq_1065	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67161	gap	enables	GO:0051287	GO_REF:0000002	IEA	InterPro:IPR006424|InterPro:IPR020828	F	Glyceraldehyde-3-phosphate dehydrogenase	gap|aq_1065	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67161	gap	enables	GO:0051287	GO_REF:0000024	ISS	UniProtKB:P09124	F	Glyceraldehyde-3-phosphate dehydrogenase	gap|aq_1065	protein	taxon:224324	20150707	UniProt		
+UniProtKB	O67161	gap	enables	GO:0051287	GO_REF:0000033	IBA	PANTHER:PTN001652504|UniProtKB:P09124|UniProtKB:P0A9B6|UniProtKB:P17721|UniProtKB:P9WN83	F	Glyceraldehyde-3-phosphate dehydrogenase	gap|aq_1065	protein	taxon:224324	20170421	GO_Central		
+UniProtKB	O67161	gap	involved_in	GO:0006006	GO_REF:0000002	IEA	InterPro:IPR006424	P	Glyceraldehyde-3-phosphate dehydrogenase	gap|aq_1065	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67161	gap	involved_in	GO:0006006	GO_REF:0000033	IBA	PANTHER:PTN001652504|UniProtKB:O34425|UniProtKB:P0A9B6	P	Glyceraldehyde-3-phosphate dehydrogenase	gap|aq_1065	protein	taxon:224324	20170421	GO_Central		
+UniProtKB	O67161	gap	involved_in	GO:0006096	GO_REF:0000041	IEA	UniPathway:UPA00109	P	Glyceraldehyde-3-phosphate dehydrogenase	gap|aq_1065	protein	taxon:224324	20240129	UniProt		
+UniProtKB	O67161	gap	involved_in	GO:0006096	GO_REF:0000043	IEA	UniProtKB-KW:KW-0324	P	Glyceraldehyde-3-phosphate dehydrogenase	gap|aq_1065	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67161	gap	located_in	GO:0005737	GO_REF:0000043	IEA	UniProtKB-KW:KW-0963	C	Glyceraldehyde-3-phosphate dehydrogenase	gap|aq_1065	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67161	gap	located_in	GO:0005737	GO_REF:0000044	IEA	UniProtKB-SubCell:SL-0086	C	Glyceraldehyde-3-phosphate dehydrogenase	gap|aq_1065	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67547	sucD	enables	GO:0000166	GO_REF:0000043	IEA	UniProtKB-KW:KW-0547	F	Succinate--CoA ligase [ADP-forming] subunit alpha	sucD|aq_1622	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67547	sucD	enables	GO:0003824	GO_REF:0000002	IEA	InterPro:IPR005810|InterPro:IPR005811	F	Succinate--CoA ligase [ADP-forming] subunit alpha	sucD|aq_1622	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67547	sucD	enables	GO:0004775	GO_REF:0000003	IEA	EC:6.2.1.5	F	Succinate--CoA ligase [ADP-forming] subunit alpha	sucD|aq_1622	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67547	sucD	enables	GO:0004775	GO_REF:0000033	IBA	PANTHER:PTN000122012|RGD:619821|UniProtKB:Q51567	F	Succinate--CoA ligase [ADP-forming] subunit alpha	sucD|aq_1622	protein	taxon:224324	20241120	GO_Central		
+UniProtKB	O67547	sucD	enables	GO:0004775	GO_REF:0000104	IEA	UniRule:UR000403795	F	Succinate--CoA ligase [ADP-forming] subunit alpha	sucD|aq_1622	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67547	sucD	enables	GO:0004775	GO_REF:0000116	IEA	RHEA:17661	F	Succinate--CoA ligase [ADP-forming] subunit alpha	sucD|aq_1622	protein	taxon:224324	20241216	RHEA		
+UniProtKB	O67547	sucD	enables	GO:0004776	GO_REF:0000033	IBA	PANTHER:PTN000122012|RGD:619821|dictyBase:DDB_G0289325	F	Succinate--CoA ligase [ADP-forming] subunit alpha	sucD|aq_1622	protein	taxon:224324	20200310	GO_Central		
+UniProtKB	O67547	sucD	enables	GO:0004776	GO_REF:0000116	IEA	RHEA:22120	F	Succinate--CoA ligase [ADP-forming] subunit alpha	sucD|aq_1622	protein	taxon:224324	20241216	RHEA		
+UniProtKB	O67547	sucD	enables	GO:0016874	GO_REF:0000043	IEA	UniProtKB-KW:KW-0436	F	Succinate--CoA ligase [ADP-forming] subunit alpha	sucD|aq_1622	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67547	sucD	involved_in	GO:0006099	GO_REF:0000033	IBA	FB:FBgn0004888|PANTHER:PTN000122012|PomBase:SPAC16E8.17c|RGD:619821	P	Succinate--CoA ligase [ADP-forming] subunit alpha	sucD|aq_1622	protein	taxon:224324	20241120	GO_Central		
+UniProtKB	O67547	sucD	involved_in	GO:0006099	GO_REF:0000041	IEA	UniPathway:UPA00223	P	Succinate--CoA ligase [ADP-forming] subunit alpha	sucD|aq_1622	protein	taxon:224324	20240129	UniProt		
+UniProtKB	O67547	sucD	involved_in	GO:0006099	GO_REF:0000043	IEA	UniProtKB-KW:KW-0816	P	Succinate--CoA ligase [ADP-forming] subunit alpha	sucD|aq_1622	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67547	sucD	involved_in	GO:0006099	GO_REF:0000104	IEA	UniRule:UR000403795	P	Succinate--CoA ligase [ADP-forming] subunit alpha	sucD|aq_1622	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67547	sucD	part_of	GO:0009361	GO_REF:0000033	IBA	PANTHER:PTN000122012|UniProtKB:P0AGE9	C	Succinate--CoA ligase [ADP-forming] subunit alpha	sucD|aq_1622	protein	taxon:224324	20200310	GO_Central		
+UniProtKB	O67618	lepA	enables	GO:0003746	GO_REF:0000104	IEA	UniRule:UR000001417	F	Elongation factor 4	lepA|aq_1725	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67618	lepA	enables	GO:0003924	GO_REF:0000002	IEA	InterPro:IPR000795	F	Elongation factor 4	lepA|aq_1725	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67618	lepA	enables	GO:0003924	GO_REF:0000104	IEA	UniRule:UR000001417	F	Elongation factor 4	lepA|aq_1725	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67618	lepA	enables	GO:0003924	GO_REF:0000116	IEA	RHEA:19669	F	Elongation factor 4	lepA|aq_1725	protein	taxon:224324	20241216	RHEA		
+UniProtKB	O67618	lepA	enables	GO:0005525	GO_REF:0000002	IEA	InterPro:IPR000795|InterPro:IPR004161|InterPro:IPR005225|InterPro:IPR006297	F	Elongation factor 4	lepA|aq_1725	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67618	lepA	enables	GO:0005525	GO_REF:0000043	IEA	UniProtKB-KW:KW-0342	F	Elongation factor 4	lepA|aq_1725	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67618	lepA	enables	GO:0005525	GO_REF:0000104	IEA	UniRule:UR000001417	F	Elongation factor 4	lepA|aq_1725	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67618	lepA	enables	GO:0016787	GO_REF:0000043	IEA	UniProtKB-KW:KW-0378	F	Elongation factor 4	lepA|aq_1725	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67618	lepA	enables	GO:0043022	GO_REF:0000033	IBA	PANTHER:PTN002460656|SGD:S000004280|UniProtKB:P60785	F	Elongation factor 4	lepA|aq_1725	protein	taxon:224324	20230407	GO_Central		
+UniProtKB	O67618	lepA	enables	GO:0043022	GO_REF:0000104	IEA	UniRule:UR000001417	F	Elongation factor 4	lepA|aq_1725	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67618	lepA	involved_in	GO:0006412	GO_REF:0000043	IEA	UniProtKB-KW:KW-0648	P	Elongation factor 4	lepA|aq_1725	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67618	lepA	involved_in	GO:0006414	GO_REF:0000108	IEA	GO:0003746	P	Elongation factor 4	lepA|aq_1725	protein	taxon:224324	20241218	GOC		
+UniProtKB	O67618	lepA	involved_in	GO:0045727	GO_REF:0000033	IBA	PANTHER:PTN002460656|SGD:S000004280	P	Elongation factor 4	lepA|aq_1725	protein	taxon:224324	20210623	GO_Central		
+UniProtKB	O67618	lepA	involved_in	GO:0045727	GO_REF:0000104	IEA	UniRule:UR000001417	P	Elongation factor 4	lepA|aq_1725	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67618	lepA	located_in	GO:0005886	GO_REF:0000043	IEA	UniProtKB-KW:KW-0997|UniProtKB-KW:KW-1003	C	Elongation factor 4	lepA|aq_1725	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67618	lepA	located_in	GO:0005886	GO_REF:0000044	IEA	UniProtKB-SubCell:SL-0037	C	Elongation factor 4	lepA|aq_1725	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67618	lepA	located_in	GO:0005886	GO_REF:0000104	IEA	UniRule:UR000001417	C	Elongation factor 4	lepA|aq_1725	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67736	folD	enables	GO:0004477	GO_REF:0000003	IEA	EC:3.5.4.9	F	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67736	folD	enables	GO:0004477	GO_REF:0000033	IBA	MGI:MGI:1338850|PANTHER:PTN000002250|PomBase:SPBC839.16|RGD:1310879|SGD:S000000288|SGD:S000003436|UniProtKB:P11586|UniProtKB:P13995|UniProtKB:P24186	F	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20211218	GO_Central		
+UniProtKB	O67736	folD	enables	GO:0004477	GO_REF:0000104	IEA	UniRule:UR000001283	F	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67736	folD	enables	GO:0004477	GO_REF:0000116	IEA	RHEA:23700	F	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20241216	RHEA		
+UniProtKB	O67736	folD	enables	GO:0004488	GO_REF:0000002	IEA	InterPro:IPR000672|InterPro:IPR020630|InterPro:IPR020631	F	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67736	folD	enables	GO:0004488	GO_REF:0000003	IEA	EC:1.5.1.5	F	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67736	folD	enables	GO:0004488	GO_REF:0000033	IBA	MGI:MGI:1338850|MGI:MGI:1342005|PANTHER:PTN000002250|PomBase:SPBC839.16|RGD:1310879|SGD:S000000288|SGD:S000003436|UniProtKB:P11586|UniProtKB:P13995|UniProtKB:P24186	F	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20211218	GO_Central		
+UniProtKB	O67736	folD	enables	GO:0004488	GO_REF:0000104	IEA	UniRule:UR000001283	F	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67736	folD	enables	GO:0004488	GO_REF:0000116	IEA	RHEA:22812	F	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20241216	RHEA		
+UniProtKB	O67736	folD	enables	GO:0016491	GO_REF:0000043	IEA	UniProtKB-KW:KW-0560	F	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67736	folD	enables	GO:0016787	GO_REF:0000043	IEA	UniProtKB-KW:KW-0378	F	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67736	folD	involved_in	GO:0000105	GO_REF:0000043	IEA	UniProtKB-KW:KW-0368	P	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67736	folD	involved_in	GO:0006164	GO_REF:0000043	IEA	UniProtKB-KW:KW-0658	P	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67736	folD	involved_in	GO:0006730	GO_REF:0000043	IEA	UniProtKB-KW:KW-0554	P	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67736	folD	involved_in	GO:0009086	GO_REF:0000043	IEA	UniProtKB-KW:KW-0486	P	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67736	folD	involved_in	GO:0035999	GO_REF:0000033	IBA	MGI:MGI:1342005|PANTHER:PTN000002250|RGD:1310879|UniProtKB:P11586	P	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20200810	GO_Central		
+UniProtKB	O67736	folD	involved_in	GO:0035999	GO_REF:0000041	IEA	UniPathway:UPA00193	P	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20240129	UniProt		
+UniProtKB	O67736	folD	involved_in	GO:0035999	GO_REF:0000104	IEA	UniRule:UR000001283	P	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67736	folD	is_active_in	GO:0005829	GO_REF:0000033	IBA	PANTHER:PTN000002250|SGD:S000001788|UniProtKB:P11586|UniProtKB:P24186	C	Bifunctional protein FolD	folD|aq_1898	protein	taxon:224324	20170228	GO_Central		
+UniProtKB	O67828	atpD	contributes_to	GO:0046933	GO_REF:0000033	IBA	PANTHER:PTN008558586|PomBase:SPAC222.12c|SGD:S000003882|UniProtKB:P06576|UniProtKB:P0ABB4	F	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20210317	GO_Central		
+UniProtKB	O67828	atpD	enables	GO:0005524	GO_REF:0000002	IEA	InterPro:IPR000194|InterPro:IPR020003	F	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67828	atpD	enables	GO:0005524	GO_REF:0000043	IEA	UniProtKB-KW:KW-0067	F	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67828	atpD	enables	GO:0005524	GO_REF:0000104	IEA	UniRule:UR000101855	F	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67828	atpD	enables	GO:0016887	GO_REF:0000002	IEA	InterPro:IPR003593	F	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67828	atpD	enables	GO:0046933	GO_REF:0000002	IEA	InterPro:IPR005722	F	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67828	atpD	enables	GO:0046933	GO_REF:0000003	IEA	EC:7.1.2.2	F	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67828	atpD	enables	GO:0046933	GO_REF:0000104	IEA	UniRule:UR000101855	F	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67828	atpD	enables	GO:0046961	GO_REF:0000003	IEA	EC:7.1.2.2	F	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67828	atpD	involved_in	GO:0006754	GO_REF:0000043	IEA	UniProtKB-KW:KW-0066	P	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67828	atpD	involved_in	GO:0015986	GO_REF:0000002	IEA	InterPro:IPR005722	P	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67828	atpD	involved_in	GO:0015986	GO_REF:0000104	IEA	UniRule:UR000101855	P	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67828	atpD	involved_in	GO:1902600	GO_REF:0000002	IEA	InterPro:IPR004100|InterPro:IPR036121	P	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67828	atpD	involved_in	GO:1902600	GO_REF:0000043	IEA	UniProtKB-KW:KW-0375	P	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67828	atpD	located_in	GO:0005886	GO_REF:0000043	IEA	UniProtKB-KW:KW-0997|UniProtKB-KW:KW-1003	C	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67828	atpD	located_in	GO:0005886	GO_REF:0000044	IEA	UniProtKB-SubCell:SL-0037	C	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67828	atpD	located_in	GO:0005886	GO_REF:0000104	IEA	UniRule:UR000101855	C	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67828	atpD	part_of	GO:0045259	GO_REF:0000043	IEA	UniProtKB-KW:KW-0139	C	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67828	atpD	part_of	GO:0045259	GO_REF:0000117	IEA	ARBA:ARBA00027774	C	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67828	atpD	part_of	GO:0045261	GO_REF:0000002	IEA	InterPro:IPR005722	C	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67828	atpD	part_of	GO:0045261	GO_REF:0000033	IBA	PANTHER:PTN008558586|PomBase:SPAC222.12c|RGD:621368|SGD:S000003882|TAIR:locus:504956338|TAIR:locus:505006590|UniProtKB:P0ABB4|UniProtKB:Q57XX1	C	ATP synthase subunit beta	atpD|aq_2038	protein	taxon:224324	20241120	GO_Central		
+UniProtKB	O67943	groEL	enables	GO:0005524	GO_REF:0000002	IEA	InterPro:IPR002423|InterPro:IPR018370	F	Chaperonin GroEL	groEL|groL|aq_2200	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67943	groEL	enables	GO:0005524	GO_REF:0000033	IBA	PANTHER:PTN000143644|UniProtKB:P0A6F5	F	Chaperonin GroEL	groEL|groL|aq_2200	protein	taxon:224324	20200206	GO_Central		
+UniProtKB	O67943	groEL	enables	GO:0005524	GO_REF:0000043	IEA	UniProtKB-KW:KW-0067	F	Chaperonin GroEL	groEL|groL|aq_2200	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67943	groEL	enables	GO:0005524	GO_REF:0000104	IEA	UniRule:UR000098153	F	Chaperonin GroEL	groEL|groL|aq_2200	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67943	groEL	enables	GO:0016853	GO_REF:0000043	IEA	UniProtKB-KW:KW-0413	F	Chaperonin GroEL	groEL|groL|aq_2200	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67943	groEL	enables	GO:0051082	GO_REF:0000033	IBA	PANTHER:PTN000143644|UniProtKB:P0A6F5	F	Chaperonin GroEL	groEL|groL|aq_2200	protein	taxon:224324	20200206	GO_Central		
+UniProtKB	O67943	groEL	enables	GO:0051082	GO_REF:0000104	IEA	UniRule:UR000098153	F	Chaperonin GroEL	groEL|groL|aq_2200	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67943	groEL	enables	GO:0140662	GO_REF:0000002	IEA	InterPro:IPR001844	F	Chaperonin GroEL	groEL|groL|aq_2200	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67943	groEL	involved_in	GO:0009408	GO_REF:0000033	IBA	PANTHER:PTN000143644|UniProtKB:P0A6F5|UniProtKB:P9WPE7|UniProtKB:P9WPE9	P	Chaperonin GroEL	groEL|groL|aq_2200	protein	taxon:224324	20200206	GO_Central		
+UniProtKB	O67943	groEL	involved_in	GO:0042026	GO_REF:0000002	IEA	InterPro:IPR001844	P	Chaperonin GroEL	groEL|groL|aq_2200	protein	taxon:224324	20241216	InterPro		
+UniProtKB	O67943	groEL	involved_in	GO:0042026	GO_REF:0000104	IEA	UniRule:UR000098153	P	Chaperonin GroEL	groEL|groL|aq_2200	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67943	groEL	involved_in	GO:0051085	GO_REF:0000033	IBA	PANTHER:PTN000143644|UniProtKB:P0A6F5	P	Chaperonin GroEL	groEL|groL|aq_2200	protein	taxon:224324	20200206	GO_Central		
+UniProtKB	O67943	groEL	located_in	GO:0005737	GO_REF:0000043	IEA	UniProtKB-KW:KW-0963	C	Chaperonin GroEL	groEL|groL|aq_2200	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67943	groEL	located_in	GO:0005737	GO_REF:0000044	IEA	UniProtKB-SubCell:SL-0086	C	Chaperonin GroEL	groEL|groL|aq_2200	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67943	groEL	located_in	GO:0005737	GO_REF:0000104	IEA	UniRule:UR000098153	C	Chaperonin GroEL	groEL|groL|aq_2200	protein	taxon:224324	20241216	UniProt		
+UniProtKB	O67943	groEL	part_of	GO:1990220	GO_REF:0000033	IBA	PANTHER:PTN000143644|UniProtKB:P0A6F5	C	Chaperonin GroEL	groEL|groL|aq_2200	protein	taxon:224324	20170228	GO_Central		

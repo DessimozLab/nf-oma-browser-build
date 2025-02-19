@@ -1,12 +1,11 @@
 #!/usr/bin/env nextflow
 include { PREPARE_XREFS } from "./prepare"
 include { MAP_XREFS_WF  } from "./map"
-include { BUILD_REDUCED_XREFS } from "./../../../modules/local/xref_fetch"
+include { BUILD_REDUCED_XREFS} from "./../../../modules/local/xref_fetch"
 
 workflow GENERATE_XREFS {
     take:
         gs_tsv
-        genome_folder
         db_h5
         seqidx_h5
         source_xref_h5
@@ -16,7 +15,7 @@ workflow GENERATE_XREFS {
         uniprot_trembl = Channel.fromPath(params.xref_uniprot_trembl)
         def refseq_folder = params.xref_refseq
 
-        PREPARE_XREFS(gs_tsv, db_h5, genome_folder, uniprot_swissprot, uniprot_trembl, refseq_folder)
+        PREPARE_XREFS(gs_tsv, db_h5, uniprot_swissprot, uniprot_trembl, refseq_folder)
         
         MAP_XREFS_WF(PREPARE_XREFS.out.xref_chunks,
                      PREPARE_XREFS.out.taxmap,

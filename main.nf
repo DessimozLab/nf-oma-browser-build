@@ -47,11 +47,7 @@ workflow OMA_browser_build {
 
         // Run the pipeline
         // parse_inputs()
-        def genomes_dir = file(params.genomes_dir)
-        def matrix_file = file(params.matrix_file)
-        def hog_orthoxml = file(params.hog_orthoxml)
-        def vps_base = params.pairwise_orthologs_folder
-        OMA_BROWSER_BUILD(genomes_dir, matrix_file, hog_orthoxml, vps_base)
+        OMA_BROWSER_BUILD()
 
     emit:
         db = OMA_BROWSER_BUILD.out.db

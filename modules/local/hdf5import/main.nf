@@ -65,6 +65,7 @@ process BUILD_HOG_H5 {
     input:
         path database
         path orthoxml
+        val is_prod_oma
 
     output:
         path "hog.h5", emit: hog_h5
@@ -72,6 +73,7 @@ process BUILD_HOG_H5 {
         path "oma-hogs.orthoXML.augmented", emit: hogs_augmented_orthoxml
 
     script:
+        def opt = (is_prod_oma) ? "--oma-prot-id" : ""
         """
         oma-build -vv hog \
             --orthoxml $orthoxml \
@@ -79,7 +81,7 @@ process BUILD_HOG_H5 {
             --hdf5-out hog.h5 \
             --augmented-orthoxml-out oma-hogs.orthoXML.augmented \
             --orthoxml-out oma-hogs.orthoXML \
-            --oma-prot-id
+            $opt
         """
     stub:
         """

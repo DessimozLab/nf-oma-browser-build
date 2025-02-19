@@ -1,0 +1,11 @@
+{
+    "fastoma_species_tree": "${projectDir}\/testdata\/fastoma\/species_tree_checked.nwk",
+    "fastoma_proteomes": "${projectDir}\/testdata\/fastoma\/proteome",
+    "fastoma_speciesdata": "${projectDir}\/testdata\/fastoma\/species_info.tsv",
+    "matrix_file": "${projectDir}\/testdata\/fastoma\/OrthologousGroups.tsv",
+    "hog_orthoxml": "${projectDir}\/testdata\/fastoma\/FastOMA_HOGs.orthoxml",
+    "genomes_dir": "${projectDir}\/testdata\/fastoma\/proteome",
+    "taxonomy_sqlite_path": "${projectDir}\/testdata\/taxonomy.sqlite",
+    "xref_refseq": "${projectDir}/assets/NO_FILE",
+    "go_gaf": "${projectDir}\/testdata\/fastoma\/*.goa"
+}
