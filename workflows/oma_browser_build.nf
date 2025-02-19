@@ -78,13 +78,3 @@ workflow OMA_BROWSER_BUILD {
 
 }
 
-
-workflow {
-    oma_browser_data_dir = Channel.fromPath(params.oma_browser_data_dir, type: "dir")
-    hog_orthoxml = Channel.fromPath(params.hog_orthoxml)
-
-    nr_chunks = params.nr_medium_procs
-    vps_base = params.pairwise_orthologs_folder
-    
-    oma_browser_build(oma_browser_data_dir, nr_chunks, hog_orthoxml, vps_base)
-}
