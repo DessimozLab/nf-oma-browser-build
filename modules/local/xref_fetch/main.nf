@@ -169,7 +169,7 @@ process BUILD_NCBITAX_DB {
 
     output:
         path "tax.sqlite", emit: tax_db
-        path "tax.sqlite.traversal.pkl", emit: tax_pkl, optional: true
+        path "tax.sqlite.traverse.pkl", emit: tax_pkl
 
     script:
         def opt = (taxonomy_sqlite.name == "NO_FILE") ? "" : "--path $taxonomy_sqlite"
