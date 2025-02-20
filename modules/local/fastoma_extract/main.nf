@@ -1,5 +1,5 @@
 process CONVERT_SPECIES_TREE {
-    label "process_medium"
+    label "process_single"
     container "dessimozlab/omabuild:edge"
 
     input:
@@ -22,7 +22,7 @@ process CONVERT_SPECIES_TREE {
 }
 
 process CONVERT_PROTEOME {
-    label "process_medium"
+    label "process_single"
     container "dessimozlab/omabuild:edge"
 
     input:

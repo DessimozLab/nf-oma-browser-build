@@ -160,7 +160,7 @@ process BUILD_REDUCED_XREFS {
 
 
 process BUILD_NCBITAX_DB {
-    label "process_low"
+    label "process_single"
     container "dessimozlab/omabuild:edge"
     tag "Verify / Build NCBITax database"
 
