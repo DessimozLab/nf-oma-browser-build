@@ -1,24 +1,25 @@
 #!/usr/bin/env nextflow
 
 // Modules
-include {HOGPROP; HOGPROP_COLLECT} from "./../../../modules/local/hogprop"
+include {HOGPROP; HOGPROP_COLLECT; COUNT_GENES_WITH_ANNOTATION} from "./../../../modules/local/hogprop"
 
 workflow ANCESTRAL_GO {
     take:
         orthoxml
         omadb
-        nr_chunks
 
     main:
-        chunks = Channel.of(1..nr_chunks)
+        nr_chunks = COUNT_GENES_WITH_ANNOTATION(omadb)
+            .map { n -> n as Integer }
+            .map { n -> (int) Math.max(Math.ceil(n / 1000.0), 2) }
+        
+        chunks = nr_chunks
+            .map { n -> (1..n).toList() }
+            .flatten()
 
         HOGPROP(chunks, nr_chunks, orthoxml, omadb)
         HOGPROP_COLLECT(HOGPROP.out | collect, omadb)
 
     emit:
-        HOGPROP_COLLECT.out.anc_go_h5
-}
-
-workflow {
-    ANCESTRAL_GO
+        anc_go_h5 = HOGPROP_COLLECT.out.anc_go_h5
 }

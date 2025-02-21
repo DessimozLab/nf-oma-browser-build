@@ -6,11 +6,13 @@ include { IMPORT_HDF5    } from "./../subworkflows/local/hdf5import"
 include { DOMAINS        } from "./../subworkflows/local/domains"
 include { GENERATE_XREFS } from "./../subworkflows/local/xrefs"
 include { GO_IMPORT      } from "./../modules/local/go_import"
-include { COMBINE_HDF    } from "./../modules/local/h5_combine"
+include { COMBINE_HDF_AND_UPDATE_SUMMARY_DATA } from "./../modules/local/h5_combine"
+include { COMBINE_HDFS as HOGS_AND_GO } from "./../modules/local/h5_combine"
 include { CACHE_BUILDER  } from "./../subworkflows/local/cache_builder"
 include { GEN_BROWSER_AUX_FILES } from "./../modules/local/browser_aux"
 //include { EDGEHOG        } from "./../modules/local/edgehog"
 include { EXTRACT_FASTOMA } from '../subworkflows/local/extract_fastoma/main.nf'
+include { ANCESTRAL_GO   } from "../subworkflows/local/ancestral_go/main.nf"
 
 workflow OMA_BROWSER_BUILD {
 
@@ -61,18 +63,25 @@ workflow OMA_BROWSER_BUILD {
                   GENERATE_XREFS.out.taxmap,
                   obo,
                   gaf)
+        
+        // ancestral GO
+        HOGS_AND_GO(IMPORT_HDF5.out.db_h5.mix(GO_IMPORT.out.go_h5).collect())
+        ANCESTRAL_GO(IMPORT_HDF5.out.augmented_orthoxml,
+                     HOGS_AND_GO.out.combined_h5)
+
 
         h5_dbs_to_combine = IMPORT_HDF5.out.db_h5.mix(
              DOMAINS.out.domains_h5,
              GENERATE_XREFS.out.xref_db,
              GO_IMPORT.out.go_h5,
              CACHE_BUILDER.out.cache_h5,
-             GENERATE_XREFS.out.red_xref_db)
+             GENERATE_XREFS.out.red_xref_db,
+             ANCESTRAL_GO.out.anc_go_h5)
         h5_dbs_to_combine.view()
-        COMBINE_HDF(h5_dbs_to_combine.collect())
+        COMBINE_HDF_AND_UPDATE_SUMMARY_DATA(h5_dbs_to_combine.collect())
    
     emit:
-        db        = COMBINE_HDF.out.combined_h5
+        db        = COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5
         seqidx_h5 = IMPORT_HDF5.out.seqidx_h5
         downloads = download_files
 
