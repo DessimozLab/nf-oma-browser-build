@@ -11,7 +11,7 @@ workflow ANCESTRAL_GO {
     main:
         nr_chunks = COUNT_GENES_WITH_ANNOTATION(omadb)
             .map { n -> n as Integer }
-            .map { n -> (int) Math.max(Math.ceil(n / 1000.0), 2) }
+            .map { n ->Math.max(Math.ceil(n / 1000.0), 2) as Integer }
         
         chunks = nr_chunks
             .map { n -> (1..n).toList() }

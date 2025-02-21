@@ -7,8 +7,9 @@ process GEN_BROWSER_AUX_FILES {
 
     output:
         path "*genomes.json", emit: genomes_json
-        path "speciestree.*", emit: speciestree
-
+        path "speciestree.nwk", emit: speciestree_newick
+        path "speciestree.phyloxml", emit: speciestree_phyloxml
+        
     script:
         """
         oma-build -vv generate-aux-files \\
