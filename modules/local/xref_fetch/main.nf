@@ -1,7 +1,7 @@
 
 process FETCH_REFSEQ {
     label "process_low"
-    container "dessimozlab/omabuild:1.0.1"
+    container "dessimozlab/omabuild:1.1.0"
 
     output:
         path "*.gpff.gz", emit: refseq_proteins
@@ -17,7 +17,7 @@ process FETCH_REFSEQ {
 process FILTER_AND_SPLIT {
     tag "$source"
     label "process_single"
-    container "dessimozlab/omabuild:1.0.1"
+    container "dessimozlab/omabuild:1.1.0"
 
     input:
         tuple path(xref), val(format), val(source)
@@ -37,7 +37,7 @@ process FILTER_AND_SPLIT {
 
 process RELEVANT_TAXID_MAP {
     label "process_single"
-    container "dessimozlab/omabuild:1.0.1"
+    container "dessimozlab/omabuild:1.1.0"
 
     input:
         path gs_tsv
@@ -68,7 +68,7 @@ process MAP_XREFS {
     label "process_single"
     label "process_long"
     label "HIGH_IO_ACCESS"
-    container "dessimozlab/omabuild:1.0.1"
+    container "dessimozlab/omabuild:1.1.0"
 
     input:
         tuple path(xref_in), val(format), val(source), 
@@ -96,7 +96,7 @@ process MAP_XREFS {
 
 process COLLECT_XREFS {
     label "process_single"
-    container "dessimozlab/omabuild:1.0.1"
+    container "dessimozlab/omabuild:1.1.0"
     tag "Collecting xrefs for $source"
 
     input:
@@ -119,7 +119,7 @@ process COLLECT_XREFS {
 
 process COMBINE_ALL_XREFS {
     label "process_single"
-    container "dessimozlab/omabuild:1.0.1"
+    container "dessimozlab/omabuild:1.1.0"
     tag "Combining all xrefs into single hdf5 db"
 
     input:
@@ -138,7 +138,7 @@ process COMBINE_ALL_XREFS {
 
 process BUILD_REDUCED_XREFS {
     label "process_low"
-    container "dessimozlab/omabuild:1.0.1"
+    container "dessimozlab/omabuild:1.1.0"
     tag "Building a reduced set of xrefs for lookup and search"
 
     input:
@@ -156,4 +156,24 @@ process BUILD_REDUCED_XREFS {
             --db $db \\
             --nr-procs ${task.cpus}
         """
+}
+
+
+process BUILD_NCBITAX_DB {
+    label "process_single"
+    container "dessimozlab/omabuild:1.1.0"
+    tag "Verify / Build NCBITax database"
+
+    input:
+        path taxonomy_sqlite
+
+    output:
+        path "tax.sqlite", emit: tax_db
+        path "tax.sqlite.traverse.pkl", emit: tax_pkl
+
+    script:
+        def opt = (taxonomy_sqlite.name == "NO_FILE") ? "" : "--path $taxonomy_sqlite"
+        """
+        build_verify_taxdb.py $opt --out-db tax.sqlite
+        """        
 }

@@ -2,7 +2,7 @@
 process ADD_GENOMES {
     label "process_single"
     label "process_long"
-    container "dessimozlab/omabuild:1.0.1"
+    container "dessimozlab/omabuild:1.1.0"
 
     input:
         path gs_tsv
@@ -35,7 +35,7 @@ process ADD_GENOMES {
 process BUILD_SEQINDEX {
     label "process_single"
     label "process_medium_memory"
-    container "dessimozlab/omabuild:1.0.1"
+    container "dessimozlab/omabuild:1.1.0"
 
 
     input:
@@ -59,12 +59,13 @@ process BUILD_SEQINDEX {
 process BUILD_HOG_H5 {
     label "process_low"
     label "process_medium_memory"
-    container "dessimozlab/omabuild:1.0.1"
+    container "dessimozlab/omabuild:1.1.0"
 
 
     input:
         path database
         path orthoxml
+        val is_prod_oma
 
     output:
         path "hog.h5", emit: hog_h5
@@ -72,6 +73,7 @@ process BUILD_HOG_H5 {
         path "oma-hogs.orthoXML.augmented", emit: hogs_augmented_orthoxml
 
     script:
+        def opt = (is_prod_oma) ? "--oma-prot-id" : ""
         """
         oma-build -vv hog \
             --orthoxml $orthoxml \
@@ -79,7 +81,7 @@ process BUILD_HOG_H5 {
             --hdf5-out hog.h5 \
             --augmented-orthoxml-out oma-hogs.orthoXML.augmented \
             --orthoxml-out oma-hogs.orthoXML \
-            --oma-prot-id
+            $opt
         """
     stub:
         """
@@ -92,7 +94,7 @@ process BUILD_HOG_H5 {
 
 process ADD_PAIRWISE_ORTHOLOGS {
     label "process_medium"
-    container "dessimozlab/omabuild:1.0.1"
+    container "dessimozlab/omabuild:1.1.0"
 
     input:
         path database
@@ -120,7 +122,7 @@ process ADD_PAIRWISE_ORTHOLOGS {
 
 process COMBINE_H5_FILES {
     label "process_single"
-    container "dessimozlab/omabuild:1.0.1"
+    container "dessimozlab/omabuild:1.1.0"
 
     input:
         path input_db, stageAs: 'OmaServer_input.h5'

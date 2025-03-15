@@ -771,7 +771,7 @@
         },
         "hogprop": {
             "git": "${LABGIT}/hogprop2",
-            "ref": "28ca6e0aa3925f8e8a7711091c97e16ba34a91f6"
+            "ref": "78b7ba4b5b0faca065313946011ffd9abe2574f1"
         },
         "httpcore": {
             "hashes": [
@@ -1971,7 +1971,7 @@
             ],
             "git": "${LABGIT}/pyoma.git",
             "markers": "python_version >= '3.6'",
-            "ref": "bf83495bcdd7183c5ae3d4217b4ec82144aa2c47"
+            "ref": "794ca9158761055e9a0b96e1d1c5e99af19c93d7"
         },
         "pyopa": {
             "hashes": [

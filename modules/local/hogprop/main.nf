@@ -1,12 +1,24 @@
 // Processes
+process COUNT_GENES_WITH_ANNOTATION {
+    label "process_single"
+    container "dessimozlab/omabuild:1.1.0"
+
+    input:
+        path omadb
+
+    output:
+        stdout
+
+    script:
+        """
+        count_genes_with_annotations.py --omadb ${omadb}
+        """
+}
+
 
 process HOGPROP {
-    label "process_low"
-    label "single_cpu"
-    container "${workflow.projectDir}/container/omabuild.sif"
-    errorStrategy { task.exitStatus in ((130..140) + 104) ? 'retry' : 'terminate' }
-    maxRetries 3
-
+    label "process_single"
+    container "dessimozlab/omabuild:1.1.0"
 
     input:
         each chunk
@@ -30,25 +42,25 @@ process HOGPROP {
 
     stub:
         """
-        touch go.h5
+        touch go_$chunk.h5
         """
 }
 
 process HOGPROP_COLLECT {
     label "process_single"
     label "process_high_memory"
-    container "dessimozlab/omabuild:1.0.0"
+    container "dessimozlab/omabuild:1.1.0"
 
     input:
         path "results/*"
         path omadb
 
     output:
-        path "go.h5", emit: anc_go_h5
+        path "anc_go.h5", emit: anc_go_h5
 
     script:
         """
-        hogprop-browser-convert --oma_db $omadb --input_folder results/ --out go.h5
+        hogprop-browser-convert --oma_db $omadb --input-folder results/ --out anc_go.h5
         """
 
     stub:

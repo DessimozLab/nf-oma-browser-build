@@ -1,20 +1,19 @@
 
-include { FETCH_REFSEQ; FILTER_AND_SPLIT; RELEVANT_TAXID_MAP } from "./../../../../modules/local/xref_fetch"
+include { FETCH_REFSEQ; FILTER_AND_SPLIT; RELEVANT_TAXID_MAP ; BUILD_NCBITAX_DB  } from "./../../../../modules/local/xref_fetch"
 
 workflow PREPARE_XREFS {
     take:
         gs_tsv
         database
-        genome_folder
         uniprot_swissprot
         uniprot_trembl
         refseq_folder
 
     main:
         // compute relevant taxid mapping for crossreference mappings
-        def taxonomy_sqlite = genome_folder / "taxonomy.sqlite"
-        def tax_traverse_pkl = genome_folder / "taxonomy.sqlite.traverse.pkl"
-        RELEVANT_TAXID_MAP(gs_tsv, database, taxonomy_sqlite, tax_traverse_pkl)
+        tax_db = (params.taxonomy_sqlite_path != null) ? Channel.fromPath(params.taxonomy_sqlite_path, type: "file") : Channel.fromPath("$projectDir/assets/NO_FILE")
+        BUILD_NCBITAX_DB(tax_db)
+        RELEVANT_TAXID_MAP(gs_tsv, database, BUILD_NCBITAX_DB.out.tax_db, BUILD_NCBITAX_DB.out.tax_pkl)
 
 
         // Transform swissprot and trembl channels into tuples

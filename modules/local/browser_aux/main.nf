@@ -1,14 +1,15 @@
 process GEN_BROWSER_AUX_FILES {
     label "process_single"
-    container "dessimozlab/omabuild:1.0.1"
+    container "dessimozlab/omabuild:1.1.0"
 
     input:
         path db
 
     output:
         path "*genomes.json", emit: genomes_json
-        path "speciestree.*", emit: speciestree
-
+        path "speciestree.nwk", emit: speciestree_newick
+        path "speciestree.phyloxml", emit: speciestree_phyloxml
+        
     script:
         """
         oma-build -vv generate-aux-files \\
