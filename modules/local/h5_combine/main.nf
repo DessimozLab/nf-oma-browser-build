@@ -1,6 +1,6 @@
 process COMBINE_HDF_AND_UPDATE_SUMMARY_DATA {
     label "process_single"
-    container "dessimozlab/omabuild:1.1.0"
+    container "dessimozlab/omabuild:edge"
 
     input:
         path h5files
@@ -28,7 +28,7 @@ process COMBINE_HDF_AND_UPDATE_SUMMARY_DATA {
 
 process COMBINE_HDFS {
     label "process_single"
-    container "dessimozlab/omabuild:1.1.0"
+    container "dessimozlab/omabuild:edge"
 
     input:
         path h5files
