@@ -2,7 +2,7 @@
 
 process GENERATE_JOBS {
     label "process_single"
-    container "dessimozlab/omabuild:edge"
+    container "dessimozlab/omabuild:1.1.0"
     
     input:
         path db
@@ -28,7 +28,7 @@ process GENERATE_JOBS {
 process COMPUTE_CACHE {
     label "process_single"
     label "HIGH_IO_ACCESS"
-    container "dessimozlab/omabuild:edge"
+    container "dessimozlab/omabuild:1.1.0"
     tag "Cache builder ${job_file}"
 
     input:
@@ -54,7 +54,7 @@ process COMPUTE_CACHE {
 
 process COMBINE_JOBS {
     label "process_single"
-    container "dessimozlab/omabuild:edge"
+    container "dessimozlab/omabuild:1.1.0"
     
     input:
         path(job_res, stageAs: "res???/*")
