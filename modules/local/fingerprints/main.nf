@@ -11,10 +11,10 @@ process INFER_FINGERPRINTS {
 
     script:
         """
-        oma-build -vv fingerprints \\
-            --db db_h5 \\
-            --suffix-db seqidx_h5 \\
-            --out-oma-group Fingerprints.txt
+        oma-build -vv fingerprint \\
+            --db $db_h5 \\
+            --suffix-db $seqidx_h5 \\
+            --out Fingerprints.txt
         """
 
     stub:

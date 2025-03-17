@@ -13,8 +13,8 @@ process INFER_KEYWORDS {
     script:
         """
         oma-build -vv keywords \\
-            --db db_h5 \\
-            --xref-db xref_db \\
+            --db $db_h5 \\
+            --xref-db $xref_db \\
             --out-oma-group Keywords.txt \\
             --out-hog RootHOG_Keywords.txt
         """

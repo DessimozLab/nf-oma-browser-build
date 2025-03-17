@@ -4,9 +4,9 @@ process COMBINE_HDF_AND_UPDATE_SUMMARY_DATA {
 
     input:
         path h5files
-        path oma_group_keywords, stage_as: "Keywords.txt"
-        path oma_group_fingerprints, stage_as: "Fingerprints.txt"
-        path oma_hog_keywords, stage_as: 'RootHOG_Keywords.txt'
+        path oma_group_keywords, name: "Keywords.txt"
+        path oma_group_fingerprints, name: "Fingerprints.txt"
+        path oma_hog_keywords, name: 'RootHOG_Keywords.txt'
 
     output:
         path "combined_file.h5", emit: combined_h5
