@@ -9,7 +9,7 @@ from pyoma.common import auto_open
 
 def load_gs_tsv(gs_tsv_file):
     """Loads the GS TSV file into a pandas DataFrame."""
-    df = pd.read_csv(gs_tsv_file, sep='\t')
+    df = pd.read_csv(gs_tsv_file, sep='\t', dtype=str)
     return df
 
 
