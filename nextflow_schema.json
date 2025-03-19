@@ -1,184 +1,192 @@
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/oma-browser-build/master/nextflow_schema.json",
-    "title": "oma-browser-build pipeline parameters",
-    "description": "Convert OMA run into OMA Browser release",
-    "type": "object",
-    "$defs": {
-        "datatype_setting": {
-            "title": "Datatype setting",
-            "type": "object",
-            "description": "",
-            "default": "",
-            "properties": {
-                "oma_source": {
-                    "type": "string",
-                    "default": "FastOMA",
-                    "enum": [
-                        "FastOMA",
-                        "Production"
-                    ],
-                    "description": "Selection of OMA data source. Can be either 'FastOMA' or 'Production'. The selection requires setting either the parameters for FastOMA or Production."
-                }
-            }
-        },
-        "fastoma_input_data": {
-            "title": "FastOMA Input data",
-            "type": "object",
-            "description": "Input files generated with FastOMA",
-            "default": "",
-            "properties": {
-                "fastoma_species_tree": {
-                    "type": "string",
-                    "description": "Species Tree in newick format.",
-                    "format": "file-path"
-                },
-                "fastoma_proteomes": {
-                    "type": "string",
-                    "format": "directory-path"
-                },
-                "fastoma_speciesdata": {
-                    "type": "string",
-                    "format": "file-path"
-                }
-            }
-        },
-        "production_oma_input_data": {
-            "title": "Production OMA Input data",
-            "type": "object",
-            "description": "Input files genereated from an OMA Production run",
-            "default": "",
-            "properties": {
-                "pairwise_orthologs_folder": {
-                    "type": "string",
-                    "description": "Pairwise Orthologs (only by Standard OMA pipeline)",
-                    "format": "directory-path"
-                },
-                "matrix_file": {
-                    "type": "string",
-                    "description": "OMA Groups file",
-                    "format": "file-path"
-                },
-                "hog_orthoxml": {
-                    "type": "string",
-                    "description": "Hierarchcial orthologous groups (HOGs) in orthoxml format",
-                    "format": "file-path",
-                    "mimetype": "application/xml"
-                },
-                "genomes_dir": {
-                    "type": "string",
-                    "description": "Folder containing genomes",
-                    "format": "directory-path"
-                }
-            },
-            "required": [
-                "hog_orthoxml",
-                "genomes_dir"
-            ]
-        },
-        "domain_data": {
-            "title": "Domain data",
-            "type": "object",
-            "description": "File paths for domain annotations",
-            "default": "",
-            "properties": {
-                "cath_names_path": {
-                    "type": "string",
-                    "default": "http://download.cathdb.info/cath/releases/latest-release/cath-classification-data/cath-names.txt",
-                    "description": "File containing CATH domain descriptions"
-                },
-                "known_domains": {
-                    "type": "string",
-                    "description": "Folder containing known domain assignments files",
-                    "format": "directory-path"
-                },
-                "pfam_names_path": {
-                    "type": "string",
-                    "default": "https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.clans.tsv.gz",
-                    "description": "File containing Pfam descriptions"
-                }
-            }
-        },
-        "crossreferences": {
-            "title": "Crossreferences",
-            "type": "object",
-            "description": "Integrate crossreferences",
-            "default": "",
-            "properties": {
-                "xref_uniprot_swissprot": {
-                    "type": "string",
-                    "default": "https://ftp.ebi.ac.uk/pub/databases/uniprot/knowledgebase/uniprot_sprot.dat.gz",
-                    "description": "UniProtKB/SwissProt annotation in text format"
-                },
-                "xref_uniprot_trembl": {
-                    "type": "string",
-                    "default": "/dev/null",
-                    "description": "UniProtKB/TrEMBL annotations in text format"
-                },
-                "taxonomy_sqlite_path": {
-                    "type": "string"
-                },
-                "xref_refseq": {
-                    "type": "string",
-                    "description": "Folder containing RefSeq gbff files."
-                }
-            }
-        },
-        "gene_ontology": {
-            "title": "Gene Ontology",
-            "type": "object",
-            "description": "Gene Ontology files to integrate",
-            "default": "",
-            "properties": {
-                "go_obo": {
-                    "type": "string",
-                    "default": "http://purl.obolibrary.org/obo/go/go-basic.obo",
-                    "description": "Gene Ontology OBO file"
-                },
-                "go_gaf": {
-                    "type": "string",
-                    "default": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/goa_uniprot_all.gaf.gz",
-                    "description": "Gene Ontology annotations (GAF format). This can the GOA database or a glob pattern with local files in gaf format."
-                }
-            }
-        },
-        "generic_options": {
-            "title": "Generic options",
-            "type": "object",
-            "fa_icon": "fas fa-file-import",
-            "description": "Less common options for the pipeline, typically set in a config file.",
-            "help_text": "These options are common to all nf-core pipelines and allow you to customise some of the core preferences for how the pipeline runs.\n\nTypically these options would be set in a Nextflow config file loaded for all pipeline runs, such as `~/.nextflow/config`.",
-            "properties": {
-                "help": {
-                    "type": "boolean",
-                    "description": "Display help text.",
-                    "fa_icon": "fas fa-question-circle",
-                    "hidden": true
-                }
-            }
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/oma-browser-build/master/nextflow_schema.json",
+  "title": "oma-browser-build pipeline parameters",
+  "description": "Convert OMA run into OMA Browser release",
+  "type": "object",
+  "$defs": {
+    "datatype_setting": {
+      "title": "Datatype setting",
+      "type": "object",
+      "description": "",
+      "default": "",
+      "properties": {
+        "oma_source": {
+          "type": "string",
+          "default": "FastOMA",
+          "enum": ["FastOMA", "Production"],
+          "description": "Selection of OMA data source. Can be either 'FastOMA' or 'Production'. The selection requires setting either the parameters for FastOMA or Production."
         }
+      }
     },
-    "allOf": [
-        {
-            "$ref": "#/$defs/datatype_setting"
+    "fastoma_input_data": {
+      "title": "FastOMA Input data",
+      "type": "object",
+      "description": "Input files generated with FastOMA",
+      "default": "",
+      "properties": {
+        "fastoma_species_tree": {
+          "type": "string",
+          "description": "Species Tree in newick format. We recommend using the tree stored in the FastOMA output folder named 'species_tree_checked.nwk'.",
+          "format": "file-path"
         },
-        {
-            "$ref": "#/$defs/fastoma_input_data"
+        "fastoma_proteomes": {
+          "type": "string",
+          "format": "directory-path",
+          "description": "Folder where the input fasta files for each proteomes are located."
         },
-        {
-            "$ref": "#/$defs/production_oma_input_data"
-        },
-        {
-            "$ref": "#/$defs/domain_data"
-        },
-        {
-            "$ref": "#/$defs/crossreferences"
-        },
-        {
-            "$ref": "#/$defs/gene_ontology"
-        },
-        {
-            "$ref": "#/$defs/generic_options"
+        "fastoma_speciesdata": {
+          "type": "string",
+          "format": "file-path",
+          "pattern": "^\\S+\\.(txt|csv|tsv)",
+          "mimetype": "text/csv",
+          "description": "Optional (but recommended) TSV file with additional information about the proteomes. If specified, the file must contain at least the column \"Name\" which must match the filename of the proteome (without file extension). We suggest to include the following columns:  NCBITaxonId [needed to map cross-references reliably]"
         }
-    ]
+      }
+    },
+    "production_oma_input_data": {
+      "title": "Production OMA Input data",
+      "type": "object",
+      "description": "Input files genereated from an OMA Production run",
+      "default": "",
+      "properties": {
+        "pairwise_orthologs_folder": {
+          "type": "string",
+          "description": "Pairwise Orthologs (only by Standard OMA pipeline)",
+          "format": "directory-path"
+        },
+        "matrix_file": {
+          "type": "string",
+          "description": "OMA Groups file",
+          "format": "file-path"
+        },
+        "hog_orthoxml": {
+          "type": "string",
+          "description": "Hierarchcial orthologous groups (HOGs) in orthoxml format",
+          "format": "file-path",
+          "mimetype": "application/xml"
+        },
+        "genomes_dir": {
+          "type": "string",
+          "description": "Folder containing genomes",
+          "format": "directory-path"
+        }
+      },
+      "required": ["hog_orthoxml", "genomes_dir"]
+    },
+    "domain_data": {
+      "title": "Domain data",
+      "type": "object",
+      "description": "File paths for domain annotations",
+      "default": "",
+      "properties": {
+        "cath_names_path": {
+          "type": "string",
+          "default": "http://download.cathdb.info/cath/releases/latest-release/cath-classification-data/cath-names.txt",
+          "description": "File containing CATH domain descriptions"
+        },
+        "known_domains": {
+          "type": "string",
+          "description": "Folder containing known domain assignments files",
+          "format": "directory-path"
+        },
+        "pfam_names_path": {
+          "type": "string",
+          "default": "https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.clans.tsv.gz",
+          "description": "File containing Pfam descriptions"
+        }
+      }
+    },
+    "crossreferences": {
+      "title": "Crossreferences",
+      "type": "object",
+      "description": "Integrate crossreferences",
+      "default": "",
+      "properties": {
+        "xref_uniprot_swissprot": {
+          "type": "string",
+          "default": "https://ftp.ebi.ac.uk/pub/databases/uniprot/knowledgebase/uniprot_sprot.dat.gz",
+          "description": "UniProtKB/SwissProt annotation in text format"
+        },
+        "xref_uniprot_trembl": {
+          "type": "string",
+          "default": "/dev/null",
+          "description": "UniProtKB/TrEMBL annotations in text format"
+        },
+        "taxonomy_sqlite_path": {
+          "type": "string"
+        },
+        "xref_refseq": {
+          "type": "string",
+          "description": "Folder containing RefSeq gbff files."
+        }
+      }
+    },
+    "gene_ontology": {
+      "title": "Gene Ontology",
+      "type": "object",
+      "description": "Gene Ontology files to integrate",
+      "default": "",
+      "properties": {
+        "go_obo": {
+          "type": "string",
+          "default": "http://purl.obolibrary.org/obo/go/go-basic.obo",
+          "description": "Gene Ontology OBO file"
+        },
+        "go_gaf": {
+          "type": "string",
+          "default": "https://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/goa_uniprot_all.gaf.gz",
+          "description": "Gene Ontology annotations (GAF format). This can the GOA database or a glob pattern with local files in gaf format."
+        }
+      }
+    },
+    "generic_options": {
+      "title": "Generic options",
+      "type": "object",
+      "fa_icon": "fas fa-file-import",
+      "description": "Less common options for the pipeline, typically set in a config file.",
+      "help_text": "These options are common to all nf-core pipelines and allow you to customise some of the core preferences for how the pipeline runs.\n\nTypically these options would be set in a Nextflow config file loaded for all pipeline runs, such as `~/.nextflow/config`.",
+      "properties": {
+        "help": {
+          "type": "boolean",
+          "description": "Display help text.",
+          "fa_icon": "fas fa-question-circle",
+          "hidden": true
+        },
+        "custom_config_version": {
+          "type": "string",
+          "description": "version of configuration base to include (nf-core configs)",
+          "default": "master"
+        },
+        "custom_config_base": {
+          "type": "string",
+          "default": "https://raw.githubusercontent.com/nf-core/configs/master",
+          "description": "location where to look for nf-core/configs"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "$ref": "#/$defs/datatype_setting"
+    },
+    {
+      "$ref": "#/$defs/fastoma_input_data"
+    },
+    {
+      "$ref": "#/$defs/production_oma_input_data"
+    },
+    {
+      "$ref": "#/$defs/domain_data"
+    },
+    {
+      "$ref": "#/$defs/crossreferences"
+    },
+    {
+      "$ref": "#/$defs/gene_ontology"
+    },
+    {
+      "$ref": "#/$defs/generic_options"
+    }
+  ]
 }
