@@ -24,19 +24,12 @@ def logo() {
 log.info logo()
 
 // Load Plugins
-include { validateParameters; paramsHelp; paramsSummaryLog } from 'plugin/nf-schema'
-
-// Print help message if needed
-if (params.help){
-    log.info paramsHelp("nextflow run main.nf required [optional]")
-    exit 0
-}
+include { validateParameters; paramsSummaryLog } from 'plugin/nf-schema'
 
 // Validate input parameters
 validateParameters()
 
 // Subworkflows
-// include {parse_inputs} from "./subworkflows/local/parse_inputs"
 include {OMA_BROWSER_BUILD} from "./workflows/oma_browser_build"
 nextflow.preview.output = true
 

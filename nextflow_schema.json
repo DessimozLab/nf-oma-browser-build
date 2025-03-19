@@ -40,7 +40,8 @@
           "format": "file-path",
           "pattern": "^\\S+\\.(txt|csv|tsv)",
           "mimetype": "text/csv",
-          "description": "Optional (but recommended) TSV file with additional information about the proteomes. If specified, the file must contain at least the column \"Name\" which must match the filename of the proteome (without file extension). We suggest to include the following columns:  NCBITaxonId [needed to map cross-references reliably]"
+          "description": "TSV file with additional information about the proteomes, must contain \"Name\" column if provided.",
+          "help_text": "Optional (but recommended) TSV file with additional information about the proteomes. If specified, the file must contain at least the column \"Name\". It's values must match the filenames of the proteomes (without file extension). We suggest to include the following columns in addition: - NCBITaxonId (needed to map cross-references reliably)"
         }
       }
     },
@@ -156,12 +157,14 @@
         "custom_config_version": {
           "type": "string",
           "description": "version of configuration base to include (nf-core configs)",
-          "default": "master"
+          "default": "master",
+          "hidden": true
         },
         "custom_config_base": {
           "type": "string",
           "default": "https://raw.githubusercontent.com/nf-core/configs/master",
-          "description": "location where to look for nf-core/configs"
+          "description": "location where to look for nf-core/configs",
+          "hidden": true
         }
       }
     }
