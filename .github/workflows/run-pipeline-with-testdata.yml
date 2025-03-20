@@ -25,4 +25,4 @@ jobs:
           mv nextflow /usr/local/bin/
 
       - name: Run Nextflow pipeline
-        run: nextflow run main.nf -profile docker -params-file test-params.json
+        run: nextflow run main.nf -profile docker,test

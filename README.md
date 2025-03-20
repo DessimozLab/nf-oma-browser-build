@@ -63,7 +63,7 @@ can even be generated interactively with the `nf-core pipelines create-params-fi
 
 As an example, one can run the pipeline with a small test dataset using the following command:
 ```bash
-nextflow run . -profile docker -params-file test-params.json
+nextflow run . -profile docker,test
 ```
 
 
