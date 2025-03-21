@@ -1,6 +1,6 @@
 process INFER_KEYWORDS {
     label "process_single"
-    container "dessimozlab/omabuild:1.2.0"
+    container "dessimozlab/omabuild:edge"
 
     input:
         path db_h5

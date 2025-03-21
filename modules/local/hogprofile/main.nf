@@ -1,6 +1,6 @@
 process INFER_HOG_PROFILES {
     label "process_medium"
-    container "dessimozlab/omabuild:1.2.0"
+    container "dessimozlab/omabuild:edge"
 
     input:
         path db_h5
