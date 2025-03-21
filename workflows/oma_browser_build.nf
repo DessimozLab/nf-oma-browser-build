@@ -11,8 +11,11 @@ include { COMBINE_HDFS as HOGS_AND_GO } from "./../modules/local/h5_combine"
 include { CACHE_BUILDER  } from "./../subworkflows/local/cache_builder"
 include { GEN_BROWSER_AUX_FILES } from "./../modules/local/browser_aux"
 include { EDGEHOG        } from "./../modules/local/edgehog"
+include { INFER_KEYWORDS } from "./../modules/local/keywords"
+include { INFER_HOG_PROFILES } from "./../modules/local/hogprofile"
 include { EXTRACT_FASTOMA } from '../subworkflows/local/extract_fastoma/main.nf'
 include { ANCESTRAL_GO   } from "../subworkflows/local/ancestral_go/main.nf"
+include { INFER_FINGERPRINTS } from '../modules/local/fingerprints/main.nf'
 
 workflow OMA_BROWSER_BUILD {
 
@@ -58,6 +61,12 @@ workflow OMA_BROWSER_BUILD {
                        IMPORT_HDF5.out.seqidx_h5,
                        IMPORT_HDF5.out.source_xref_db)
 
+        INFER_KEYWORDS(IMPORT_HDF5.out.db_h5,
+                       GENERATE_XREFS.out.xref_db)
+        INFER_FINGERPRINTS(IMPORT_HDF5.out.db_h5,
+                           IMPORT_HDF5.out.seqidx_h5)
+        INFER_HOG_PROFILES(IMPORT_HDF5.out.db_h5)
+
         // ancestral synteny reconstruction with edgehog
         EDGEHOG(IMPORT_HDF5.out.augmented_orthoxml,
                 GEN_BROWSER_AUX_FILES.out.speciestree_newick,
@@ -82,11 +91,15 @@ workflow OMA_BROWSER_BUILD {
              GENERATE_XREFS.out.xref_db,
              GO_IMPORT.out.go_h5,
              CACHE_BUILDER.out.cache_h5,
+             INFER_HOG_PROFILES.out.profiles_h5,
              GENERATE_XREFS.out.red_xref_db,
              ANCESTRAL_GO.out.anc_go_h5,
              EDGEHOG.out.anc_synteny_h5)
         h5_dbs_to_combine.view()
-        COMBINE_HDF_AND_UPDATE_SUMMARY_DATA(h5_dbs_to_combine.collect())
+        COMBINE_HDF_AND_UPDATE_SUMMARY_DATA(h5_dbs_to_combine.collect(),
+                                            INFER_KEYWORDS.out.oma_group_keywords,
+                                            INFER_FINGERPRINTS.out.oma_group_fingerprints,
+                                            INFER_KEYWORDS.out.oma_hog_keywords)
    
     emit:
         db        = COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5

@@ -1,7 +1,9 @@
 #!/usr/bin/env nextflow
 
 // Modules
-include {HOGPROP; HOGPROP_COLLECT; COUNT_GENES_WITH_ANNOTATION} from "./../../../modules/local/hogprop"
+include {HOGPROP; HOGPROP_COLLECT} from "./../../../modules/local/hogprop"
+include {COUNT_GENES_WITH_ANNOTATION} from "./../../../modules/local/hogprop"
+include {HOGPROP_CONVERT_TO_BROWSERDB_FORMAT} from "./../../../modules/local/hogprop"
 
 workflow ANCESTRAL_GO {
     take:
@@ -19,7 +21,7 @@ workflow ANCESTRAL_GO {
 
         HOGPROP(chunks, nr_chunks, orthoxml, omadb)
         HOGPROP_COLLECT(HOGPROP.out | collect, omadb)
-
+        HOGPROP_CONVERT_TO_BROWSERDB_FORMAT(omadb, HOGPROP_COLLECT.out.anc_go_comb)
     emit:
-        anc_go_h5 = HOGPROP_COLLECT.out.anc_go_h5
+        anc_go_h5 = HOGPROP_CONVERT_TO_BROWSERDB_FORMAT.out.anc_go_h5
 }
