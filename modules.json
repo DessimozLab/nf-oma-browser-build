@@ -1,0 +1,17 @@
+{
+  "name": "oma-browser-build",
+  "homePage": "",
+  "repos": {
+    "https://github.com/nf-core/modules.git": {
+      "modules": {
+        "nf-core": {
+          "hmmer/hmmsearch": {
+            "branch": "master",
+            "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+            "installed_by": ["modules"]
+          }
+        }
+      }
+    }
+  }
+}

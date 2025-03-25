@@ -1,3 +1,23 @@
+process IDENTIFY_PROTEINS_WITHOUT_DOMAIN_ANNOTATION {
+    label "process_single"
+    container "dessimozlab/omabuild:edge"
+
+    input:
+        path database
+        path domain_files
+
+    output:
+        path "prot-chunk_*.fa", emit: domain_jobs
+
+    script:
+        """
+        IdentifyNewProteins.py -v \\
+            --db $database \\
+            --out prot-chunk \\
+            ${domain_files.size() > 0 ? "--anno $domain_files" : ""}
+        """
+}
+
 
 process ADD_DOMAINS {
     label "process_single"
