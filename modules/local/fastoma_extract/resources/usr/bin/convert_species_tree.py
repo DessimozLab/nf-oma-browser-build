@@ -56,7 +56,7 @@ def taxonomy_from_tree(tree: ete3.Tree, taxprovider:TaxidProvider) -> Tuple[List
                     taxdata['UniProtSpeciesCode'] = taxdata["Name"]
                 else:
                     sp_id_cnt += 1
-                    taxdata['UniProtSpeciesCode'] = f"X{sp_id_cnt}"
+                    taxdata['UniProtSpeciesCode'] = f"X{sp_id_cnt:04d}"
             if "GenomeId" not in taxdata:
                 sp_id_cnt += 1
                 taxdata["GenomeId"] = sp_id_cnt
