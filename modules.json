@@ -5,9 +5,19 @@
     "https://github.com/nf-core/modules.git": {
       "modules": {
         "nf-core": {
+          "hmmer/hmmpress": {
+            "branch": "master",
+            "git_sha": "26b0fc18fe9c717394e05482e65d8434556f24e1",
+            "installed_by": ["modules"]
+          },
           "hmmer/hmmsearch": {
             "branch": "master",
             "git_sha": "81880787133db07d9b4c1febd152c090eb8325dc",
+            "installed_by": ["modules"]
+          },
+          "untar": {
+            "branch": "master",
+            "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
             "installed_by": ["modules"]
           }
         }

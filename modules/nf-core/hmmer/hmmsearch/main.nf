@@ -27,6 +27,7 @@ process HMMER_HMMSEARCH {
     alignment      = write_align     ? "-A ${prefix}.sto" : ''
     target_summary = write_target    ? "--tblout ${prefix}.tbl" : ''
     domain_summary = write_domain    ? "--domtblout ${prefix}.domtbl" : ''
+    hmmfile_arg    = (hmmfile.size() == 1) ? "${hmmfile}" : hmmfile.find{ !(it.name =~ /\.h3[ifmp]$/) }
     """
     hmmsearch \\
         $args \\
@@ -35,7 +36,7 @@ process HMMER_HMMSEARCH {
         $alignment \\
         $target_summary \\
         $domain_summary \\
-        $hmmfile \\
+        $hmmfile_arg \\
         $seqdb
 
     gzip --no-name *.txt \\
