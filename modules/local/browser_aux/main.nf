@@ -1,6 +1,6 @@
 process GEN_BROWSER_AUX_FILES {
     label "process_single"
-    container "dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:edge"
 
     input:
         path db

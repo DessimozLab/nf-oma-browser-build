@@ -1,6 +1,6 @@
 process IDENTIFY_PROTEINS_WITHOUT_DOMAIN_ANNOTATION {
     label "process_single"
-    container "dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:edge"
 
     input:
         path database
@@ -19,10 +19,29 @@ process IDENTIFY_PROTEINS_WITHOUT_DOMAIN_ANNOTATION {
 }
 
 
+process COLLECT_RESOLVED_DOMAIN_ANNOTATIONS {
+    label "process_single"
+    container "docker.io/dessimozlab/omabuild:edge"
+
+    input:
+        path domain_files
+
+    output:
+        path "domains.tsv", emit: domains_tsv
+
+    script:
+        """
+        format_cath_results_to_mdas_format.py \\
+            domains.tsv \\
+            $domain_files
+        """
+}
+
+
 process ADD_DOMAINS {
     label "process_single"
     label "process_medium_memory"
-    container "dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:edge"
 
     input:
         path database
