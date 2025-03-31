@@ -55,7 +55,7 @@ workflow DOMAINS {
             HMMER_HMMSEARCH(hmm_jobs)
             //HMMER_HMMSEARCH.out.output.view()
             CATH_RESOLVE_HITS(HMMER_HMMSEARCH.out.output)
-            ASSIGN_CATH_SUPERFAMILIES(CATH_RESOLVE_HITS.out.resolve_hits_crh, file(params.discontinuous_regs), file(params.pfam_names_path))
+            ASSIGN_CATH_SUPERFAMILIES(CATH_RESOLVE_HITS.out.resolve_hits_crh, file(params.discontinuous_regs), file(params.cath_domain_list))
             COLLECT_RESOLVED_DOMAIN_ANNOTATIONS(ASSIGN_CATH_SUPERFAMILIES.out.resolve_hits_csv.collect())
             new_domains = COLLECT_RESOLVED_DOMAIN_ANNOTATIONS.out.domains_tsv
         } else {

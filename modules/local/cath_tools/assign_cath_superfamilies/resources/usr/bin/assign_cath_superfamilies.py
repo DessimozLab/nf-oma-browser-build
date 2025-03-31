@@ -27,7 +27,7 @@ def getRegionsAsString(regions):
 
 
 def ranges(i):
-    for a, b in itertools.groupby(enumerate(i), lambda x, y: y - x):
+    for a, b in itertools.groupby(enumerate(i), lambda tup: tup[1] - tup[0]):
         b = list(b)
         yield b[0][1], b[-1][1]
 

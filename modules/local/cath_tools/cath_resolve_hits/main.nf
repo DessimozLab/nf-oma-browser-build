@@ -14,13 +14,12 @@ process CATH_RESOLVE_HITS {
 
     script:
         """
-        cath-resolve-hits \\
+        gunzip -c $hmm_hits | cath-resolve-hits \\
             --min-dc-hmm-coverage=80 \\
             --worst-permissible-bitscore 25 \\
             --output-hmmer-aln \\
             --input-format hmmsearch_out \\
-            $hmm_hits > ${meta.id}_resolve.crh
-
+            - > ${meta.id}_resolve.crh
       
         #cat <<-END_VERSIONS > versions.yml
         #    "${task.process}":
