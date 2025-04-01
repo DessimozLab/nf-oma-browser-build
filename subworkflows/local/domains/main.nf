@@ -25,9 +25,6 @@ workflow DOMAINS {
             if (hmm_db.name.endsWith('.tar.gz') || hmm_db.name.endsWith('.tgz')) {
                 UNTAR( [[id:'hmms'], hmm_db])
                 hmm_db_ready = UNTAR.out.untar.map{ it[1] }.map{ dir -> files(dir / '*') }.collect()
-                xx = UNTAR.out.untar.map{ it[1] }
-                      .map{ dir -> dir.listFiles() as List }
-                      .collect().toList()
             } else if (hmm_db.extension == "hmm") {
                 HMMER_HMMPRESS( [[id: "hmms"], hmm_db] )
                 hmm_db_ready = HMMER_HMMPRESS.out.compressed_db.map{ _meta, f -> files(f) }
@@ -35,7 +32,6 @@ workflow DOMAINS {
             } else {
                 hmm_db_ready = Channel.from([hmm_db])
             }
-            hmm_db_ready.view()
 
             //query_files = Channel.fromPath("chunks*fa")
             //db_files = files("/Users/adriaal/Repositories/nf-oma-browser-build/work/13/7d01b4df61490aee6d54cbff233deb/hmms/*")
@@ -53,7 +49,6 @@ workflow DOMAINS {
                 }
             hmm_jobs.view()
             HMMER_HMMSEARCH(hmm_jobs)
-            //HMMER_HMMSEARCH.out.output.view()
             CATH_RESOLVE_HITS(HMMER_HMMSEARCH.out.output)
             ASSIGN_CATH_SUPERFAMILIES(CATH_RESOLVE_HITS.out.resolve_hits_crh, file(params.discontinuous_regs), file(params.cath_domain_list))
             COLLECT_RESOLVED_DOMAIN_ANNOTATIONS(ASSIGN_CATH_SUPERFAMILIES.out.resolve_hits_csv.collect())
@@ -61,7 +56,8 @@ workflow DOMAINS {
         } else {
             new_domains = Channel.fromList([])
         }
-        all_domains = Channel.fromList(known_domains).mix(new_domains).collect()
+        all_domains = Channel.fromList(known_domains).mix(new_domains).collect().ifEmpty{ [] }
+        all_domains.view()
         ADD_DOMAINS(database, all_domains, cath_names, pfam_names)
 
     emit:
