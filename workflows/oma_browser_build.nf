@@ -16,6 +16,7 @@ include { INFER_HOG_PROFILES } from "./../modules/local/hogprofile"
 include { EXTRACT_FASTOMA } from '../subworkflows/local/extract_fastoma/main.nf'
 include { ANCESTRAL_GO   } from "../subworkflows/local/ancestral_go/main.nf"
 include { INFER_FINGERPRINTS } from '../modules/local/fingerprints/main.nf'
+include { OMAMER_BUILD } from '../modules/local/omamer/main.nf'
 
 workflow OMA_BROWSER_BUILD {
 
@@ -54,6 +55,17 @@ workflow OMA_BROWSER_BUILD {
         download_files = GEN_BROWSER_AUX_FILES.out.genomes_json
             .mix(GEN_BROWSER_AUX_FILES.out.speciestree_newick,
                  GEN_BROWSER_AUX_FILES.out.speciestree_phyloxml)
+
+        // create OMAmer databases for levels defined in params.omamer_levels
+        if (params.omamer_levels != null) {
+            levels = Channel.of(params.omamer_levels.split(','))
+            omamer_jobs = levels.combine(IMPORT_HDF5.out.db_h5)
+                .combine(GEN_BROWSER_AUX_FILES.out.speciestree_newick)
+                .map{level, db, tree -> [[id: level], db, tree]}
+            omamer_jobs.view()
+            OMAMER_BUILD(omamer_jobs)
+            download_files = download_files.mix(OMAMER_BUILD.out.omamer_db)
+        }
 
         // create crossreferences
         GENERATE_XREFS(gs_file,
