@@ -19,7 +19,7 @@ workflow DOMAINS {
         cath_names = (params.cath_names_path != null) ? Channel.fromPath(params.cath_names_path) : Channel.fromPath("$projectDir/assets/NO_FILE")
         pfam_names = (params.pfam_names_path != null) ? Channel.fromPath(params.pfam_names_path) : Channel.fromPath("$projectDir/assets/NO_FILE")
         
-        if (params.hmm_db != null) {
+        if (params.infer_domains == true) {
             
             hmm_db = file(params.hmm_db, checkIfExists: true)
             if (hmm_db.name.endsWith('.tar.gz') || hmm_db.name.endsWith('.tgz')) {
