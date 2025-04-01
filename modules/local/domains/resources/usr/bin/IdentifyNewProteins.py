@@ -17,7 +17,8 @@ def load_existing_domain_annotations(fnames):
     hashes = set([])
     for fname in fnames:
         logger.info('extracting annotations from {}'.format(fname))
-        with gzip.open(fname, 'rt', newline='') as fh:
+        open_ = gzip.open if fname.endswith('.gz') else open
+        with open_(fname, 'rt', newline='') as fh:
             dialect = csv.Sniffer().sniff(fh.read(4096))
             fh.seek(0)
             csv_reader = csv.reader(fh, dialect)
