@@ -1,7 +1,7 @@
 // Processes
 process COUNT_GENES_WITH_ANNOTATION {
     label "process_single"
-    container "dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:edge"
 
     input:
         path omadb
@@ -18,7 +18,7 @@ process COUNT_GENES_WITH_ANNOTATION {
 
 process HOGPROP {
     label "process_single"
-    container "dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:edge"
 
     input:
         each chunk
@@ -49,7 +49,7 @@ process HOGPROP {
 process HOGPROP_COLLECT {
     label "process_single"
     label "process_high_memory"
-    container "dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:edge"
 
     input:
         path "results/*"
@@ -72,7 +72,7 @@ process HOGPROP_COLLECT {
 
 process HOGPROP_CONVERT_TO_BROWSERDB_FORMAT {
     label "process_single"
-    container "dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:edge"
 
     input:
         path omadb
