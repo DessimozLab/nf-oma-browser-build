@@ -1,6 +1,6 @@
 process INFER_FINGERPRINTS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:1.3.0"
 
     input:
         path db_h5
