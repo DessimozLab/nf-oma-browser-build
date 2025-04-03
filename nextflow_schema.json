@@ -81,15 +81,37 @@
       "description": "File paths for domain annotations",
       "default": "",
       "properties": {
+        "infer_domains": {
+          "type": "boolean",
+          "description": "Flag indicating whether domains are inferred using the CATH/Gene3d pipeline.",
+          "default": false,
+          "help_text": "If set to true, the pipeline will run the CATH/Gene3D pipeline to infer domain assignments. This will require substantial amount of compute time. The set of already known domains (see parameter 'known_domains') will be used to skip the inference of domains that are already known. If set to false, the pipeline will use the known domain assignments provided in the 'known_domains' parameter."
+        },
+        "known_domains": {
+          "type": "string",
+          "description": "Folder containing known domain assignments files.",
+          "format": "directory-path",
+          "help_text": "The folder must contain csv/tsv files that contain three columns (md5hash of sequence, CATH-domain-id, region on sequence). The output of a previous run of this pipeline can thus be used as input."
+        },
         "cath_names_path": {
           "type": "string",
           "default": "http://download.cathdb.info/cath/releases/latest-release/cath-classification-data/cath-names.txt",
           "description": "File containing CATH domain descriptions"
         },
-        "known_domains": {
+        "hmm_db": {
           "type": "string",
-          "description": "Folder containing known domain assignments files",
-          "format": "directory-path"
+          "default": "ftp://orengoftp.biochem.ucl.ac.uk/gene3d/v21.0.0/gene3d_hmmsearch/hmms.tar.gz",
+          "description": "Path where the domain hmms for the cath/gene3d pipeline are located."
+        },
+        "cath_domain_list": {
+          "type": "string",
+          "default": "http://download.cathdb.info/cath/releases/latest-release/cath-classification-data/cath-domain-list.txt",
+          "description": "File with mapping from hmm id to cath domain id."
+        },
+        "discontinuous_regs": {
+          "type": "string",
+          "default": "http://download.cathdb.info/gene3d/v21.0.0/gene3d_hmmsearch/discontinuous/discontinuous_regs.pkl",
+          "description": "File provided by gene3d to handle discontinuous regions"
         },
         "pfam_names_path": {
           "type": "string",
@@ -141,6 +163,19 @@
         }
       }
     },
+    "omamer": {
+      "title": "OMAmer",
+      "type": "object",
+      "description": "Parameters regarding building OMAmer databases based on the generated OMA instance",
+      "default": "",
+      "properties": {
+        "omamer_levels": {
+          "type": "string",
+          "description": "Comma-seperated list of taxonomic levels for which OMAmer databases should be built.",
+          "help_text": "The input string is parsed as a comma-seperated list, e.g. given 'Mammalia,Primates' as parameter value would build two OMAmer databases, one for Mammalia and one for Primates. Note that the taxonomic levels must exist in the input species tree."
+        }
+      }
+    },
     "generic_options": {
       "title": "Generic options",
       "type": "object",
@@ -187,6 +222,9 @@
     },
     {
       "$ref": "#/$defs/gene_ontology"
+    },
+    {
+      "$ref": "#/$defs/omamer"
     },
     {
       "$ref": "#/$defs/generic_options"

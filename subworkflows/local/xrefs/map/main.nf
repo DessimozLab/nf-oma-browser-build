@@ -24,7 +24,7 @@ workflow MAP_XREFS_WF {
             .map { source, map_resList, format, xrefList -> [source, map_resList, format[0], xrefList.flatten()] }
         COLLECT_XREFS(grouped_by_source)
         xref_dbs_list = COLLECT_XREFS.out.xref_by_source_h5
-            .map{ source, h5db -> h5db}
+            .map{_source, h5db -> h5db}
             .mix(source_xref_db)
             .collect()
         COMBINE_ALL_XREFS(xref_dbs_list)
