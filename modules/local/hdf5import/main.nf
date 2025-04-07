@@ -13,6 +13,7 @@ process ADD_GENOMES {
     output:
         path "OmaServer.h5", emit: db_h5
         path "SourceXRefs.h5", emit: source_xref_h5
+        path "summary.json", emit: summary_json
 
     script:
         """
@@ -23,12 +24,16 @@ process ADD_GENOMES {
                 --oma-groups $oma_groups \
                 --xref-db SourceXRefs.h5 \
                 --genomes $genomes_json
+        
+        collect_dataset_stats.py --hdf5 OmaServer.h5 \
+                --out summary.json
         """
 
     stub:
         """
         touch OmaServer.h5
         touch SourceXRefs.h5
+        echo '{}' > summary.json
         """
 }
 
@@ -36,10 +41,10 @@ process BUILD_SEQINDEX {
     label "process_single"
     label "process_medium_memory"
     container "docker.io/dessimozlab/omabuild:edge"
-
+    tag "Building Sequence Index with ${meta.nr_of_amino_acids} AAs"
 
     input:
-        path database
+        tuple val(meta), path(database)
 
     output:
         path "OmaServer.h5.idx", emit: seqidx_h5
@@ -60,10 +65,10 @@ process BUILD_HOG_H5 {
     label "process_low"
     label "process_medium_memory"
     container "docker.io/dessimozlab/omabuild:edge"
-
+    tag "Building HOG HDF5 with ${meta.nr_of_sequences} proteins"
 
     input:
-        path database
+        tuple val(meta), path(database)
         path orthoxml
         val is_prod_oma
 
