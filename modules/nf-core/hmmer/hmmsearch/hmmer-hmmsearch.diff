@@ -1,0 +1,27 @@
+Changes in component 'nf-core/hmmer/hmmsearch'
+'modules/nf-core/hmmer/hmmsearch/environment.yml' is unchanged
+'modules/nf-core/hmmer/hmmsearch/meta.yml' is unchanged
+Changes in 'hmmer/hmmsearch/main.nf':
+--- modules/nf-core/hmmer/hmmsearch/main.nf
++++ modules/nf-core/hmmer/hmmsearch/main.nf
+@@ -27,6 +27,7 @@
+     alignment      = write_align     ? "-A ${prefix}.sto" : ''
+     target_summary = write_target    ? "--tblout ${prefix}.tbl" : ''
+     domain_summary = write_domain    ? "--domtblout ${prefix}.domtbl" : ''
++    hmmfile_arg    = (hmmfile.size() == 1) ? "${hmmfile}" : hmmfile.find{ !(it.name =~ /\.h3[ifmp]$/) }
+     """
+     hmmsearch \\
+         $args \\
+@@ -35,7 +36,7 @@
+         $alignment \\
+         $target_summary \\
+         $domain_summary \\
+-        $hmmfile \\
++        $hmmfile_arg \\
+         $seqdb
+ 
+     gzip --no-name *.txt \\
+
+'modules/nf-core/hmmer/hmmsearch/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/hmmer/hmmsearch/tests/main.nf.test' is unchanged
+************************************************************
