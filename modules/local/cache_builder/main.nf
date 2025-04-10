@@ -32,8 +32,7 @@ process COMPUTE_CACHE {
     tag "Cache builder ${job_file}"
 
     input:
-        path(job_file)
-        path(db)
+        tuple path(job_file), path(db)
 
     output:
         path("cache-res.h5"), emit: cache_chunk
