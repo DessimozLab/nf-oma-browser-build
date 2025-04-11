@@ -777,7 +777,7 @@
         },
         "hogprop": {
             "git": "git+${LABGIT}/hogprop2",
-            "ref": "705acb86b9a338c343b0ccba97b668c03fe2c6a2"
+            "ref": "78b7ba4b5b0faca065313946011ffd9abe2574f1"
         },
         "httpcore": {
             "hashes": [
