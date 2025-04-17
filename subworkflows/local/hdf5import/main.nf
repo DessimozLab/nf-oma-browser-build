@@ -17,8 +17,14 @@ workflow IMPORT_HDF5 {
     main:
         def is_prod_oma = (params.oma_source == "Production")
         ADD_GENOMES(gs_tsv, tax_tsv, oma_groups, genomes_json.collect())
-        BUILD_SEQINDEX(ADD_GENOMES.out.db_h5)
-        BUILD_HOG_H5(ADD_GENOMES.out.db_h5, hogs, is_prod_oma)
+        db_with_meta = ADD_GENOMES.out.summary_json
+            .combine(ADD_GENOMES.out.db_h5)
+            .map { file, db ->
+                def json = new groovy.json.JsonSlurper().parseText(file.text)
+                return [json, db]
+            }
+        BUILD_SEQINDEX(db_with_meta)
+        BUILD_HOG_H5(db_with_meta, hogs, is_prod_oma)
 
         vp = (vps_base != null) ? file(vps_base) : file("$projectDir/assets/NO_FILE")
         ADD_PAIRWISE_ORTHOLOGS(ADD_GENOMES.out.db_h5, vp)

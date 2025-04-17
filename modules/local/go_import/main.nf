@@ -3,7 +3,7 @@
 process GO_IMPORT {
     label "process_single"
     label "HIGH_IO_ACCESS"
-    container "docker.io/dessimozlab/omabuild:1.3.0"
+    container "docker.io/dessimozlab/omabuild:1.3.1"
     
     input:
         path xref_db

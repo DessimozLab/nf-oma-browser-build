@@ -39,7 +39,7 @@ workflow DOMAINS {
             //hmm_jobs = query_files
             
             IDENTIFY_PROTEINS_WITHOUT_DOMAIN_ANNOTATION(database, known_domains)
-            hmm_jobs = IDENTIFY_PROTEINS_WITHOUT_DOMAIN_ANNOTATION.out.domain_jobs
+            hmm_jobs = IDENTIFY_PROTEINS_WITHOUT_DOMAIN_ANNOTATION.out.domain_jobs.flatten()
                 .combine(hmm_db_ready).view()
                 .map { data -> 
                     def file = data[0]

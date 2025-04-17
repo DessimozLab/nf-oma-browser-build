@@ -3,7 +3,7 @@ process EDGEHOG {
     label "single_process"
     label "process_long"
     label "process_high_memory"
-    container "docker.io/dessimozlab/omabuild:1.3.0"
+    container "docker.io/dessimozlab/omabuild:1.3.1"
 
     input:
         path augmented_orthoxml
@@ -16,10 +16,15 @@ process EDGEHOG {
     script:
         def unzip = (augmented_orthoxml.endsWith(".gz")) ? "gunzip -c $augmented_orthoxml > \$TMPDIR/oma-hogs.orthoxml" : "ln -s ${augmented_orthoxml} edgehog-hogs.orthoxml"
         def hog_path = (augmented_orthoxml.endsWith(".gz")) ? "\$TMPDIR/oma-hogs.orthoxml" : "edgehog-hogs.orthoxml"
+        def trimed_tree = "simplified_${speciestree}"
         """
         $unzip 
+        trim_uninformative_levels.py \\
+            --tree $speciestree \\
+            --out $trimed_tree
+        
         edgehog --hogs $hog_path \\
-                --species_tree $speciestree \\
+                --species_tree $trimed_tree \\
                 --hdf5 $oma_db \\
                 --date_edges \\
                 --out-format HDF5

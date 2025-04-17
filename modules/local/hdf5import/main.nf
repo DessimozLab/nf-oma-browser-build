@@ -2,7 +2,7 @@
 process ADD_GENOMES {
     label "process_single"
     label "process_long"
-    container "docker.io/dessimozlab/omabuild:1.3.0"
+    container "docker.io/dessimozlab/omabuild:1.3.1"
 
     input:
         path gs_tsv
@@ -13,6 +13,7 @@ process ADD_GENOMES {
     output:
         path "OmaServer.h5", emit: db_h5
         path "SourceXRefs.h5", emit: source_xref_h5
+        path "summary.json", emit: summary_json
 
     script:
         """
@@ -23,23 +24,27 @@ process ADD_GENOMES {
                 --oma-groups $oma_groups \
                 --xref-db SourceXRefs.h5 \
                 --genomes $genomes_json
+        
+        collect_dataset_stats.py --hdf5 OmaServer.h5 \
+                --out summary.json
         """
 
     stub:
         """
         touch OmaServer.h5
         touch SourceXRefs.h5
+        echo '{}' > summary.json
         """
 }
 
 process BUILD_SEQINDEX {
     label "process_single"
     label "process_medium_memory"
-    container "docker.io/dessimozlab/omabuild:1.3.0"
-
+    container "docker.io/dessimozlab/omabuild:1.3.1"
+    tag "Building Sequence Index with ${meta.nr_of_amino_acids} AAs"
 
     input:
-        path database
+        tuple val(meta), path(database)
 
     output:
         path "OmaServer.h5.idx", emit: seqidx_h5
@@ -59,11 +64,11 @@ process BUILD_SEQINDEX {
 process BUILD_HOG_H5 {
     label "process_low"
     label "process_medium_memory"
-    container "docker.io/dessimozlab/omabuild:1.3.0"
-
+    container "docker.io/dessimozlab/omabuild:1.3.1"
+    tag "Building HOG HDF5 with ${meta.nr_of_sequences} proteins"
 
     input:
-        path database
+        tuple val(meta), path(database)
         path orthoxml
         val is_prod_oma
 
@@ -94,7 +99,7 @@ process BUILD_HOG_H5 {
 
 process ADD_PAIRWISE_ORTHOLOGS {
     label "process_medium"
-    container "docker.io/dessimozlab/omabuild:1.3.0"
+    container "docker.io/dessimozlab/omabuild:1.3.1"
 
     input:
         path database
@@ -122,7 +127,7 @@ process ADD_PAIRWISE_ORTHOLOGS {
 
 process COMBINE_H5_FILES {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.3.0"
+    container "docker.io/dessimozlab/omabuild:1.3.1"
 
     input:
         path input_db, stageAs: 'OmaServer_input.h5'

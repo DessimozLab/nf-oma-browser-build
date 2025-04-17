@@ -9,8 +9,8 @@ workflow CACHE_BUILDER {
 
     main:
         GENERATE_JOBS(omadb)
-        jobs = GENERATE_JOBS.out.job_file.flatten()
-        COMPUTE_CACHE(jobs, omadb)
+        jobs = GENERATE_JOBS.out.job_file.flatten().combine(omadb)
+        COMPUTE_CACHE(jobs)
         COMBINE_JOBS(COMPUTE_CACHE.out.cache_chunk.collect())
         
     emit:

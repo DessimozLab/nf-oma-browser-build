@@ -1,6 +1,6 @@
 process COMBINE_HDF_AND_UPDATE_SUMMARY_DATA {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.3.0"
+    container "docker.io/dessimozlab/omabuild:1.3.1"
 
     input:
         path h5files
@@ -28,7 +28,7 @@ process COMBINE_HDF_AND_UPDATE_SUMMARY_DATA {
 
 process COMBINE_HDFS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.3.0"
+    container "docker.io/dessimozlab/omabuild:1.3.1"
 
     input:
         path h5files

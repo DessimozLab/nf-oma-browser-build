@@ -2,7 +2,7 @@
 
 process GENERATE_JOBS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.3.0"
+    container "docker.io/dessimozlab/omabuild:1.3.1"
     
     input:
         path db
@@ -28,12 +28,11 @@ process GENERATE_JOBS {
 process COMPUTE_CACHE {
     label "process_single"
     label "HIGH_IO_ACCESS"
-    container "docker.io/dessimozlab/omabuild:1.3.0"
+    container "docker.io/dessimozlab/omabuild:1.3.1"
     tag "Cache builder ${job_file}"
 
     input:
-        path(job_file)
-        path(db)
+        tuple path(job_file), path(db)
 
     output:
         path("cache-res.h5"), emit: cache_chunk
@@ -54,7 +53,7 @@ process COMPUTE_CACHE {
 
 process COMBINE_JOBS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.3.0"
+    container "docker.io/dessimozlab/omabuild:1.3.1"
     
     input:
         path(job_res, stageAs: "res???/*")
