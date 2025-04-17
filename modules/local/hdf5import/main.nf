@@ -2,7 +2,7 @@
 process ADD_GENOMES {
     label "process_single"
     label "process_long"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:1.3.1"
 
     input:
         path gs_tsv
@@ -40,7 +40,7 @@ process ADD_GENOMES {
 process BUILD_SEQINDEX {
     label "process_single"
     label "process_medium_memory"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:1.3.1"
     tag "Building Sequence Index with ${meta.nr_of_amino_acids} AAs"
 
     input:
@@ -64,7 +64,7 @@ process BUILD_SEQINDEX {
 process BUILD_HOG_H5 {
     label "process_low"
     label "process_medium_memory"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:1.3.1"
     tag "Building HOG HDF5 with ${meta.nr_of_sequences} proteins"
 
     input:
@@ -99,7 +99,7 @@ process BUILD_HOG_H5 {
 
 process ADD_PAIRWISE_ORTHOLOGS {
     label "process_medium"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:1.3.1"
 
     input:
         path database
@@ -127,7 +127,7 @@ process ADD_PAIRWISE_ORTHOLOGS {
 
 process COMBINE_H5_FILES {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:1.3.1"
 
     input:
         path input_db, stageAs: 'OmaServer_input.h5'
