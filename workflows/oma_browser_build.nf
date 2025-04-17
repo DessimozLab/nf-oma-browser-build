@@ -21,8 +21,6 @@ include { OMAMER_BUILD } from '../modules/local/omamer/main.nf'
 workflow OMA_BROWSER_BUILD {
 
     main:
-        def hog_orthoxml = file(params.hog_orthoxml)
-        def vps_base = params.pairwise_orthologs_folder
         
         if (params.oma_source == "FastOMA"){
             EXTRACT_FASTOMA()
@@ -43,8 +41,9 @@ workflow OMA_BROWSER_BUILD {
                     tax_tsv,
                     oma_groups,
                     protein_files,
-                    hog_orthoxml,
-                    vps_base,
+                    file(params.hog_orthoxml),
+                    params.pairwise_orthologs_folder,
+                    params.homoeologs_folder,
                     splice_json)
 
         // import Domains

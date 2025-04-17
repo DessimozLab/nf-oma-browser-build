@@ -1,15 +1,15 @@
 #!/usr/bin/env nextflow
 def logo() {
     // Log colors ANSI codes
-    c_reset = "\033[0m";
-    c_dim = "\033[2m";
-    c_black = "\033[0;30m";
-    c_green = "\033[0;32m";
-    c_yellow = "\033[0;33m";
-    c_blue = "\033[0;34m";
-    c_purple = "\033[0;35m";
-    c_cyan = "\033[0;36m";
-    c_white = "\033[0;37m";
+    def c_reset = "\033[0m";
+    def c_dim = "\033[2m";
+    def c_green = "\033[0;32m";
+    // c_black = "\033[0;30m";
+    // c_yellow = "\033[0;33m";
+    // c_blue = "\033[0;34m";
+    // c_purple = "\033[0;35m";
+    // c_cyan = "\033[0;36m";
+    // c_white = "\033[0;37m";
 
     return """    ${c_dim}------------------------------------------------------------------------------${c_reset}${c_green}
        ____  __  ______       ____                                       ____        _ __    __
