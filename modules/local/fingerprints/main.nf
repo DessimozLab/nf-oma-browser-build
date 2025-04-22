@@ -3,6 +3,7 @@ process INFER_FINGERPRINTS {
     container "docker.io/dessimozlab/omabuild:edge"
 
     input:
+        val meta
         path db_h5
         path seqidx_h5
 

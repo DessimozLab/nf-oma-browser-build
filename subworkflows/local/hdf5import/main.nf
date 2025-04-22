@@ -37,6 +37,7 @@ workflow IMPORT_HDF5 {
                          splice_json)
 
     emit:
+        meta = db_with_meta[0]
         db_h5 = COMBINE_H5_FILES.out.db_h5
         seqidx_h5 = BUILD_SEQINDEX.out.seqidx_h5
         source_xref_db = ADD_GENOMES.out.source_xref_h5

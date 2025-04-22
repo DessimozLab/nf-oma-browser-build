@@ -72,9 +72,11 @@ workflow OMA_BROWSER_BUILD {
                        IMPORT_HDF5.out.seqidx_h5,
                        IMPORT_HDF5.out.source_xref_db)
 
-        INFER_KEYWORDS(IMPORT_HDF5.out.db_h5,
+        INFER_KEYWORDS(IMPORT_HDF5.out.meta,
+                       IMPORT_HDF5.out.db_h5,
                        GENERATE_XREFS.out.xref_db)
-        INFER_FINGERPRINTS(IMPORT_HDF5.out.db_h5,
+        INFER_FINGERPRINTS(IMPORT_HDF5.out.meta, 
+                           IMPORT_HDF5.out.db_h5,
                            IMPORT_HDF5.out.seqidx_h5)
         INFER_HOG_PROFILES(IMPORT_HDF5.out.db_h5)
 
