@@ -26,6 +26,8 @@ workflow IMPORT_HDF5 {
             }
         BUILD_SEQINDEX(db_with_meta)
         BUILD_HOG_H5(db_with_meta, hogs, is_prod_oma)
+        meta = db_with_meta.map{ it[0] }
+        meta.view()
 
         vp = (vps_base != null) ? file(vps_base) : file("$projectDir/assets/NO_FILE")
         hp = (homoeologs_base != null) ? file(homoeologs_base) : file("$projectDir/assets/NO_FILE2")
@@ -37,7 +39,7 @@ workflow IMPORT_HDF5 {
                          splice_json)
 
     emit:
-        meta = db_with_meta[0]
+        meta = meta
         db_h5 = COMBINE_H5_FILES.out.db_h5
         seqidx_h5 = BUILD_SEQINDEX.out.seqidx_h5
         source_xref_db = ADD_GENOMES.out.source_xref_h5
