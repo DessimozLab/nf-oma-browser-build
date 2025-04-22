@@ -75,9 +75,23 @@ workflow OMA_BROWSER_BUILD {
         INFER_KEYWORDS(IMPORT_HDF5.out.meta,
                        IMPORT_HDF5.out.db_h5,
                        GENERATE_XREFS.out.xref_db)
-        INFER_FINGERPRINTS(IMPORT_HDF5.out.meta, 
-                           IMPORT_HDF5.out.db_h5,
-                           IMPORT_HDF5.out.seqidx_h5)
+    
+        // create jobs to compute fingerprints, 1 job per 6000 oma groups
+        // total number of oma groups is available in the meta dictionary
+        chunk_c = IMPORT_HDF5.map { meta ->
+            def chunks = []
+            def nr = 1
+            def step = 6000
+            for (int i = 1; i <= meta.nr_oma_groups; i += step) {
+                def up = Math.min(i + step - 1, meta.nr_oma_groups)
+                chunks << [start_og: i, end_og: up, nr: nr++ ]
+            }
+            return chunks.collect { chunk -> meta + chunk }
+        }.flatten()
+        fingerprint_jobs = chunk_c
+            .combine(IMPORT_HDF5.out.db_h5)
+            .combine(IMPORT_HDF5.out.seqidx_h5)
+        INFER_FINGERPRINTS(fingerprint_jobs)
         INFER_HOG_PROFILES(IMPORT_HDF5.out.db_h5)
 
         // ancestral synteny reconstruction with edgehog

@@ -27,7 +27,6 @@ workflow IMPORT_HDF5 {
         BUILD_SEQINDEX(db_with_meta)
         BUILD_HOG_H5(db_with_meta, hogs, is_prod_oma)
         meta = db_with_meta.map{ it[0] }
-        meta.view()
 
         vp = (vps_base != null) ? file(vps_base) : file("$projectDir/assets/NO_FILE")
         hp = (homoeologs_base != null) ? file(homoeologs_base) : file("$projectDir/assets/NO_FILE2")

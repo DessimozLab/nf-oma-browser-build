@@ -3,19 +3,20 @@ process INFER_FINGERPRINTS {
     container "docker.io/dessimozlab/omabuild:edge"
 
     input:
-        val meta
-        path db_h5
-        path seqidx_h5
+        tuple val(meta), path(db_h5), path(seqidx_h5)
 
     output:
-        path "Fingerprints.txt", emit: oma_group_fingerprints
+        path "Fingerprints*.txt", emit: oma_group_fingerprints
 
     script:
+        def rng = meta.start_og ? "--og-rng ${meta.start_og} ${meta.end_og}" : "" 
+        def nr = meta.og_chunk ? "_${meta.og_chunk}" : ""
         """
         oma-build -vv fingerprint \\
             --db $db_h5 \\
             --suffix-db $seqidx_h5 \\
-            --out Fingerprints.txt
+            $rng \\
+            --out Fingerprints${nr}.txt
         """
 
     stub:
