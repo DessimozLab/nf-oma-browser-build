@@ -82,9 +82,10 @@ workflow OMA_BROWSER_BUILD {
             def chunks = []
             def nr = 1
             def step = 6000
-            for (int i = 1; i <= meta.nr_oma_groups; i += step) {
+            (1..meta.nr_oma_groups).step(step).each { i ->
                 def up = Math.min(i + step - 1, meta.nr_oma_groups)
-                chunks << [start_og: i, end_og: up, nr: nr++ ]
+                chunks << [start_og: i, end_og: up, nr: nr]
+                nr += 1
             }
             return chunks.collect { chunk -> meta + chunk }
         }.flatten()
@@ -92,6 +93,8 @@ workflow OMA_BROWSER_BUILD {
             .combine(IMPORT_HDF5.out.db_h5)
             .combine(IMPORT_HDF5.out.seqidx_h5)
         INFER_FINGERPRINTS(fingerprint_jobs)
+
+        // infer hog profiles
         INFER_HOG_PROFILES(IMPORT_HDF5.out.db_h5)
 
         // ancestral synteny reconstruction with edgehog
@@ -125,7 +128,7 @@ workflow OMA_BROWSER_BUILD {
         h5_dbs_to_combine.view()
         COMBINE_HDF_AND_UPDATE_SUMMARY_DATA(h5_dbs_to_combine.collect(),
                                             INFER_KEYWORDS.out.oma_group_keywords,
-                                            INFER_FINGERPRINTS.out.oma_group_fingerprints,
+                                            INFER_FINGERPRINTS.out.oma_group_fingerprints.collectFile(name: "Fingerprints.txt", newLine: false),
                                             INFER_KEYWORDS.out.oma_hog_keywords)
    
     emit:
