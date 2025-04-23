@@ -1,11 +1,26 @@
-name: build omabuild container and publish it to ghcr and dockerhub
+name: build containers and publish it to ghcr and dockerhub
 
 on:
   push:
 
 jobs:
-  docker:
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        include: 
+          - name: omabuild
+            context: containers/oma
+            platforms: linux/amd64    #linux/arm64 take a long time for development
+          - name: omadarwin
+            context: containers/darwin
+            platforms: linux/amd64,linux/arm64
+          - name: omabuild-rdf-py
+            context: containers/rdf/biosoda_py
+            platforms: linux/amd64    #linux/arm64 take a long time for development
+          # - name: omabuild-rdf-java
+          #   context: containers/rdf/biosoda_java
+          #   platforms: linux/amd64,linux/arm64
     steps:
       - name: checkout repo
         uses: actions/checkout@v4
@@ -15,8 +30,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            dessimozlab/omabuild
-            ghcr.io/dessimozlab/omabuild
+            dessimozlab/${{ matrix.name }}
+            ghcr.io/dessimozlab/${{ matrix.name }}
           tags: |
             type=schedule
             type=ref,event=branch
@@ -46,14 +61,31 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build python oma build container
+      - name: Build ${{ matrix.name }} container
         uses: docker/build-push-action@v6
         with:
-          context: containers/oma
-          platforms: linux/amd64 #,linux/arm64   #linux/arm64 take a long time
+          context: ${{ matrix.context }}
+          platforms: ${{ matrix.platforms }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           secrets: |
             "labgit=${{ secrets.LABGIT }}"
 
+  run-nextflow:
+    name: run nextflow pipeline with testdata
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Nextflow
+        run: |
+          curl -s https://get.nextflow.io | bash
+          chmod +x nextflow
+          mv nextflow /usr/local/bin/
+
+      - name: Run Nextflow pipeline
+        run: nextflow run main.nf -profile docker,test
