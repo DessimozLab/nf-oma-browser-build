@@ -18,9 +18,9 @@ jobs:
           - name: omabuild-rdf-py
             context: containers/rdf/biosoda_py
             platforms: linux/amd64    #linux/arm64 take a long time for development
-          # - name: omabuild-rdf-java
-          #   context: containers/rdf/biosoda_java
-          #   platforms: linux/amd64,linux/arm64
+          - name: omabuild-rdf-java
+            context: containers/rdf/biosoda_java
+            platforms: linux/amd64,linux/arm64
     steps:
       - name: checkout repo
         uses: actions/checkout@v4

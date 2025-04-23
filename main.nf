@@ -46,6 +46,7 @@ workflow OMA_browser_build {
         db = OMA_BROWSER_BUILD.out.db
         seqidx = OMA_BROWSER_BUILD.out.seqidx_h5
         downloads = OMA_BROWSER_BUILD.out.downloads
+        rdf = OMA_BROWSER_BUILD.out.rdf
 }
 
 workflow {
@@ -56,6 +57,7 @@ workflow {
         OMA_browser_build.out.db          >> 'main_db'
         OMA_browser_build.out.seqidx      >> 'data'
         OMA_browser_build.out.downloads   >> 'downloads'
+        OMA_browser_build.out.rdf         >> 'RDF'
 
 }
 
@@ -81,6 +83,7 @@ output {
 
    data      { mode 'copy' }
    downloads { mode 'copy' }
+   RDF       { mode 'copy' }
 }
 
 
