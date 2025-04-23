@@ -78,7 +78,7 @@ workflow OMA_BROWSER_BUILD {
     
         // create jobs to compute fingerprints, 1 job per 6000 oma groups
         // total number of oma groups is available in the meta dictionary
-        chunk_c = IMPORT_HDF5.map { meta ->
+        chunk_c = IMPORT_HDF5.out.meta.map { meta ->
             def chunks = []
             def nr = 1
             def step = 6000
