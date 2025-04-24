@@ -37,6 +37,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        libhdf5-103 \
        libhdf5-dev \
+       procps \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /usr/biosoda
 
