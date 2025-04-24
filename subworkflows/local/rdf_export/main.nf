@@ -14,5 +14,5 @@ workflow RDF_EXPORT {
         RDF_FROM_ORTHOXML([version: (params.version != null) ? params.version : "Test" ], augmented_orthoxml, orth_ontology)
 
     emit:
-        rdf_tuples = RDF_FROM_HDF5.out.rdf_db.mix(RDF_FROM_ORTHOXML.out.rdf_hogs)
+        rdf_turtles = RDF_FROM_HDF5.out.rdf_db.mix(RDF_FROM_ORTHOXML.out.rdf_hogs)
 }
