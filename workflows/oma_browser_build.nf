@@ -17,7 +17,7 @@ include { EXTRACT_FASTOMA } from '../subworkflows/local/extract_fastoma/main.nf'
 include { ANCESTRAL_GO   } from "../subworkflows/local/ancestral_go/main.nf"
 include { INFER_FINGERPRINTS } from '../modules/local/fingerprints/main.nf'
 include { OMAMER_BUILD } from '../modules/local/omamer/main.nf'
-include { RDF_EXPORT } from '../subworkflows/local/rdf_export'
+include { RDF_EXPORT } from '../subworkflows/local/rdf_export/main.nf'
 
 workflow OMA_BROWSER_BUILD {
 
@@ -132,19 +132,18 @@ workflow OMA_BROWSER_BUILD {
                                             INFER_FINGERPRINTS.out.oma_group_fingerprints.collectFile(name: "Fingerprints.txt", newLine: false),
                                             INFER_KEYWORDS.out.oma_hog_keywords)
 
-        if (params.rdf_export){
-            rdf_turtles = RDF_EXPORT(
-                    IMPORT_HDF5.out.augmented_orthoxml,
-                    COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5
-                ).out.rdf_turtles
+        if (params.rdf_export) {
+            RDF_EXPORT(IMPORT_HDF5.out.augmented_orthoxml,
+                       COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
+            rdf_out = RDF_EXPORT.out.rdf_turtles
         } else {
-            rdf_turtles = Channel.empty()
+            rdf_out = Channel.empty()
         }
     emit:
         db        = COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5
         seqidx_h5 = IMPORT_HDF5.out.seqidx_h5
         downloads = download_files
-        rdf       = rdf_turtles
+        rdf       = rdf_out
 
 }
 

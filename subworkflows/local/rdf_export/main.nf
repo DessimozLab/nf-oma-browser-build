@@ -12,7 +12,8 @@ workflow RDF_EXPORT {
         orth_ontology = (params.rdf_orthOntology != null) ? file(params.rdf_orthOntology) : file("$projectDir/assets/NO_FILE2")
         RDF_FROM_HDF5(db_h5, prefixes)
         RDF_FROM_ORTHOXML([version: (params.version != null) ? params.version : "Test" ], augmented_orthoxml, orth_ontology)
-
+        rdfs = RDF_FROM_HDF5.out.rdf_db.mix(RDF_FROM_ORTHOXML.out.rdf_hogs)
+        
     emit:
-        rdf_turtles = RDF_FROM_HDF5.out.rdf_db.mix(RDF_FROM_ORTHOXML.out.rdf_hogs)
+        rdf_turtles = rdfs
 }
