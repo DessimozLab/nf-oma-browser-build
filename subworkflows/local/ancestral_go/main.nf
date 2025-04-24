@@ -11,14 +11,15 @@ workflow ANCESTRAL_GO {
         omadb
 
     main:
-        nr_genes_with_annotation = COUNT_GENES_WITH_ANNOTATION(omadb)
+        COUNT_GENES_WITH_ANNOTATION(omadb)
+        nr_genes_with_annotation = COUNT_GENES_WITH_ANNOTATION.out
             .map { n -> n as Integer }
-            
+
         if (nr_genes_with_annotation == 0) {
             log.info "No genes with annotation found in the database. Skipping HOGPROP."
             anc_go_h5 = Channel.empty()
         } else {
-            nr_chunks = COUNT_GENES_WITH_ANNOTATION(omadb)
+            nr_chunks = COUNT_GENES_WITH_ANNOTATION.out
                 .map { n -> n as Integer }
                 .map { n ->Math.max(Math.ceil(n / 1000.0), 2) as Integer }
             
