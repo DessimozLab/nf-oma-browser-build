@@ -8,7 +8,7 @@ process RDF_FROM_ORTHOXML {
         path ontology
 
     output:
-        path "oma_hogs_rdf*.ttl", emit: rdf_hogs
+        path "oma_hogs_rdf*.ttl.gz", emit: rdf_hogs
 
     script:
         def orth_ontology = (ontology.name != 'NO_FILE') ? "$ontology" : "/usr/biosoda/ORTH_v2_no_restrictions.owl"
