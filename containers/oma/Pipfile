@@ -4,8 +4,6 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-omahdf5tordf = {git = "git+${LABGIT}/biosoda"}
-omamer = "*"
 edgehog = "*"
 hogprop = {git = "git+${LABGIT}/hogprop2"}
          #branch = "nf-convert",

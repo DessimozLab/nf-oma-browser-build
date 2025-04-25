@@ -12,6 +12,7 @@ workflow IMPORT_HDF5 {
         genomes_json
         hogs
         vps_base
+        homoeologs_base
         splice_json
 
     main:
@@ -25,9 +26,11 @@ workflow IMPORT_HDF5 {
             }
         BUILD_SEQINDEX(db_with_meta)
         BUILD_HOG_H5(db_with_meta, hogs, is_prod_oma)
+        meta = db_with_meta.map{ it[0] }
 
         vp = (vps_base != null) ? file(vps_base) : file("$projectDir/assets/NO_FILE")
-        ADD_PAIRWISE_ORTHOLOGS(ADD_GENOMES.out.db_h5, vp)
+        hp = (homoeologs_base != null) ? file(homoeologs_base) : file("$projectDir/assets/NO_FILE2")
+        ADD_PAIRWISE_ORTHOLOGS(db_with_meta, vp, hp)
 
         COMBINE_H5_FILES(ADD_GENOMES.out.db_h5,
                          BUILD_HOG_H5.out.hog_h5,
@@ -35,6 +38,7 @@ workflow IMPORT_HDF5 {
                          splice_json)
 
     emit:
+        meta = meta
         db_h5 = COMBINE_H5_FILES.out.db_h5
         seqidx_h5 = BUILD_SEQINDEX.out.seqidx_h5
         source_xref_db = ADD_GENOMES.out.source_xref_h5

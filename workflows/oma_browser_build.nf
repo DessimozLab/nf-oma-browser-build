@@ -17,12 +17,11 @@ include { EXTRACT_FASTOMA } from '../subworkflows/local/extract_fastoma/main.nf'
 include { ANCESTRAL_GO   } from "../subworkflows/local/ancestral_go/main.nf"
 include { INFER_FINGERPRINTS } from '../modules/local/fingerprints/main.nf'
 include { OMAMER_BUILD } from '../modules/local/omamer/main.nf'
+include { RDF_EXPORT } from '../subworkflows/local/rdf_export/main.nf'
 
 workflow OMA_BROWSER_BUILD {
 
     main:
-        def hog_orthoxml = file(params.hog_orthoxml)
-        def vps_base = params.pairwise_orthologs_folder
         
         if (params.oma_source == "FastOMA"){
             EXTRACT_FASTOMA()
@@ -43,8 +42,9 @@ workflow OMA_BROWSER_BUILD {
                     tax_tsv,
                     oma_groups,
                     protein_files,
-                    hog_orthoxml,
-                    vps_base,
+                    file(params.hog_orthoxml),
+                    params.pairwise_orthologs_folder,
+                    params.homoeologs_folder,
                     splice_json)
 
         // import Domains
@@ -73,10 +73,29 @@ workflow OMA_BROWSER_BUILD {
                        IMPORT_HDF5.out.seqidx_h5,
                        IMPORT_HDF5.out.source_xref_db)
 
-        INFER_KEYWORDS(IMPORT_HDF5.out.db_h5,
+        INFER_KEYWORDS(IMPORT_HDF5.out.meta,
+                       IMPORT_HDF5.out.db_h5,
                        GENERATE_XREFS.out.xref_db)
-        INFER_FINGERPRINTS(IMPORT_HDF5.out.db_h5,
-                           IMPORT_HDF5.out.seqidx_h5)
+    
+        // create jobs to compute fingerprints, 1 job per 6000 oma groups
+        // total number of oma groups is available in the meta dictionary
+        chunk_c = IMPORT_HDF5.out.meta.map { meta ->
+            def chunks = []
+            def nr = 1
+            def step = 6000
+            (1..meta.nr_oma_groups).step(step).each { i ->
+                def up = Math.min(i + step - 1, meta.nr_oma_groups)
+                chunks << [start_og: i, end_og: up, nr: nr]
+                nr += 1
+            }
+            return chunks.collect { chunk -> meta + chunk }
+        }.flatten()
+        fingerprint_jobs = chunk_c
+            .combine(IMPORT_HDF5.out.db_h5)
+            .combine(IMPORT_HDF5.out.seqidx_h5)
+        INFER_FINGERPRINTS(fingerprint_jobs)
+
+        // infer hog profiles
         INFER_HOG_PROFILES(IMPORT_HDF5.out.db_h5)
 
         // ancestral synteny reconstruction with edgehog
@@ -110,13 +129,21 @@ workflow OMA_BROWSER_BUILD {
         h5_dbs_to_combine.view()
         COMBINE_HDF_AND_UPDATE_SUMMARY_DATA(h5_dbs_to_combine.collect(),
                                             INFER_KEYWORDS.out.oma_group_keywords,
-                                            INFER_FINGERPRINTS.out.oma_group_fingerprints,
+                                            INFER_FINGERPRINTS.out.oma_group_fingerprints.collectFile(name: "Fingerprints.txt", newLine: false),
                                             INFER_KEYWORDS.out.oma_hog_keywords)
-   
+
+        if (params.rdf_export) {
+            RDF_EXPORT(IMPORT_HDF5.out.augmented_orthoxml,
+                       COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
+            rdf_out = RDF_EXPORT.out.rdf_turtles
+        } else {
+            rdf_out = Channel.empty()
+        }
     emit:
         db        = COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5
         seqidx_h5 = IMPORT_HDF5.out.seqidx_h5
         downloads = download_files
+        rdf       = rdf_out
 
 }
 

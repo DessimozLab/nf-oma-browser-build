@@ -47,7 +47,6 @@ workflow DOMAINS {
                     def meta = [id: file.baseName]
                     return [meta, db_files, file, false, false, false]
                 }
-            hmm_jobs.view()
             HMMER_HMMSEARCH(hmm_jobs)
             CATH_RESOLVE_HITS(HMMER_HMMSEARCH.out.output)
             ASSIGN_CATH_SUPERFAMILIES(CATH_RESOLVE_HITS.out.resolve_hits_crh, file(params.discontinuous_regs), file(params.cath_domain_list))

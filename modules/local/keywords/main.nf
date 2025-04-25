@@ -1,8 +1,9 @@
 process INFER_KEYWORDS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.3.1"
+    container "docker.io/dessimozlab/omabuild:1.4.0"
 
     input:
+        val meta
         path db_h5
         path xref_db
 

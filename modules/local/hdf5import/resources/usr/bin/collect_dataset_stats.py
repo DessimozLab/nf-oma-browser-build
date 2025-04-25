@@ -14,6 +14,9 @@ def get_stats(fpath):
         stats['avg_nr_seqs_in_genome'] = int(gtab['TotEntries'].mean())
         stats['nr_of_amino_acids'] = int(gtab['TotAA'].sum())
         stats['max_nr_amino_acids_in_genome'] = int(gtab['TotAA'].max())
+        prot_tab = h5.get_node("/Protein/Entries")
+        idx = prot_tab.colindexes["OmaGroup"][-1]
+        stats['nr_oma_groups'] = int(prot_tab[idx]['OmaGroup'])
         
         taxtab = h5.get_node("/Taxonomy")[:]
         stats['nr_of_taxa'] = len(taxtab)

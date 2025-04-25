@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://raw.githubusercontent.com/oma-browser-build/master/nextflow_schema.json",
+  "$id": "https://raw.githubusercontent.com/dessimozlab/oma-browser-build/master/nextflow_schema.json",
   "title": "oma-browser-build pipeline parameters",
   "description": "Convert OMA run into OMA Browser release",
   "type": "object",
@@ -16,6 +16,16 @@
           "default": "FastOMA",
           "enum": ["FastOMA", "Production"],
           "description": "Selection of OMA data source. Can be either 'FastOMA' or 'Production'. The selection requires setting either the parameters for FastOMA or Production."
+        },
+        "oma_version": {
+          "type": "string",
+          "description": "Version of the OMA Browser instance. It defaults to 'All.<Mon><YEAR>'"
+        },
+        "oma_release_char": {
+          "type": "string",
+          "description": "Release specific character (used in HOG ids)",
+          "pattern": "^[A-Z]?$",
+          "help_text": "A single capital letter [A-Z] which makes the HOG-IDs unique accross different releases."
         }
       }
     },
@@ -71,6 +81,11 @@
           "type": "string",
           "description": "Folder containing genomes",
           "format": "directory-path"
+        },
+        "homoeologs_folder": {
+          "type": "string",
+          "description": "Folder containing the homoeologs files",
+          "format": "directory-path"
         }
       },
       "required": ["hog_orthoxml", "genomes_dir"]
@@ -84,8 +99,8 @@
         "infer_domains": {
           "type": "boolean",
           "description": "Flag indicating whether domains are inferred using the CATH/Gene3d pipeline.",
-          "default": false,
-          "help_text": "If set to true, the pipeline will run the CATH/Gene3D pipeline to infer domain assignments. This will require substantial amount of compute time. The set of already known domains (see parameter 'known_domains') will be used to skip the inference of domains that are already known. If set to false, the pipeline will use the known domain assignments provided in the 'known_domains' parameter."
+          "help_text": "If set to true, the pipeline will run the CATH/Gene3D pipeline to infer domain assignments. This will require substantial amount of compute time. The set of already known domains (see parameter 'known_domains') will be used to skip the inference of domains that are already known. If set to false, the pipeline will use the known domain assignments provided in the 'known_domains' parameter.",
+          "fa_icon": "fas fa-toggle-on"
         },
         "known_domains": {
           "type": "string",
@@ -176,6 +191,27 @@
         }
       }
     },
+    "exporting_as_rdf": {
+      "title": "Exporting as RDF",
+      "type": "object",
+      "description": "Parameters regarding the export as rdf triples",
+      "properties": {
+        "rdf_export": {
+          "type": "boolean",
+          "description": "Flag to activate export as RDF triples",
+          "fa_icon": "fas fa-toggle-on",
+          "help_text": "Activating rdf_export will enable the dump of RDF ttl files which can be imported into a Sparql endpoint."
+        },
+        "rdf_orthOntology": {
+          "type": "string",
+          "description": "user provided orthOntology file. If not provided, default ontology will be used"
+        },
+        "rdf_prefixes": {
+          "type": "string",
+          "description": "user provided rdf prefix mapping. if not provided, default prefixes will be used."
+        }
+      }
+    },
     "generic_options": {
       "title": "Generic options",
       "type": "object",
@@ -225,6 +261,9 @@
     },
     {
       "$ref": "#/$defs/omamer"
+    },
+    {
+      "$ref": "#/$defs/exporting_as_rdf"
     },
     {
       "$ref": "#/$defs/generic_options"
