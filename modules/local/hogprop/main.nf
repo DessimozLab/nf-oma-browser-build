@@ -21,10 +21,7 @@ process HOGPROP {
     container "docker.io/dessimozlab/omabuild:edge"
 
     input:
-        each chunk
-        val nr_chunks
-        path orthoxml
-        path omadb
+        tuple val(chunk), val(nr_chunks), path(orthoxml),  path(omadb)
 
     output:
         path "go*.h5"
