@@ -102,7 +102,7 @@ process ADD_PAIRWISE_ORTHOLOGS {
     container "docker.io/dessimozlab/omabuild:edge"
 
     input:
-        path database
+        tuple val(meta), path(database)
         path vps_base
         path homoeologs_base
 
