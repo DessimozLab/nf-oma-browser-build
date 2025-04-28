@@ -1,6 +1,6 @@
  process RDF_FROM_HDF5{
     label "process_medium"
-    container "docker.io/dessimozlab/omabuild-rdf-py:edge"
+    container "docker.io/dessimozlab/omabuild-rdf-py:1.4.0"
 
     input:
         path database

@@ -1,6 +1,6 @@
 process RDF_FROM_ORTHOXML {
     label "process_medium"
-    container "docker.io/dessimozlab/omabuild-rdf-java:edge"
+    container "docker.io/dessimozlab/omabuild-rdf-java:1.4.0"
 
     input:
         val meta
