@@ -1,6 +1,6 @@
 process INFER_HOG_PROFILES {
     label "process_medium"
-    container "docker.io/dessimozlab/omabuild:1.4.0"
+    container "docker.io/dessimozlab/omabuild:edge"
 
     input:
         path db_h5
