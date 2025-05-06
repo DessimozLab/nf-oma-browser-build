@@ -74,8 +74,8 @@ process BUILD_HOG_H5 {
 
     output:
         path "hog.h5", emit: hog_h5
-        path "oma-hogs.orthoXML", emit: hogs_orthoxml
-        path "oma-hogs.orthoXML.augmented", emit: hogs_augmented_orthoxml
+        path "oma-hogs.orthoXML.gz", emit: hogs_orthoxml
+        path "oma-hogs.orthoXML.augmented.gz", emit: hogs_augmented_orthoxml
 
     script:
         def opt = (is_prod_oma) ? "--oma-prot-id" : ""
@@ -84,15 +84,15 @@ process BUILD_HOG_H5 {
             --orthoxml $orthoxml \
             --db $database \
             --hdf5-out hog.h5 \
-            --augmented-orthoxml-out oma-hogs.orthoXML.augmented \
-            --orthoxml-out oma-hogs.orthoXML \
+            --augmented-orthoxml-out oma-hogs.orthoXML.augmented.gz \
+            --orthoxml-out oma-hogs.orthoXML.gz \
             $opt
         """
     stub:
         """
         touch hog.h5
-        touch oma-hogs.orthoXML
-        touch oma-hogs.orthoXML.augmented
+        touch oma-hogs.orthoXML.gz
+        touch oma-hogs.orthoXML.augmented.gz
         """
 
 }
