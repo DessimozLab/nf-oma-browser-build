@@ -8,6 +8,7 @@ process GO_IMPORT {
     input:
         path xref_db
         path tax_map
+        path og_db
         path obo
         path gaf
 
@@ -18,6 +19,7 @@ process GO_IMPORT {
         """
         oma-build -vv import-go \\
             --xref-db $xref_db \\
+            --og-db $og_db \\
             --out ./GO.h5 \\
             --tax-map $tax_map \\
             --obo $obo \\

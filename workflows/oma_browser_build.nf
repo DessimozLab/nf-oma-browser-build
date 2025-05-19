@@ -103,13 +103,15 @@ workflow OMA_BROWSER_BUILD {
                 GEN_BROWSER_AUX_FILES.out.speciestree_newick,
                 IMPORT_HDF5.out.db_h5)
 
-        // integrate Gene Ontology data
+        // integrate Gene Ontology data & predict using OMA Groups
         obo = Channel.fromPath(params.go_obo)
         gaf = Channel.fromPath(params.go_gaf).collect()
         GO_IMPORT(GENERATE_XREFS.out.xref_db,
                   GENERATE_XREFS.out.taxmap,
+                  IMPORT_HDF5.out.db_h5,
                   obo,
                   gaf)
+        
         
         // ancestral GO
         HOGS_AND_GO(IMPORT_HDF5.out.db_h5.mix(GO_IMPORT.out.go_h5).collect())
