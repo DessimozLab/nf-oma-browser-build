@@ -174,6 +174,6 @@ process BUILD_NCBITAX_DB {
     script:
         def opt = (taxonomy_sqlite.name == "NO_FILE") ? "" : "--path $taxonomy_sqlite"
         """
-        build_verify_taxdb.py $opt --out-db tax.sqlite
+        build_verify_taxdb.py $opt -vv --out-db tax.sqlite
         """        
 }

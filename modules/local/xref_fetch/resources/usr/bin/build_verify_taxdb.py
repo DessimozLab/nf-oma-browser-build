@@ -4,8 +4,10 @@ import argparse
 import os
 import shutil
 import sys
+import logging
 from pathlib import Path
 from omataxonomy import Taxonomy
+logger = logging.getLogger('build_verify_taxdb')
 
 
 def check_existance(db_path):
@@ -22,10 +24,16 @@ def main():
     # Setup command-line argument parser
     parser = argparse.ArgumentParser(description="Check if the ete3 NCBI taxonomy database can be loaded.")
     parser.add_argument("--path",  help="Path to the NCBI taxonomy database folder")
+    parser.add_argument("-v", action="count", default=0, help="Increase verbosity level")
     parser.add_argument('--out-db', help="Name of the output database file")
 
     # Parse arguments
     args = parser.parse_args()
+    logging.basicConfig(
+        level=30 - 10 * min(conf.verbose, 2),
+        format="%(asctime)s %(levelname)s %(name)s: %(message)s",
+    )
+    logger.info("Command line options: %s", str(conf))
 
     out_db = Path(args.out_db)
     out_pkl = out_db.parent / (str(out_db.name) + ".traverse.pkl")
