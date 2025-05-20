@@ -40,7 +40,7 @@ workflow DOMAINS {
             
             IDENTIFY_PROTEINS_WITHOUT_DOMAIN_ANNOTATION(database, known_domains)
             hmm_jobs = IDENTIFY_PROTEINS_WITHOUT_DOMAIN_ANNOTATION.out.domain_jobs.flatten()
-                .combine(hmm_db_ready).view()
+                .combine(hmm_db_ready)
                 .map { data -> 
                     def file = data[0]
                     def db_files = data[1..-1]
@@ -56,7 +56,6 @@ workflow DOMAINS {
             new_domains = Channel.fromList([])
         }
         all_domains = Channel.fromList(known_domains).mix(new_domains).collect().ifEmpty{ [] }
-        all_domains.view()
         ADD_DOMAINS(database, all_domains, cath_names, pfam_names)
 
     emit:

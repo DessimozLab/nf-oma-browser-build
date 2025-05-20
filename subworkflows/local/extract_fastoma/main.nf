@@ -13,7 +13,6 @@ workflow EXTRACT_FASTOMA {
         convert_jobs = CONVERT_SPECIES_TREE.out.gs_tsv
             | splitCsv(sep: "\t", header: true)
             | map { row ->
-                println "Processing row: ${row}"
                 def dbfile = file("${params.fastoma_proteomes}/${row.Name}.fa")
                 def matrix = (params.matrix_file != null) ? file("${params.matrix_file}") : file("$projectDir/assets/NO_FILE")
                 return tuple( row, dbfile, matrix )

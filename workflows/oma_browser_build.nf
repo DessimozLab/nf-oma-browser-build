@@ -62,7 +62,6 @@ workflow OMA_BROWSER_BUILD {
             omamer_jobs = levels.combine(IMPORT_HDF5.out.db_h5)
                 .combine(GEN_BROWSER_AUX_FILES.out.speciestree_newick)
                 .map{level, db, tree -> [[id: level], db, tree]}
-            omamer_jobs.view()
             OMAMER_BUILD(omamer_jobs)
             download_files = download_files.mix(OMAMER_BUILD.out.omamer_db)
         }
@@ -128,7 +127,6 @@ workflow OMA_BROWSER_BUILD {
              GENERATE_XREFS.out.red_xref_db,
              ANCESTRAL_GO.out.anc_go_h5,
              EDGEHOG.out.anc_synteny_h5)
-        h5_dbs_to_combine.view()
         COMBINE_HDF_AND_UPDATE_SUMMARY_DATA(h5_dbs_to_combine.collect(),
                                             INFER_KEYWORDS.out.oma_group_keywords,
                                             INFER_FINGERPRINTS.out.oma_group_fingerprints.collectFile(name: "Fingerprints.txt", newLine: false),

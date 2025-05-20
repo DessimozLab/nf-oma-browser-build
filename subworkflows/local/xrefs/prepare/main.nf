@@ -29,7 +29,6 @@ workflow PREPARE_XREFS {
 
         // Concatenate the three channels
         xref_channel = swissprot_channel.concat(trembl_channel, refseq_channel)
-        xref_channel.view()
 
         FILTER_AND_SPLIT(xref_channel, RELEVANT_TAXID_MAP.out.tax_map)
 
