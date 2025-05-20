@@ -1605,12 +1605,12 @@
         },
         "omataxonomy": {
             "hashes": [
-                "sha256:bfa5c61fbdf1b7fae7d84adef3141baa9631791da169e3f3b27f6ae4a77840e8",
-                "sha256:c09bc74f9d3e5b3dfd62e284c3523c84033051fbe52e96dbc13c2884965c2178"
+                "sha256:71634f19fbd9b829ff07a684f7c5a0d38003a98b32bbbe15e3b2e975e025d2de",
+                "sha256:d54612f4588cceca69ecd93a449888588af2574c4b6c2aa13ff626aa08cbf165"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8' and python_version < '4.0'",
-            "version": "==0.3.1"
+            "version": "==0.3.2"
         },
         "overrides": {
             "hashes": [
@@ -2501,11 +2501,11 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:ca5cc1069b85dc23070a6628e6bcecb3292acac802399c7f8edc0100619f9009",
-                "sha256:f6ffc5f0142b1bd8d0ca94ee91b30c0ca862ffd50826da1ea85258a06fd94552"
+                "sha256:49f7af965996f26d43c8ae34539c8d99c5042fbff34302ea151eaa9c207cd257",
+                "sha256:95a60484590d24103af13b686121328cc2736bee85de8936383111e421b9edc0"
             ],
             "markers": "python_version >= '3.9'",
-            "version": "==80.7.1"
+            "version": "==80.8.0"
         },
         "six": {
             "hashes": [
