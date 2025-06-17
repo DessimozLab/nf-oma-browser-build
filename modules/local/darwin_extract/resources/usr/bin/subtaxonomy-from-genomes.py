@@ -44,8 +44,12 @@ def subtaxonomy_from_genomes(tax, genomes):
                         # at least two genomes which contains expected species sciname - os_code. 
                         # We use the expected species sciname as the ancestral taxonomy name
                         sciname = commonprefix(genomes_scinames)[:len(genomes_scinames[0])-8].strip()
+                    else:
+                        sciname = genomes[node.taxid][0]['SciName']
                     # create the current ncbi taxlevel node
                     print(f"node: {node.taxid}; sciname: {sciname}")
+                    if node.sci_name != sciname:
+                        print("WARNING: taxonomy name mismatch: {node.sci_name} != {sciname}", file=sys.stderr)
                     taxtab.append((node.taxid, parent_taxid, sciname, False))
                     for genome in genomes[node.taxid]:
                         taxtab.append((genome['GenomeId'], node.taxid, f"{genome['SciName']} - {genome['UniProtSpeciesCode']}", True))
