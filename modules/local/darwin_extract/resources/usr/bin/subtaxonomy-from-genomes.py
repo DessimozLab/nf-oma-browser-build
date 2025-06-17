@@ -48,13 +48,16 @@ def subtaxonomy_from_genomes(tax, genomes):
                     print(f"node: {node.taxid}; sciname: {sciname}")
                     taxtab.append((node.taxid, parent_taxid, sciname, False))
                     for genome in genomes[node.taxid]:
-                        taxtab.append((genome['GenomeId'], node.taxid, genome['SciName'], True))
+                        taxtab.append((genome['GenomeId'], node.taxid, f"{genome['SciName']} - {genome['UniProtSpeciesCode']}", True))
                     continue
         taxtab.append((node.taxid, parent_taxid, sciname, is_genome_level))
     return taxtab
 
 
 def parse_genomes_tsv(genomes_tsv):
+    """
+    Parse a TSV file containing genome information and return a dictionary mapping NCBI taxids to genome data.
+    """
     genomes = collections.defaultdict(list)
     with open(genomes_tsv, 'r') as f:
         reader = csv.DictReader(f, dialect="excel-tab")
@@ -63,17 +66,33 @@ def parse_genomes_tsv(genomes_tsv):
     return genomes
 
 
+def write_merged_taxid_mapping(fname, mapping):
+    """
+    Write a mapping of old taxids to new taxids to a file.
+    """
+    with open(fname, 'wt') as f:
+        writer = csv.writer(f, dialect="excel-tab")
+        writer.writerow(["Old", "New"])
+        for old_new_pair in mapping.items():
+            writer.writerow(map(str, old_new_pair))
+
+
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description="Extract a subtaxonomy from a set of genomes")
     parser.add_argument('--input', required=True, help="Genomes file in TSV format")
     parser.add_argument('--database', help="Taxonomy database file (sqlite format)")
     parser.add_argument('--out', required=True, help="Path to output file")
+    parser.add_argument('--merges', help="Enable debug output")
     conf = parser.parse_args()
 
     tax = omataxonomy.Taxonomy(conf.database)
     genomes = parse_genomes_tsv(conf.input)
-    taxtab = subtaxonomy_from_genomes(tax, genomes)
+    if conf.merges:
+        _, translations = tax._translate_merged(genomes.keys())
+        if len(translations) > 0:
+            write_merged_taxid_mapping(conf.merges, translations)
 
+    taxtab = subtaxonomy_from_genomes(tax, genomes)
     with open(conf.out, 'w') as f:
         csv.writer(f, dialect="excel-tab").writerows(taxtab)

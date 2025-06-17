@@ -8,6 +8,7 @@ workflow IMPORT_HDF5 {
     take:
         gs_tsv
         tax_tsv
+        taxid_updates
         oma_groups
         genomes_json
         hogs
@@ -17,7 +18,7 @@ workflow IMPORT_HDF5 {
 
     main:
         def is_prod_oma = (params.oma_source == "Production")
-        ADD_GENOMES(gs_tsv, tax_tsv, oma_groups, genomes_json.collect())
+        ADD_GENOMES(gs_tsv, tax_tsv, taxid_updates, oma_groups, genomes_json.collect())
         db_with_meta = ADD_GENOMES.out.summary_json
             .combine(ADD_GENOMES.out.db_h5)
             .map { file, db ->

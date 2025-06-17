@@ -27,6 +27,7 @@ workflow OMA_BROWSER_BUILD {
             EXTRACT_FASTOMA()
             gs_file = EXTRACT_FASTOMA.out.gs_file
             tax_tsv = EXTRACT_FASTOMA.out.tax_tsv
+            taxid_updates = file("${projectDir}/assets/NO_FILE")
             oma_groups = EXTRACT_FASTOMA.out.oma_groups
             protein_files = EXTRACT_FASTOMA.out.protein_files
             splice_json = EXTRACT_FASTOMA.out.splice_json
@@ -34,12 +35,17 @@ workflow OMA_BROWSER_BUILD {
             EXTRACT_DARWIN()
             gs_file = EXTRACT_DARWIN.out.gs_file
             tax_tsv = EXTRACT_DARWIN.out.tax_tsv
+            taxid_updates = Channel.empty().mix(
+                EXTRACT_DARWIN.out.taxid_merges.ifEmpty{
+                    file("${projectDir}/assets/NO_FILE")
+                 })
             oma_groups = EXTRACT_DARWIN.out.oma_groups
             protein_files = EXTRACT_DARWIN.out.protein_files
             splice_json = EXTRACT_DARWIN.out.splice_json
         }
         IMPORT_HDF5(gs_file,
                     tax_tsv,
+                    taxid_updates,
                     oma_groups,
                     protein_files,
                     file(params.hog_orthoxml),

@@ -107,9 +107,12 @@ process CONVERT_TAXONOMY {
 
     output:
         path "taxonomy.tsv",          emit: tax_tsv
+        path "taxid_merges.tsv",      emit: taxid_merges_tsv, optional: true
 
     script:
         """
-        subtaxonomy-from-genomes.py --input $gs_tsv --database $sqlite_taxonomy --out taxonomy.tsv
+        subtaxonomy-from-genomes.py --input $gs_tsv \\
+             --database $sqlite_taxonomy \\
+             --out taxonomy.tsv --merges taxid_merges.tsv
         """
 }

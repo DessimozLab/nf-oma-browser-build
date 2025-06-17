@@ -7,6 +7,7 @@ process ADD_GENOMES {
     input:
         path gs_tsv
         path tax_tsv
+        path taxid_updates
         path oma_groups
         path genomes_json
 
@@ -16,11 +17,13 @@ process ADD_GENOMES {
         path "summary.json", emit: summary_json
 
     script:
+        def tax_up_stmt = taxid_updates.name != "NO_FILE" ? "--updated-taxid-tsv $taxid_updates" : ""
         """
         oma-build -vv genomes \
                 --db OmaServer.h5 \
                 --gs-tsv $gs_tsv \
                 --tax-tsv $tax_tsv \
+                $tax_up_stmt \
                 --oma-groups $oma_groups \
                 --xref-db SourceXRefs.h5 \
                 --genomes $genomes_json

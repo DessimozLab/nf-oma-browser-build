@@ -31,6 +31,7 @@ workflow EXTRACT_DARWIN {
         gs_file = CONVERT_GS.out.gs_tsv
         protein_files = CONVERT_PROTEINS.out.prot_json.collect()
         tax_tsv = CONVERT_TAXONOMY.out.tax_tsv
+        taxid_merges = CONVERT_TAXONOMY.out.taxid_merges_tsv
         oma_groups = CONVERT_OMA_GROUPS.out.oma_groups_json
         splice_json = CONVERT_SPLICE_MAP.out.splice_json
 
