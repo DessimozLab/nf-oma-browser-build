@@ -2,6 +2,7 @@
 
 import collections
 import csv
+import sys
 from os.path import commonprefix
 import omataxonomy
 
@@ -49,7 +50,7 @@ def subtaxonomy_from_genomes(tax, genomes):
                     # create the current ncbi taxlevel node
                     print(f"node: {node.taxid}; sciname: {sciname}")
                     if node.sci_name != sciname:
-                        print("WARNING: taxonomy name mismatch: {node.sci_name} != {sciname}", file=sys.stderr)
+                        print(f"WARNING: taxonomy name mismatch: {node.sci_name} != {sciname}", file=sys.stderr)
                     taxtab.append((node.taxid, parent_taxid, sciname, False))
                     for genome in genomes[node.taxid]:
                         taxtab.append((genome['GenomeId'], node.taxid, f"{genome['SciName']} - {genome['UniProtSpeciesCode']}", True))
