@@ -33,7 +33,8 @@ workflow IMPORT_HDF5 {
         hp = (homoeologs_base != null) ? file(homoeologs_base) : file("$projectDir/assets/NO_FILE2")
         ADD_PAIRWISE_ORTHOLOGS(db_with_meta, vp, hp)
 
-        COMBINE_H5_FILES(ADD_GENOMES.out.db_h5,
+        COMBINE_H5_FILES(meta,
+                         ADD_GENOMES.out.db_h5,
                          BUILD_HOG_H5.out.hog_h5,
                          ADD_PAIRWISE_ORTHOLOGS.out.vps_h5,
                          splice_json)

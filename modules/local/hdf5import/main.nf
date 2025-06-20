@@ -136,6 +136,7 @@ process COMBINE_H5_FILES {
     container "docker.io/dessimozlab/omabuild:edge"
 
     input:
+        val meta
         path input_db, stageAs: 'OmaServer_input.h5'
         path hogs_h5
         path vps
