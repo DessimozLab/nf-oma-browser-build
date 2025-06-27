@@ -34,19 +34,37 @@ def subtaxonomy_from_genomes(tax, genomes):
                 has_sub_clades = len(node.children) > 0
 
                 if len(genomes[node.taxid]) == 1 and not has_sub_clades:
+                    # regular case: one genome for this taxid, no further sub-clades extending it
+                    # ensure that tax-name matches genome sciname
                     genome = genomes[node.taxid][0]
                     sciname = genome['SciName']
                     is_genome_level = True
                 else:
-                    if len(genomes[node.taxid]) > 1:
+                    # more complicated cases. Lets distinguish:
+                    # 1. node more than genomes, but no sub-clades with genomes
+                    if len(genomes[node.taxid]) > 1 and not has_sub_clades:
                         genomes_scinames = [g['SciName'] for g in genomes[node.taxid]]
                         print(f"node: {node.taxid}; sciname: {sciname}; genomes_scinames: {genomes_scinames}")
-                        assert min((len(z) for z in genomes_scinames)) == max((len(z) for z in genomes_scinames))
-                        # at least two genomes which contains expected species sciname - os_code. 
-                        # We use the expected species sciname as the ancestral taxonomy name
-                        sciname = commonprefix(genomes_scinames)[:len(genomes_scinames[0])-8].strip()
-                    else:
+                        if min((len(z) for z in genomes_scinames)) == max((len(z) for z in genomes_scinames)):
+                            # at least two genomes which contains expected species sciname - os_code. 
+                            # We use the expected species sciname as the ancestral taxonomy name
+                            sciname = commonprefix(genomes_scinames)[:len(genomes_scinames[0])-8].strip()
+                        else:
+                            # genomes have different scinames. most likely those resulted from different 
+                            # versions of the same species that were merged in the taxonomy.
+                            # In this case, we don't change the scinames and don't add an extra internal node.
+                            # instead all genomes will be added as children of the current parrent.
+                            taxtab.extend([(genome['GenomeId'], parent_taxid, genome['SciName'], True) 
+                                          for genome in genomes[node.taxid]])
+                            continue
+
+                    # 2. node has sub-clades with genomes
+                    elif has_sub_clades: # asserted that len(genomes[node.taxid]) >= 1
+                        # we need to create an internal node for this taxid
+                        # and add all genomes as children of this node
                         sciname = genomes[node.taxid][0]['SciName']
+                    else:
+                        raise RuntimeError("Unexpected case: genomes with no sub-clades but no single genome either")
                     # create the current ncbi taxlevel node
                     print(f"node: {node.taxid}; sciname: {sciname}")
                     if node.sci_name != sciname:
@@ -82,6 +100,18 @@ def write_merged_taxid_mapping(fname, mapping):
             writer.writerow(map(str, old_new_pair))
 
 
+def update_genomes(genomes, translations):
+    """
+    Update the genomes dictionary with new taxids based on the translations.
+    """
+    print(translations, file=sys.stderr)
+    for old_taxid, new_taxid in translations.items():
+        genome_list = genomes.pop(old_taxid)
+        for g in genome_list:
+            g['NCBITaxonId'] = new_taxid
+        genomes[new_taxid].extend(genome_list)
+        
+
 if __name__ == '__main__':
     import argparse
     parser = argparse.ArgumentParser(description="Extract a subtaxonomy from a set of genomes")
@@ -97,6 +127,7 @@ if __name__ == '__main__':
         _, translations = tax._translate_merged(genomes.keys())
         if len(translations) > 0:
             write_merged_taxid_mapping(conf.merges, translations)
+            update_genomes(genomes, translations)
 
     taxtab = subtaxonomy_from_genomes(tax, genomes)
     with open(conf.out, 'w') as f:
