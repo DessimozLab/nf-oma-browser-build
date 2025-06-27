@@ -116,9 +116,37 @@ process ADD_PAIRWISE_ORTHOLOGS {
         def vps = vps_base.name != 'NO_FILE' ? "--vps-base $vps_base" : ''
         def homoeologs = homoeologs_base.name != 'NO_FILE2' ? "--homoeologs-base $homoeologs_base" : ''
         """
+        
+        # Initialize argument list
+        vps_arg=()
+
+        if [ "$vps_base" = "NO_FILE" ]; then
+            echo "Skipping --vps_base"
+        elif [ -d "$vps_base" ]; then
+            echo "$vps_base is a directory; using it as --vps_base"
+            vps_arg=(--vps-base "$vps_base")
+        elif [[ "$vps_base" == *.tgz || -L "$vps_base" ]]; then
+            # Resolve symlink if needed
+            target=\$(readlink -f "$vps_base")
+
+            if [ -f "\$target" ] && [[ "\$target" == *.tgz ]]; then
+               extract_dir="\$TMPDIR/VPairs"
+               mkdir -p "\$extract_dir"
+               echo "Extracting \$target to \$extract_dir"
+               tar -xzf "\$target" -C "\$extract_dir"
+               vps_arg=(--vps-base "\$extract_dir")
+            else
+               echo "Error: $vps_base is not a valid .tgz file"
+               exit 1
+            fi
+        else
+            echo "Error: Unrecognized input: $vps_base"
+            exit 1
+        fi
+
         oma-build -vv vps \\
             --db $database \\
-            $vps \\
+            \${vps_arg[@]} \\
             $homoeologs \\
             --hdf5-out vps.h5
         """

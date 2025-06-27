@@ -64,7 +64,7 @@
         "pairwise_orthologs_folder": {
           "type": "string",
           "description": "Pairwise Orthologs (only by Standard OMA pipeline)",
-          "format": "directory-path"
+	  "help_text": "Folder where the pairwise orthologs in TSV format are stored. Can also be a single compressed tarball (ending in '.tgz') that contains all the files. This can be needed for big datasets and quotas on the number of files"
         },
         "matrix_file": {
           "type": "string",
