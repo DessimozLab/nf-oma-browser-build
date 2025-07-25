@@ -63,7 +63,7 @@ def taxonomy_from_tree(tree: ete3.Tree, taxprovider:TaxidProvider) -> Tuple[List
             taxdata["OriginalNCBITaxonId"] = taxdata["NCBITaxonId"]
             gs.append(taxdata)
         parent_taxid = node.up.taxid if node.up is not None else 0
-        tax.append((taxdata['NCBITaxonId'], parent_taxid, taxdata.get('SciName', taxdata['Name'])), )
+        tax.append((taxdata['NCBITaxonId'], parent_taxid, taxdata.get('SciName', taxdata['Name'])), node.is_leaf())
     return tax, gs
 
 def parse_genomes_tsv(genomes_tsv):
