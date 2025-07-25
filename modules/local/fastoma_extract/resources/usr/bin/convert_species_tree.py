@@ -14,6 +14,7 @@ class TaxidProvider:
     def __init__(self, mapping: Dict[str, Dict]):
         self._next_id = -100
         self.mapping = mapping
+        self._unique_taxids = None
 
     def augment_by_taxonomy(self, names, taxonomy_file):
         try:
@@ -30,9 +31,23 @@ class TaxidProvider:
             if taxid in mnemonic:
                 v['UniProtSpeciesCode'] = mnemonic[taxid]
 
+    def build_unique_taxids(self):
+        """
+        Build a set of unique NCBITaxonIds from the mapping.
+        """
+        tax_2_cnts = collections.Counter([n['NCBITaxonId'] for n in self.mapping.values() if 'NCBITaxonId' in n and n['NCBITaxonId'] not in ("", None)])
+        self._unique_taxids = frozenset([taxid for taxid, cnt in tax_2_cnts.items() if cnt == 1])
+
     def get_node(self, name):
+        if self._unique_taxids is None:
+            self.build_unique_taxids()
         node = self.mapping[name]
         if not 'NCBITaxonId' in node or node['NCBITaxonId'] in ("", None):
+            node['NCBITaxonId'] = self._next_id
+            self._next_id -= 1
+        elif node['NCBITaxonId'] not in self._unique_taxids:
+            logger.warning(f"Node {name} has a non-unique NCBITaxonId {node['NCBITaxonId']} - using negative taxid and keep the original id as OriginalNCBITaxonId")
+            node['OriginalNCBITaxonId'] = node['NCBITaxonId']
             node['NCBITaxonId'] = self._next_id
             self._next_id -= 1
         return node
@@ -60,10 +75,11 @@ def taxonomy_from_tree(tree: ete3.Tree, taxprovider:TaxidProvider) -> Tuple[List
             if "GenomeId" not in taxdata:
                 sp_id_cnt += 1
                 taxdata["GenomeId"] = sp_id_cnt
-            taxdata["OriginalNCBITaxonId"] = taxdata["NCBITaxonId"]
+            if "OriginalNCBITaxonId" not in taxdata:
+                taxdata["OriginalNCBITaxonId"] = taxdata["NCBITaxonId"]
             gs.append(taxdata)
         parent_taxid = node.up.taxid if node.up is not None else 0
-        tax.append((taxdata['NCBITaxonId'], parent_taxid, taxdata.get('SciName', taxdata['Name'])), node.is_leaf())
+        tax.append((taxdata['NCBITaxonId'], parent_taxid, taxdata.get('SciName', taxdata['Name']), node.is_leaf()))
     return tax, gs
 
 def parse_genomes_tsv(genomes_tsv):
