@@ -146,7 +146,7 @@ process ADD_PAIRWISE_ORTHOLOGS {
 
         oma-build -vv vps \\
             --db $database \\
-            \${vps_arg[@]} \\
+            \${vps_arg[@]:-} \\
             $homoeologs \\
             --hdf5-out vps.h5
         """
