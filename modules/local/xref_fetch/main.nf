@@ -69,9 +69,11 @@ process MAP_XREFS {
     label "process_long"
     label "HIGH_IO_ACCESS"
     container "docker.io/dessimozlab/omabuild:edge"
+    tag "Maps xref ${xref_in} from ${source}"
 
     input:
-        tuple path(xref_in), val(format), val(source), 
+        tuple val(meta), 
+              path(xref_in), val(format), val(source), 
               path(tax_map),
               path(db),
               path(seq_idx_db),

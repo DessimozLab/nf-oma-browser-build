@@ -73,7 +73,8 @@ workflow OMA_BROWSER_BUILD {
         }
 
         // create crossreferences
-        GENERATE_XREFS(gs_file,
+        GENERATE_XREFS(IMPORT_HDF5.out.meta,
+                       gs_file,
                        IMPORT_HDF5.out.db_h5,
                        IMPORT_HDF5.out.seqidx_h5,
                        IMPORT_HDF5.out.source_xref_db)

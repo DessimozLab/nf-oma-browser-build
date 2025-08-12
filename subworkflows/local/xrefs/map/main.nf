@@ -6,6 +6,7 @@ include { MAP_XREFS; COLLECT_XREFS; COMBINE_ALL_XREFS } from "./../../../../modu
 
 workflow MAP_XREFS_WF {
     take:
+        meta
         xref
         tax_map
         db
@@ -13,11 +14,12 @@ workflow MAP_XREFS_WF {
         source_xref_db
 
     main:
-        map_xref_params = xref
+        map_xref_params = meta
+           .combine(xref)
            .combine(tax_map)
            .combine(db)
            .combine(seq_idx_db)
-           .combine(source_xref_db) 
+           .combine(source_xref_db)
         MAP_XREFS(map_xref_params)
         grouped_by_source = MAP_XREFS.out.matched_xrefs
             .groupTuple()
