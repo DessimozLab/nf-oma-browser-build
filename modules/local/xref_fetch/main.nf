@@ -77,6 +77,7 @@ process MAP_XREFS {
               path(tax_map),
               path(db),
               path(seq_idx_db),
+              path(seq_buf),
               path(src_xref_db)
 
     output:

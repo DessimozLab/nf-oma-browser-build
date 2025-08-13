@@ -77,6 +77,7 @@ workflow OMA_BROWSER_BUILD {
                        gs_file,
                        IMPORT_HDF5.out.db_h5,
                        IMPORT_HDF5.out.seqidx_h5,
+                       IMPORT_HDF5.out.seq_buf,
                        IMPORT_HDF5.out.source_xref_db)
 
         INFER_KEYWORDS(IMPORT_HDF5.out.meta,
@@ -99,6 +100,7 @@ workflow OMA_BROWSER_BUILD {
         fingerprint_jobs = chunk_c
             .combine(IMPORT_HDF5.out.db_h5)
             .combine(IMPORT_HDF5.out.seqidx_h5)
+            .combine(IMPORT_HDF5.out.seq_buf)
         INFER_FINGERPRINTS(fingerprint_jobs)
 
         // infer hog profiles
@@ -149,6 +151,7 @@ workflow OMA_BROWSER_BUILD {
     emit:
         db        = COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5
         seqidx_h5 = IMPORT_HDF5.out.seqidx_h5
+        seq_buf   = IMPORT_HDF5.out.seq_buf
         downloads = download_files
         rdf       = rdf_out
 

@@ -51,11 +51,13 @@ process BUILD_SEQINDEX {
 
     output:
         path "OmaServer.h5.idx", emit: seqidx_h5
+        path "sequences.bin", emit: seq_bin
 
     script:
         """
         oma-build -vv seqindex \
             --db $database \
+            --seq-buf sequences.bin \
             --out "OmaServer.h5.idx"
         """
     stub:

@@ -9,6 +9,7 @@ workflow GENERATE_XREFS {
         gs_tsv
         db_h5
         seqidx_h5
+        seq_buf
         source_xref_h5
 
     main:
@@ -24,6 +25,7 @@ workflow GENERATE_XREFS {
             PREPARE_XREFS.out.taxmap,
             db_h5, 
             seqidx_h5,
+            seq_buf,
             source_xref_h5)
         BUILD_REDUCED_XREFS(db_h5, MAP_XREFS_WF.out.xref_db)
 

@@ -3,7 +3,7 @@ process INFER_FINGERPRINTS {
     container "docker.io/dessimozlab/omabuild:edge"
 
     input:
-        tuple val(meta), path(db_h5), path(seqidx_h5)
+        tuple val(meta), path(db_h5), path(seqidx_h5), path(seq_buff)
 
     output:
         path "Fingerprints*.txt", emit: oma_group_fingerprints

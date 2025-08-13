@@ -11,6 +11,7 @@ workflow MAP_XREFS_WF {
         tax_map
         db
         seq_idx_db
+        seq_buf
         source_xref_db
 
     main:
@@ -19,6 +20,7 @@ workflow MAP_XREFS_WF {
            .combine(tax_map)
            .combine(db)
            .combine(seq_idx_db)
+           .combine(seq_buf)
            .combine(source_xref_db)
         MAP_XREFS(map_xref_params)
         grouped_by_source = MAP_XREFS.out.matched_xrefs
