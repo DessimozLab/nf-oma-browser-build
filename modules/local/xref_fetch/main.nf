@@ -126,6 +126,7 @@ process COMBINE_ALL_XREFS {
     tag "Combining all xrefs into single hdf5 db"
 
     input:
+        val  meta
         path xref_dbs
 
     output:

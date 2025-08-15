@@ -31,7 +31,7 @@ workflow MAP_XREFS_WF {
             .map{_source, h5db -> h5db}
             .mix(source_xref_db)
             .collect()
-        COMBINE_ALL_XREFS(xref_dbs_list)
+        COMBINE_ALL_XREFS(meta, xref_dbs_list)
     emit:
         xref_db = COMBINE_ALL_XREFS.out.xref_db_h5
 }
