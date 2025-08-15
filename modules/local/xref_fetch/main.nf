@@ -85,6 +85,26 @@ process MAP_XREFS {
 
     script:
         """
+        # Determine local target path in TMPDIR for sequence buffer
+        local_seq="\${TMPDIR:-/tmp}/${seq_buf.name}"
+
+        # Get size of the target file, not the symlink
+        file_size=\$(stat -Lc%s "$seq_buf")
+
+        # Get free space on TMPDIR in bytes
+        free_space=\$(df -B1 "\${TMPDIR:-/tmp}" | tail -1 | awk '{print \$4}')
+
+        if [ "\$file_size" -le "\$free_space" ]; then
+            echo "Enough space: copying $seq_buf to \$local_seq"
+            cp -L $seq_buf \$local_seq
+            rm $seq_buf
+            ln -s \$local_seq
+        else
+            echo "Not enough space in TMPDIR: using symlink for $seq_buf directly"          
+        fi
+
+        # List content for debugging
+        ls -la . 
         oma-build -vv map-xref \\
             --xref $xref_in \\
             --format $format \\
