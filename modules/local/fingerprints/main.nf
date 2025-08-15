@@ -3,7 +3,7 @@ process INFER_FINGERPRINTS {
     container "docker.io/dessimozlab/omabuild:edge"
 
     input:
-        tuple val(meta), path(db_h5), path(seqidx_h5), path(seq_buff)
+        tuple val(meta), path(db_h5), path(seqidx_h5), path(seq_buf)
 
     output:
         path "Fingerprints*.txt", emit: oma_group_fingerprints
@@ -12,24 +12,25 @@ process INFER_FINGERPRINTS {
         def rng = meta.start_og ? "--og-rng ${meta.start_og} ${meta.end_og}" : "" 
         def nr = meta.og_chunk ? "_${meta.og_chunk}" : ""
         
-        // Check free space in TMPDIR in bytes (Java way)
-        def tmpDir = System.getenv('TMPDIR') ?: '/tmp'
-        def freeSpace = new File(tmpDir).getUsableSpace()
-
         // Size of actual file (follows symlink)
-        def buffSize = seq_buff.size()
-        def copyToLocal = buffSize <= freeSpace
-        
+        def buffSize = seq_buf.size()
+        def uniqueName = "${seq_buf.name}_" + ((Math.random()*10000 as Integer) as String)
         """
-        ${ copyToLocal ? """
-        echo "Copying $seq_buff to \${TMPDIR}"
-        local_seq="${tmpDir}/${seq_buff.name}"
-        cp -L $seq_buff \$local_seq
-        rm $seq_buff
-        ln -s \$local_seq
-        """ : """
-        echo "Not enough space in TMPDIR: using symlink for $seq_buff directly"
-        """ }
+        # Check if TMPDIR on compute node has enough space for the sequence buffer
+        tmpDir="\${TMPDIR:-/tmp}"
+        free_blocks=\$(df -P "\$tmpDir" | tail -1 | awk '{print \$4}')
+        block_size=\$(df -P "\$tmpDir" | tail -1 | awk '{print \$2}')
+        free_space=\$((free_blocks * block_size))
+
+        if [ "${buffSize}" -le "\$free_space" ]; then
+            local_seq="\${tmpDir}/${uniqueName}"
+            echo "Copying $seq_buf to \$local_seq"
+            cp -L "$seq_buf" "\$local_seq"
+            rm "$seq_buf"
+            ln -s "\$local_seq" "$seq_buf"
+        else
+            echo "Not enough space in TMPDIR, using original symlink"
+        fi
         
         # List content for debugging
         ls -la . 
