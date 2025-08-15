@@ -11,25 +11,26 @@ process INFER_FINGERPRINTS {
     script:
         def rng = meta.start_og ? "--og-rng ${meta.start_og} ${meta.end_og}" : "" 
         def nr = meta.og_chunk ? "_${meta.og_chunk}" : ""
+        
+        // Check free space in TMPDIR in bytes (Java way)
+        def tmpDir = System.getenv('TMPDIR') ?: '/tmp'
+        def freeSpace = new File(tmpDir).getUsableSpace()
+
+        // Size of actual file (follows symlink)
+        def buffSize = seq_buff.size()
+        def copyToLocal = buffSize <= freeSpace
+        
         """
-        # Determine local target path in TMPDIR for sequence buffer
-        local_seq="\${TMPDIR:-/tmp}/${seq_buff.name}"
-
-        # Get size of the target file, not the symlink
-        file_size=\$(stat -Lc%s "$seq_buff")
-
-        # Get free space on TMPDIR in bytes
-        free_space=\$(df -B1 "\${TMPDIR:-/tmp}" | tail -1 | awk '{print \$4}')
-
-        if [ "\$file_size" -le "\$free_space" ]; then
-            echo "Enough space: copying $seq_buff to \$local_seq"
-            cp -L $seq_buff \$local_seq
-            rm $seq_buff
-            ln -s \$local_seq
-        else
-            echo "Not enough space in TMPDIR: using symlink for $seq_buff directly"          
-        fi
-
+        ${ copyToLocal ? """
+        echo "Copying $seq_buff to \${TMPDIR}"
+        local_seq="${tmpDir}/${seq_buff.name}"
+        cp -L $seq_buff \$local_seq
+        rm $seq_buff
+        ln -s \$local_seq
+        """ : """
+        echo "Not enough space in TMPDIR: using symlink for $seq_buff directly"
+        """ }
+        
         # List content for debugging
         ls -la . 
 

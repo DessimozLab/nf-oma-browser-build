@@ -84,25 +84,25 @@ process MAP_XREFS {
         tuple val(source), path("xref-${source}.pkl"), val(format), path(xref_in), emit: matched_xrefs
 
     script:
+        // Check free space in TMPDIR in bytes (Java way)
+        def tmpDir = System.getenv('TMPDIR') ?: '/tmp'
+        def freeSpace = new File(tmpDir).getUsableSpace()
+
+        // Size of actual file (follows symlink)
+        def buffSize = seq_buf.size()
+        def copyToLocal = buffSize <= freeSpace
+        
         """
-        # Determine local target path in TMPDIR for sequence buffer
-        local_seq="\${TMPDIR:-/tmp}/${seq_buf.name}"
-
-        # Get size of the target file, not the symlink
-        file_size=\$(stat -Lc%s "$seq_buf")
-
-        # Get free space on TMPDIR in bytes
-        free_space=\$(df -B1 "\${TMPDIR:-/tmp}" | tail -1 | awk '{print \$4}')
-
-        if [ "\$file_size" -le "\$free_space" ]; then
-            echo "Enough space: copying $seq_buf to \$local_seq"
-            cp -L $seq_buf \$local_seq
-            rm $seq_buf
-            ln -s \$local_seq
-        else
-            echo "Not enough space in TMPDIR: using symlink for $seq_buf directly"          
-        fi
-
+        ${ copyToLocal ? """
+        echo "Copying $seq_buf to \${TMPDIR}"
+        local_seq="${tmpDir}/${seq_buf.name}"
+        cp -L $seq_buf \$local_seq
+        rm $seq_buf
+        ln -s \$local_seq
+        """ : """
+        echo "Not enough space in TMPDIR: using symlink for $seq_buf directly"
+        """ }
+        
         # List content for debugging
         ls -la . 
         oma-build -vv map-xref \\
