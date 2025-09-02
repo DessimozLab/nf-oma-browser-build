@@ -84,12 +84,12 @@ workflow OMA_BROWSER_BUILD {
                        IMPORT_HDF5.out.db_h5,
                        GENERATE_XREFS.out.xref_db)
     
-        // create jobs to compute fingerprints, 1 job per 6000 oma groups
+        // create jobs to compute fingerprints, 1 job per 1000 oma groups
         // total number of oma groups is available in the meta dictionary
         chunk_c = IMPORT_HDF5.out.meta.map { meta ->
             def chunks = []
             def nr = 1
-            def step = 6000
+            def step = 1000
             (1..meta.nr_oma_groups).step(step).each { i ->
                 def up = Math.min(i + step - 1, meta.nr_oma_groups)
                 chunks << [start_og: i, end_og: up, nr: nr]
