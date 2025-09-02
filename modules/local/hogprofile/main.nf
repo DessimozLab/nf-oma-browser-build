@@ -3,6 +3,7 @@ process INFER_HOG_PROFILES {
     container "docker.io/dessimozlab/omabuild:edge"
 
     input:
+        val meta
         path db_h5
         
     output:

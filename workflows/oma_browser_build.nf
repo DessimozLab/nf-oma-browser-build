@@ -104,7 +104,8 @@ workflow OMA_BROWSER_BUILD {
         INFER_FINGERPRINTS(fingerprint_jobs)
 
         // infer hog profiles
-        INFER_HOG_PROFILES(IMPORT_HDF5.out.db_h5)
+        INFER_HOG_PROFILES(IMPORT_HDF5.out.meta, 
+                           IMPORT_HDF5.out.db_h5)
 
         // ancestral synteny reconstruction with edgehog
         EDGEHOG(IMPORT_HDF5.out.augmented_orthoxml,
