@@ -40,11 +40,17 @@ def load_existing_domain_annotations(fnames):
 class NewSeqsFilter(object):
     def __init__(self, existing):
         self.known_hashes = existing
+        self.hit = 0
+        self.miss = 0
+        logger.info(f"Initialized Filter with {len(existing)} sequences")
 
     def examine(self, seq_records):
         for srec in seq_records:
             if not srec.id in self.known_hashes:
+                self.miss += 1
                 yield srec
+            else:
+                self.hit += 1
 
 
 class BufferedSeqWriter(object):
@@ -96,6 +102,7 @@ def find_missing(db_fn, existing_fns, out_fn_prefix=None):
     with BufferedSeqWriter(out_fn_prefix) as writer:
         for cnt, missing in enumerate(filt.examine(iter_seqs_from_db(db_fn))):
             writer.write(missing)
+    logger.info(f"FilterStats: {filt.hit} known, {filt.miss} new sequences")
 
 
 if __name__ == '__main__':
