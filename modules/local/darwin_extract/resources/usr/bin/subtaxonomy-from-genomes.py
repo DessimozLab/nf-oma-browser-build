@@ -12,6 +12,8 @@ def subtaxonomy_from_genomes(tax, genomes):
     while True:
         if len(tree.children) != 1: break
         tree = tree.children[0]
+    
+    ensure_unique_names(tree)
 
     for node in tree.traverse(strategy="preorder"):
         parent_taxid = node.up.taxid if node.up is not None and node != tree else 0
@@ -76,6 +78,55 @@ def subtaxonomy_from_genomes(tax, genomes):
         taxtab.append((node.taxid, parent_taxid, sciname, is_genome_level))
     return taxtab
 
+
+def ensure_unique_names(tree):
+    """
+    Ensure that all nodes in the tree have unique scientific names by appending suffixes to duplicates.
+    """
+    name_count = collections.defaultdict(list)
+    for node in tree.traverse(strategy="preorder"):
+        if node.sci_name:
+            name_count[node.sci_name].append(node)
+
+    duplicates = {name for name, nodes in name_count.items() if len(nodes) > 1}
+    if not duplicates:
+        return
+    print(f"Found {len(duplicates)} duplicate names in the taxonomy", file=sys.stderr)
+
+    def find_node_to_keep(nodes):
+        # Step 1: Find nodes with > 1 child
+        multi_child_nodes = [n for n in nodes if len(n.children) > 1]
+        if len(multi_child_nodes) > 1:
+            raise RuntimeError("Multiple nodes with multiple children found for the same name")
+        if len(multi_child_nodes) == 1:
+            return multi_child_nodes[0]
+        
+        # Step 2: Find oldest node among nodes with single child
+        n2p = collections.defaultdict(set)
+        for n in nodes:
+            cur = n
+            while cur.up:
+                n2p[n].add(cur.up)
+                cur = cur.up
+        nodes_set = set(nodes)
+        oldest = [n for n, parents in n2p.items() if len(parents & nodes_set) == 0]
+        if len(oldest) != 1:
+            raise RuntimeError("Could not uniquely identify the oldest node among duplicates")
+        print(f"Keeping node {oldest[0].taxid} for name {oldest[0].sci_name}", file=sys.stderr)
+        return oldest[0]
+
+
+    for dup in duplicates:
+        nodes = name_count[dup]
+        node_to_keep = find_node_to_keep(nodes)
+        for node in nodes:
+            if node is node_to_keep:
+                continue
+            for c in list(node.children):
+                c.up = node.up
+            if node in node.up.children:
+                node.up.children.remove(node)
+        
 
 def parse_genomes_tsv(genomes_tsv):
     """
