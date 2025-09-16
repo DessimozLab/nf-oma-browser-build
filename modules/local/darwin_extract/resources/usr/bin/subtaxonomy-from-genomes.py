@@ -126,10 +126,7 @@ def ensure_unique_names(tree):
         for node in nodes:
             if node is node_to_keep:
                 continue
-            for c in list(node.children):
-                c.up = node.up
-            if node in node.up.children:
-                node.up.children.remove(node)
+            node.delete(prevent_nondicotomic=False)
         
 
 def parse_genomes_tsv(genomes_tsv):
