@@ -97,7 +97,9 @@ def ensure_unique_names(tree):
         # Step 1: Find nodes with > 1 child
         multi_child_nodes = [n for n in nodes if len(n.children) > 1]
         if len(multi_child_nodes) > 1:
-            raise RuntimeError("Multiple nodes with multiple children found for the same name")
+            if multi_child_nodes[-1].up == multi_child_nodes[0]:
+                return multi_child_nodes[0]
+            raise RuntimeError(f"Multiple nodes with multiple children found for the same name: {multi_child_nodes}")
         if len(multi_child_nodes) == 1:
             return multi_child_nodes[0]
         
@@ -112,13 +114,15 @@ def ensure_unique_names(tree):
         oldest = [n for n, parents in n2p.items() if len(parents & nodes_set) == 0]
         if len(oldest) != 1:
             raise RuntimeError("Could not uniquely identify the oldest node among duplicates")
-        print(f"Keeping node {oldest[0].taxid} for name {oldest[0].sci_name}", file=sys.stderr)
+        print(f"Keeping oldest node {oldest[0].taxid} for name {oldest[0].sci_name}", file=sys.stderr)
         return oldest[0]
 
 
     for dup in duplicates:
         nodes = name_count[dup]
         node_to_keep = find_node_to_keep(nodes)
+        print(f"{dup}: {len(nodes)} ({list((n.taxid, n.rank) for n in nodes)}); "
+              f"keep {node_to_keep.taxid} [{node_to_keep.sci_name} - {node_to_keep.rank}]", file=sys.stderr)
         for node in nodes:
             if node is node_to_keep:
                 continue
