@@ -84,24 +84,12 @@ workflow OMA_BROWSER_BUILD {
                        IMPORT_HDF5.out.db_h5,
                        GENERATE_XREFS.out.xref_db)
     
-        // create jobs to compute fingerprints, 1 job per 1000 oma groups
-        // total number of oma groups is available in the meta dictionary
-        chunk_c = IMPORT_HDF5.out.meta.map { meta ->
-            def chunks = []
-            def nr = 1
-            def step = 1000
-            (1..meta.nr_oma_groups).step(step).each { i ->
-                def up = Math.min(i + step - 1, meta.nr_oma_groups)
-                chunks << [start_og: i, end_og: up, nr: nr]
-                nr += 1
-            }
-            return chunks.collect { chunk -> meta + chunk }
-        }.flatten()
-        fingerprint_jobs = chunk_c
+        // infer  fingerprints
+        fingerprint_job = IMPORT_HDF5.out.meta
             .combine(IMPORT_HDF5.out.db_h5)
             .combine(IMPORT_HDF5.out.seqidx_h5)
             .combine(IMPORT_HDF5.out.seq_buf)
-        INFER_FINGERPRINTS(fingerprint_jobs)
+        INFER_FINGERPRINTS(fingerprint_job)
 
         // infer hog profiles
         INFER_HOG_PROFILES(IMPORT_HDF5.out.meta, 
@@ -139,7 +127,7 @@ workflow OMA_BROWSER_BUILD {
              EDGEHOG.out.anc_synteny_h5)
         COMBINE_HDF_AND_UPDATE_SUMMARY_DATA(h5_dbs_to_combine.collect(),
                                             INFER_KEYWORDS.out.oma_group_keywords,
-                                            INFER_FINGERPRINTS.out.oma_group_fingerprints.collectFile(name: "Fingerprints.txt", newLine: false),
+                                            INFER_FINGERPRINTS.out.oma_group_fingerprints,
                                             INFER_KEYWORDS.out.oma_hog_keywords)
 
         if (params.rdf_export) {
