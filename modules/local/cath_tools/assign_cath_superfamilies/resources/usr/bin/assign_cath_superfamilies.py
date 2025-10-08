@@ -90,7 +90,11 @@ def process_cath_resolve_hits_file(infile, outfile, evalue_coff, dom_to_fam, dis
             final_start_stop_list=[]
             for i in final_start_stop.split(","):
                 final_start_stop_list.append(map(int,i.split("-")))
-            plup = discontinuous_regs[hmm_id]
+            try:
+                plup = discontinuous_regs[hmm_id]
+            except KeyError:
+                print(f"Warning: could not find discontinuous regions for {hmm_id}", file=sys.stderr)
+                continue
             
             mda_resolved_aas = set()
             for start,stop in final_start_stop_list:
