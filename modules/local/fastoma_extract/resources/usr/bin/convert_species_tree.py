@@ -25,7 +25,8 @@ class TaxidProvider:
         tax = omataxonomy.Taxonomy(taxonomy_file)
         scinames = tax.translate_to_names(num_id)
         mnemonic = tax.get_mnemonic_names(num_id)
-        for taxid, sciname, v in zip(num_id, scinames, self.mapping.values()):
+        for taxid, sciname in zip(num_id, scinames):
+            v = self.mapping[str(taxid)]
             v['NCBITaxonId'] = taxid
             v['SciName'] = sciname
             if taxid in mnemonic:
