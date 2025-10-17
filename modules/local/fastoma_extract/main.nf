@@ -5,6 +5,7 @@ process CONVERT_SPECIES_TREE {
     input:
         path speciestree
         path mapping_file
+        path taxonomy_sqlite
 
     output:
         path "gs.tsv", emit: gs_tsv
@@ -12,10 +13,12 @@ process CONVERT_SPECIES_TREE {
 
     script:
         def map_file = mapping_file.name == "NO_FILE" ? "" : "--mapping $mapping_file"
+        def tax_sqlite = taxonomy_sqlite.name == "NO_FILE2" ? "./taxonomy.sqlite" : "$taxonomy_sqlite"
         """
         convert_species_tree.py \\
              --tree $speciestree \\
              $map_file \\
+             --taxonomy $tax_sqlite \\
              --out-tax tax.tsv \\
              --out-genomes gs.tsv
         """

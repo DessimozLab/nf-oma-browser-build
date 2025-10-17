@@ -8,8 +8,9 @@ workflow EXTRACT_FASTOMA {
     main:
         species_tree = Channel.fromPath(params.fastoma_species_tree, type: "file", checkIfExists: true)
         species_mapping = (params.fastoma_speciesdata != null) ? Channel.fromPath(params.fastoma_speciesdata, type: "file") : Channel.fromPath("$projectDir/assets/NO_FILE")
+        taxonomy_db = (params.taxonomy_sqlite_path != null) ? Channel.fromPath(params.taxonomy_sqlite_path, type: "file") : Channel.fromPath("$projectDir/assets/NO_FILE2")
         
-        CONVERT_SPECIES_TREE(species_tree, species_mapping)
+        CONVERT_SPECIES_TREE(species_tree, species_mapping, taxonomy_db)
         convert_jobs = CONVERT_SPECIES_TREE.out.gs_tsv
             | splitCsv(sep: "\t", header: true)
             | map { row ->
