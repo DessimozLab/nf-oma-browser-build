@@ -64,7 +64,16 @@ def subtaxonomy_from_genomes(tax, genomes):
                     elif has_sub_clades: # asserted that len(genomes[node.taxid]) >= 1
                         # we need to create an internal node for this taxid
                         # and add all genomes as children of this node
-                        sciname = genomes[node.taxid][0]['SciName']
+                        if len(genomes[node.taxid]) == 1:
+                            # only one genome for this taxid
+                            sciname = genomes[node.taxid][0]['SciName']
+                        else:  # more than one genome
+                            genomes_scinames = [g['SciName'] for g in genomes[node.taxid]]
+                            print(f"node: {node.taxid}; sciname: {sciname}; {len(node.children)} sub-clades; genomes_scinames: {genomes_scinames}")
+                            if min((len(z) for z in genomes_scinames)) == max((len(z) for z in genomes_scinames)):
+                                # at least two genomes which contains expected species sciname - os_code. 
+                                # We use the expected species sciname as the ancestral taxonomy name
+                                sciname = commonprefix(genomes_scinames)[:len(genomes_scinames[0])-8].strip()
                     else:
                         raise RuntimeError("Unexpected case: genomes with no sub-clades but no single genome either")
                     # create the current ncbi taxlevel node
@@ -73,7 +82,10 @@ def subtaxonomy_from_genomes(tax, genomes):
                         print(f"WARNING: taxonomy name mismatch: {node.sci_name} != {sciname}", file=sys.stderr)
                     taxtab.append((node.taxid, parent_taxid, sciname, False))
                     for genome in genomes[node.taxid]:
-                        taxtab.append((genome['GenomeId'], node.taxid, f"{genome['SciName']} - {genome['UniProtSpeciesCode']}", True))
+                        nam = genome['SciName']
+                        if not nam.endswith(f" - {genome['UniProtSpeciesCode']}"):
+                            nam += f" - {genome['UniProtSpeciesCode']}"
+                        taxtab.append((genome['GenomeId'], node.taxid, nam, True))
                     continue
         taxtab.append((node.taxid, parent_taxid, sciname, is_genome_level))
     return taxtab
