@@ -17,16 +17,22 @@ workflow IMPORT_HDF5 {
         splice_json
 
     main:
-        def is_prod_oma = (params.oma_source == "Production")
-        ADD_GENOMES(gs_tsv, tax_tsv, taxid_updates, oma_groups, genomes_json.collect())
+        def initial_meta = [
+            'oma_version': params.oma_version ?: 'unknown',
+            'oma_release_char': params.oma_release_char ?: '',
+            'is_prod_oma': params.oma_source == "Production"
+        ]
+        
+        ADD_GENOMES(gs_tsv, tax_tsv, taxid_updates, oma_groups, genomes_json.collect(), initial_meta)
         db_with_meta = ADD_GENOMES.out.summary_json
             .combine(ADD_GENOMES.out.db_h5)
             .map { file, db ->
-                def json = new groovy.json.JsonSlurper().parseText(file.text)
-                return [json, db]
+            def json = new groovy.json.JsonSlurper().parseText(file.text)
+            def combined_meta = initial_meta + json // Combine meta with the parsed JSON meta
+            return [combined_meta, db]
             }
         BUILD_SEQINDEX(db_with_meta)
-        BUILD_HOG_H5(db_with_meta, hogs, is_prod_oma)
+        BUILD_HOG_H5(db_with_meta, hogs)
         meta = db_with_meta.map{ it[0] }
 
         vp = (vps_base != null) ? file(vps_base) : file("$projectDir/assets/NO_FILE")

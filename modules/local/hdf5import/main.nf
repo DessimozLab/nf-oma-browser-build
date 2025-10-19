@@ -10,6 +10,7 @@ process ADD_GENOMES {
         path taxid_updates
         path oma_groups
         path genomes_json
+        val  meta
 
     output:
         path "OmaServer.h5", emit: db_h5
@@ -24,6 +25,8 @@ process ADD_GENOMES {
                 --gs-tsv $gs_tsv \
                 --tax-tsv $tax_tsv \
                 $tax_up_stmt \
+                --release "${meta.oma_version}" \
+                --rel-char "${meta.oma_release_char}" \
                 --oma-groups $oma_groups \
                 --xref-db SourceXRefs.h5 \
                 --genomes $genomes_json
@@ -75,7 +78,6 @@ process BUILD_HOG_H5 {
     input:
         tuple val(meta), path(database)
         path orthoxml
-        val is_prod_oma
 
     output:
         path "hog.h5", emit: hog_h5
@@ -83,7 +85,7 @@ process BUILD_HOG_H5 {
         path "oma-hogs.orthoXML.augmented.gz", emit: hogs_augmented_orthoxml
 
     script:
-        def opt = (is_prod_oma) ? "--oma-prot-id" : ""
+        def opt = (meta.is_prod_oma) ? "--oma-prot-id" : ""
         """
         oma-build -vv hog \
             --orthoxml $orthoxml \
