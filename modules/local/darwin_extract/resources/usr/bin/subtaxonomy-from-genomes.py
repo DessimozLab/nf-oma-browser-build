@@ -46,11 +46,15 @@ def subtaxonomy_from_genomes(tax, genomes):
                     # 1. node more than genomes, but no sub-clades with genomes
                     if len(genomes[node.taxid]) > 1 and not has_sub_clades:
                         genomes_scinames = [g['SciName'] for g in genomes[node.taxid]]
-                        print(f"node: {node.taxid}; sciname: {sciname}; genomes_scinames: {genomes_scinames}")
+                        prefix = commonprefix(genomes_scinames)
+                        print(f"node: {node.taxid}; sciname: {sciname}; genomes_scinames: {genomes_scinames}; one_is_prefix: {any(g == prefix for g in genomes_scinames)}")
                         if min((len(z) for z in genomes_scinames)) == max((len(z) for z in genomes_scinames)):
                             # at least two genomes which contains expected species sciname - os_code. 
                             # We use the expected species sciname as the ancestral taxonomy name
                             sciname = commonprefix(genomes_scinames)[:len(genomes_scinames[0])-8].strip()
+                        elif any(g == prefix for g in genomes_scinames):
+                            # one of the genomes has the common prefix as its sciname
+                            sciname = prefix
                         else:
                             # genomes have different scinames. most likely those resulted from different 
                             # versions of the same species that were merged in the taxonomy.
@@ -85,6 +89,7 @@ def subtaxonomy_from_genomes(tax, genomes):
                         nam = genome['SciName']
                         if not nam.endswith(f" - {genome['UniProtSpeciesCode']}"):
                             nam += f" - {genome['UniProtSpeciesCode']}"
+                            print(f"WARNING: appending species code to genome name: {nam}", file=sys.stderr)
                         taxtab.append((genome['GenomeId'], node.taxid, nam, True))
                     continue
         taxtab.append((node.taxid, parent_taxid, sciname, is_genome_level))
