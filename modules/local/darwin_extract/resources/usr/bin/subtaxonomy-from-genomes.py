@@ -137,7 +137,9 @@ def ensure_unique_names(tree):
               f"keep {node_to_keep.taxid} [{node_to_keep.sci_name} - {node_to_keep.rank}]", file=sys.stderr)
         for node in nodes:
             if node is node_to_keep:
+                print(f" keep {node.taxid} [{node.sci_name} - {node.rank}; parent: {node.up.taxid}]")
                 continue
+            print(f" remove {node.taxid} [{node.sci_name} - {node.rank}; parent: {node.up.taxid}; children: {list(n.taxid for n in node.children)}]")
             node.delete(prevent_nondicotomic=False)
         
 
