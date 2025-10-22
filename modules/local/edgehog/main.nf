@@ -7,7 +7,6 @@ process EDGEHOG {
 
     input:
         path augmented_orthoxml
-        path speciestree
         path oma_db
 
     output:
@@ -15,15 +14,14 @@ process EDGEHOG {
 
     script:
         def unzip = (augmented_orthoxml.name.endsWith(".gz")) ? "gunzip -c $augmented_orthoxml > edgehog-hogs.orthoxml" : "ln -s ${augmented_orthoxml} edgehog-hogs.orthoxml"
-        def trimed_tree = "simplified_${speciestree}"
         """
         $unzip 
-        trim_uninformative_levels.py \\
-            --tree $speciestree \\
-            --out $trimed_tree
+        extract_speciestree_from_orthoxml.py \\
+            --orthoxml edgehog-hogs.orthoxml \\
+            --out speciestree.nwk
         
         edgehog --hogs edgehog-hogs.orthoxml \\
-                --species_tree $trimed_tree \\
+                --species_tree speciestree.nwk \\
                 --hdf5 $oma_db \\
                 --date_edges \\
                 --out-format HDF5

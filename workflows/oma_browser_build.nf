@@ -97,7 +97,6 @@ workflow OMA_BROWSER_BUILD {
 
         // ancestral synteny reconstruction with edgehog
         EDGEHOG(IMPORT_HDF5.out.augmented_orthoxml,
-                GEN_BROWSER_AUX_FILES.out.speciestree_newick,
                 IMPORT_HDF5.out.db_h5)
 
         // integrate Gene Ontology data & predict using OMA Groups
