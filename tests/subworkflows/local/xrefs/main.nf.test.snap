@@ -1,0 +1,31 @@
+{
+    "Should run without failures": {
+        "content": [
+            {
+                "0": [
+                    "taxmap.pkl:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "1": [
+                    "XRef-db.h5:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "2": [
+                    "reduced-xrefs-db.h5:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "red_xref_db": [
+                    "reduced-xrefs-db.h5:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "taxmap": [
+                    "taxmap.pkl:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "xref_db": [
+                    "XRef-db.h5:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-10-29T09:00:44.685298"
+    }
+}

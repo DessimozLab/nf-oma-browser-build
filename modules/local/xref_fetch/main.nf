@@ -12,6 +12,12 @@ process FETCH_REFSEQ {
             --nr-cpu $task.cpus \\
             --out "./"
         """
+    
+    stub:
+        """
+        touch example_refseq.gpff.gz
+        touch example_refseq_2.gpff.gz
+        """
 }
 
 process FILTER_AND_SPLIT {
@@ -32,6 +38,12 @@ process FILTER_AND_SPLIT {
             --out-prefix ./xref-${source} \\
             --format $format \\
             --tax-map $tax_map
+        """
+    
+    stub:
+        """
+        touch xref-${source}_part1.gz
+        touch xref-${source}_part2.gz
         """
 }
 
@@ -117,6 +129,11 @@ process MAP_XREFS {
             --seq-idx-db $seq_idx_db \\
             --xref-source-db $src_xref_db
         """
+
+    stub:
+        """
+        touch xref-${source}.pkl
+        """
 }
 
 process COLLECT_XREFS {
@@ -139,6 +156,12 @@ process COLLECT_XREFS {
             --source $source \\
             --out ./xref-${source}.h5
         """
+    
+    stub:
+        """
+        touch xref-${source}_001.h5
+        touch xref-${source}_002.h5
+        """
 }
 
 
@@ -159,6 +182,11 @@ process COMBINE_ALL_XREFS {
         oma-build -vv combine-xrefs \\
             --out XRef-db.h5 \\
             --xrefs $xref_dbs \\
+        """
+    
+    stub:
+        """
+        touch XRef-db.h5
         """
 }
 
@@ -182,6 +210,11 @@ process BUILD_REDUCED_XREFS {
             --db $db \\
             --nr-procs ${task.cpus}
         """
+    
+    stub:
+        """
+        touch reduced-xrefs-db.h5
+        """
 }
 
 
@@ -201,5 +234,11 @@ process BUILD_NCBITAX_DB {
         def opt = (taxonomy_sqlite.name == "NO_FILE") ? "" : "--path $taxonomy_sqlite"
         """
         build_verify_taxdb.py $opt -vv --out-db tax.sqlite
-        """        
+        """
+    
+    stub:
+        """
+        touch tax.sqlite
+        touch tax.sqlite.traverse.pkl
+        """
 }
