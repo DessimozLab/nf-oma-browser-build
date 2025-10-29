@@ -20,8 +20,8 @@ process FILTER_AND_SPLIT {
     container "docker.io/dessimozlab/omabuild:edge"
 
     input:
-        tuple path(xref), val(format), val(source)
-        path tax_map
+        tuple path(xref), val(format), val(source), path(tax_map)
+
     output:
         tuple path("xref-${source}*.gz"), val(format), val(source), emit: split_xref
 
@@ -128,7 +128,7 @@ process COLLECT_XREFS {
         tuple val(source), path(map_results, stageAs: "?/*" ), val(format), path(xref_in, stageAs: "?/*")
 
     output:
-        tuple val(source), path("xref-${source}.h5"), emit: xref_by_source_h5
+        tuple val(source), path("xref-${source}_*.h5"), emit: xref_by_source_h5
 
     script:
         """

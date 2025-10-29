@@ -21,16 +21,21 @@ workflow PREPARE_XREFS {
         def trembl_channel = uniprot_trembl.map { path -> tuple(path, 'swiss', 'trembl') }
 
         if (refseq_folder != null){
-            refseq_channel = Channel.fromPath("${refseq_folder}/*.gpff.gz").collect().map { path -> tuple(path, 'genbank', 'refseq') }
+            refseq_channel = Channel.fromPath("${refseq_folder}/*.gpff.gz").map { path -> tuple(path, 'genbank', 'refseq') }
         } else {
             FETCH_REFSEQ()
-            refseq_channel = FETCH_REFSEQ.out.refseq_proteins.map{ path -> tuple(path, 'genbank', 'refseq') }
+            refseq_channel = FETCH_REFSEQ.out.refseq_proteins
+                .flatten()
+                .map{ path -> tuple(path, 'genbank', 'refseq') }
         }
 
         // Concatenate the three channels
         xref_channel = swissprot_channel.concat(trembl_channel, refseq_channel)
-
-        FILTER_AND_SPLIT(xref_channel, RELEVANT_TAXID_MAP.out.tax_map)
+        
+        // cross-product with tax_map
+        xref_with_tax = xref_channel.combine(RELEVANT_TAXID_MAP.out.tax_map)
+        
+        FILTER_AND_SPLIT(xref_with_tax)
 
         filtered_xrefs = FILTER_AND_SPLIT.out.split_xref
             .flatMap{ files, format, source ->
