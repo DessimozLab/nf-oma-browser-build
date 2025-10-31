@@ -77,7 +77,7 @@ process RELEVANT_TAXID_MAP {
 
 
 process MAP_XREFS {
-    label "process_single"
+    label "process_medium"
     label "process_long"
     label "HIGH_IO_ACCESS"
     container "docker.io/dessimozlab/omabuild:edge"
@@ -97,24 +97,40 @@ process MAP_XREFS {
 
     script:
         // Size of actual file (follows symlink)
-        def buffSize = seq_buf.size()
-        def uniqueName = "${seq_buf.name}_" + ((Math.random()*10000 as Integer) as String)
+        def seq_buf_size = seq_buf.size()
+        def seq_idx_db_size = seq_idx_db.size()
+        def rand_nr = (Math.random()*10000 as Integer) as String
         """
+        copy_to_tmp_if_space() {
+            local source_file="\$1"
+            local file_size="\$2"
+            local unique_name="\$3"
+            
+            # Get available space in tmpDir
+            free_blocks=\$(df -P "\$tmpDir" | tail -1 | awk '{print \$4}')
+            block_size=\$(df -P "\$tmpDir" | tail -1 | awk '{print \$2}')
+            free_space=\$((free_blocks * block_size))
+
+            if [ "\$file_size" -le "\$free_space" ]; then
+                local_file="\${tmpDir}/\$unique_name"
+                echo "Copying \$source_file to \$local_file"
+                cp -L "\$source_file" "\$local_file"
+                rm "\$source_file"
+                ln -s "\$local_file" "\$source_file"
+                echo "Successfully moved \$source_file to tmpDir"
+            else
+                echo "Not enough space in TMPDIR for \$source_file, using original location"
+            fi
+        }
+
         # Check if TMPDIR on compute node has enough space for the sequence buffer
         tmpDir="\${TMPDIR:-/tmp}"
-        free_blocks=\$(df -P "\$tmpDir" | tail -1 | awk '{print \$4}')
-        block_size=\$(df -P "\$tmpDir" | tail -1 | awk '{print \$2}')
-        free_space=\$((free_blocks * block_size))
 
-        if [ "${buffSize}" -le "\$free_space" ]; then
-            local_seq="\${tmpDir}/${uniqueName}"
-            echo "Copying $seq_buf to \$local_seq"
-            cp -L "$seq_buf" "\$local_seq"
-            rm "$seq_buf"
-            ln -s "\$local_seq" "$seq_buf"
-        else
-            echo "Not enough space in TMPDIR, using original symlink"
-        fi
+        # copy seq_buf to local tmp if space available:
+        copy_to_tmp_if_space "$seq_buf" "${seq_buf_size}" "${seq_buf.name}_${rand_nr}"
+
+        # copy seq_idx_db to local tmp if space available:
+        copy_to_tmp_if_space "$seq_idx_db" "${seq_idx_db_size}" "${seq_idx_db.name}_${rand_nr}"
         
         # List content for debugging
         ls -la . 
@@ -127,7 +143,8 @@ process MAP_XREFS {
             --out xref-${source}.pkl \\
             --db $db \\
             --seq-idx-db $seq_idx_db \\
-            --xref-source-db $src_xref_db
+            --xref-source-db $src_xref_db \\
+            --nr-procs ${task.cpus}
         """
 
     stub:
