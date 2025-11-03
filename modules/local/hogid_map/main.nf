@@ -1,6 +1,6 @@
 process HOG_LSH_BUILD {
     label "process_medium"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
 
     input:
         tuple val(meta), path(omadb)
@@ -28,7 +28,7 @@ process HOG_LSH_BUILD {
 
 process HOG_MAP_IDS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
 
     input:
         path target_lsh

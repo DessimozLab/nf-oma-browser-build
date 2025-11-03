@@ -1,7 +1,7 @@
 // Processes
 process COUNT_GENES_WITH_ANNOTATION {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
 
     input:
         path omadb
@@ -18,7 +18,7 @@ process COUNT_GENES_WITH_ANNOTATION {
 
 process HOGPROP {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
 
     input:
         tuple val(chunk), val(nr_chunks), path(orthoxml),  path(omadb)
@@ -46,7 +46,7 @@ process HOGPROP {
 process HOGPROP_COLLECT {
     label "process_single"
     label "process_high_memory"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
 
     input:
         path "results/*"
@@ -69,7 +69,7 @@ process HOGPROP_COLLECT {
 
 process HOGPROP_CONVERT_TO_BROWSERDB_FORMAT {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
 
     input:
         path omadb

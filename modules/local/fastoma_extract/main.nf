@@ -1,6 +1,6 @@
 process CONVERT_SPECIES_TREE {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
 
     input:
         path speciestree
@@ -26,7 +26,7 @@ process CONVERT_SPECIES_TREE {
 
 process CONVERT_PROTEOME {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
 
     input:
         tuple val(meta), path(genome), path(matrix)
@@ -54,7 +54,7 @@ process CONVERT_PROTEOME {
 
 process CONVERT_SPLICINGS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
 
     input:
         path splicefolder
@@ -71,7 +71,7 @@ process CONVERT_SPLICINGS {
 
 process FINALIZE_GS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
 
     input:
         path gs_tsv
@@ -91,7 +91,7 @@ process FINALIZE_GS {
 
 process  MERGE_JSON {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
 
     input:
         path json_files

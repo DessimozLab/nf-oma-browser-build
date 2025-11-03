@@ -1,7 +1,7 @@
 
 process FETCH_REFSEQ {
     label "process_low"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
 
     output:
         path "*.gpff.gz", emit: refseq_proteins
@@ -23,7 +23,7 @@ process FETCH_REFSEQ {
 process FILTER_AND_SPLIT {
     tag "$source"
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
 
     input:
         tuple path(xref), val(format), val(source), path(tax_map)
@@ -49,7 +49,7 @@ process FILTER_AND_SPLIT {
 
 process RELEVANT_TAXID_MAP {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
 
     input:
         path gs_tsv
@@ -80,7 +80,7 @@ process MAP_XREFS {
     label "process_medium"
     label "process_long"
     label "HIGH_IO_ACCESS"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
     tag "Maps xref ${xref_in} from ${source}"
 
     input:
@@ -155,7 +155,7 @@ process MAP_XREFS {
 
 process COLLECT_XREFS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
     tag "Collecting xrefs for $source"
 
     input:
@@ -184,7 +184,7 @@ process COLLECT_XREFS {
 
 process COMBINE_ALL_XREFS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
     tag "Combining all xrefs into single hdf5 db"
 
     input:
@@ -209,7 +209,7 @@ process COMBINE_ALL_XREFS {
 
 process BUILD_REDUCED_XREFS {
     label "process_low"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
     tag "Building a reduced set of xrefs for lookup and search"
 
     input:
@@ -237,7 +237,7 @@ process BUILD_REDUCED_XREFS {
 
 process BUILD_NCBITAX_DB {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
     tag "Verify / Build NCBITax database"
 
     input:

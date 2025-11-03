@@ -1,6 +1,6 @@
 process IDENTIFY_PROTEINS_WITHOUT_DOMAIN_ANNOTATION {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
 
     input:
         path database
@@ -21,7 +21,7 @@ process IDENTIFY_PROTEINS_WITHOUT_DOMAIN_ANNOTATION {
 
 process COLLECT_RESOLVED_DOMAIN_ANNOTATIONS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
 
     input:
         path domain_files
@@ -41,7 +41,7 @@ process COLLECT_RESOLVED_DOMAIN_ANNOTATIONS {
 process ADD_DOMAINS {
     label "process_single"
     label "process_medium_memory"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:fix-xref"
 
     input:
         path database
