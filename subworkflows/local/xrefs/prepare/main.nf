@@ -24,18 +24,49 @@ workflow PREPARE_XREFS {
             refseq_channel = Channel.fromPath("${refseq_folder}/*.gpff.gz").collect().map { path -> tuple(path, 'genbank', 'refseq') }
         } else {
             FETCH_REFSEQ()
-            refseq_channel = FETCH_REFSEQ.out.refseq_proteins.map{ path -> tuple(path, 'genbank', 'refseq') }
+            refseq_channel = FETCH_REFSEQ.out.refseq_proteins
+                .map{ path -> tuple(path, 'genbank', 'refseq') }
         }
 
         // Concatenate the three channels
         xref_channel = swissprot_channel.concat(trembl_channel, refseq_channel)
-
-        FILTER_AND_SPLIT(xref_channel, RELEVANT_TAXID_MAP.out.tax_map)
+        
+        // cross-product with tax_map
+        xref_with_tax = xref_channel.combine(RELEVANT_TAXID_MAP.out.tax_map)
+        
+        FILTER_AND_SPLIT(xref_with_tax)
 
         filtered_xrefs = FILTER_AND_SPLIT.out.split_xref
             .flatMap{ files, format, source ->
                 def fileList = files instanceof List ? files : [files]
-                fileList.collect { file -> tuple(file, format, source)}
+                fileList.collect { file -> tuple(source, format, file)}
+            }
+            .groupTuple(by: [0, 1])
+            .flatMap { source, format, files -> 
+                // Emit batches of roughly 80MB
+                def batches = []
+                def currentBatch = []
+                def currentSize = 0
+                def maxSize = 80 * 1024 * 1024   // 80 MB
+
+                files.each { file ->
+                    //println "DEBUG file=${file} size=${file?.size()}"
+                    def fsize = file?.size() ?: 0
+                    if (currentSize + fsize > maxSize && currentBatch) {
+                        batches << currentBatch
+                        currentBatch = []
+                        currentSize = 0
+                    }
+                    currentBatch << file
+                    currentSize += fsize
+                }
+                if (currentBatch) batches << currentBatch
+
+                // Emit tuples (files[], format, source)
+                batches.collect { batch -> 
+                    //println "DEBUG batch size=${batch.size()} total=${batch.collect{ it.size() }.sum()}"
+                    tuple(batch, format, source) 
+                }
             }
 
     emit:

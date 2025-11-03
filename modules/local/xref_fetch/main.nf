@@ -12,6 +12,12 @@ process FETCH_REFSEQ {
             --nr-cpu $task.cpus \\
             --out "./"
         """
+    
+    stub:
+        """
+        touch example_refseq.gpff.gz
+        touch example_refseq_2.gpff.gz
+        """
 }
 
 process FILTER_AND_SPLIT {
@@ -20,8 +26,8 @@ process FILTER_AND_SPLIT {
     container "docker.io/dessimozlab/omabuild:edge"
 
     input:
-        tuple path(xref), val(format), val(source)
-        path tax_map
+        tuple path(xref), val(format), val(source), path(tax_map)
+
     output:
         tuple path("xref-${source}*.gz"), val(format), val(source), emit: split_xref
 
@@ -32,6 +38,12 @@ process FILTER_AND_SPLIT {
             --out-prefix ./xref-${source} \\
             --format $format \\
             --tax-map $tax_map
+        """
+    
+    stub:
+        """
+        touch xref-${source}_part1.gz
+        touch xref-${source}_part2.gz
         """
 }
 
@@ -65,7 +77,7 @@ process RELEVANT_TAXID_MAP {
 
 
 process MAP_XREFS {
-    label "process_single"
+    label "process_medium"
     label "process_long"
     label "HIGH_IO_ACCESS"
     container "docker.io/dessimozlab/omabuild:edge"
@@ -85,24 +97,40 @@ process MAP_XREFS {
 
     script:
         // Size of actual file (follows symlink)
-        def buffSize = seq_buf.size()
-        def uniqueName = "${seq_buf.name}_" + ((Math.random()*10000 as Integer) as String)
+        def seq_buf_size = seq_buf.size()
+        def seq_idx_db_size = seq_idx_db.size()
+        def rand_nr = (Math.random()*10000 as Integer) as String
         """
+        copy_to_tmp_if_space() {
+            local source_file="\$1"
+            local file_size="\$2"
+            local unique_name="\$3"
+            
+            # Get available space in tmpDir
+            free_blocks=\$(df -P "\$tmpDir" | tail -1 | awk '{print \$4}')
+            block_size=\$(df -P "\$tmpDir" | tail -1 | awk '{print \$2}')
+            free_space=\$((free_blocks * block_size))
+
+            if [ "\$file_size" -le "\$free_space" ]; then
+                local_file="\${tmpDir}/\$unique_name"
+                echo "Copying \$source_file to \$local_file"
+                cp -L "\$source_file" "\$local_file"
+                rm "\$source_file"
+                ln -s "\$local_file" "\$source_file"
+                echo "Successfully moved \$source_file to tmpDir"
+            else
+                echo "Not enough space in TMPDIR for \$source_file, using original location"
+            fi
+        }
+
         # Check if TMPDIR on compute node has enough space for the sequence buffer
         tmpDir="\${TMPDIR:-/tmp}"
-        free_blocks=\$(df -P "\$tmpDir" | tail -1 | awk '{print \$4}')
-        block_size=\$(df -P "\$tmpDir" | tail -1 | awk '{print \$2}')
-        free_space=\$((free_blocks * block_size))
 
-        if [ "${buffSize}" -le "\$free_space" ]; then
-            local_seq="\${tmpDir}/${uniqueName}"
-            echo "Copying $seq_buf to \$local_seq"
-            cp -L "$seq_buf" "\$local_seq"
-            rm "$seq_buf"
-            ln -s "\$local_seq" "$seq_buf"
-        else
-            echo "Not enough space in TMPDIR, using original symlink"
-        fi
+        # copy seq_buf to local tmp if space available:
+        copy_to_tmp_if_space "$seq_buf" "${seq_buf_size}" "${seq_buf.name}_${rand_nr}"
+
+        # copy seq_idx_db to local tmp if space available:
+        copy_to_tmp_if_space "$seq_idx_db" "${seq_idx_db_size}" "${seq_idx_db.name}_${rand_nr}"
         
         # List content for debugging
         ls -la . 
@@ -115,7 +143,13 @@ process MAP_XREFS {
             --out xref-${source}.pkl \\
             --db $db \\
             --seq-idx-db $seq_idx_db \\
-            --xref-source-db $src_xref_db
+            --xref-source-db $src_xref_db \\
+            --nr-procs ${task.cpus}
+        """
+
+    stub:
+        """
+        touch xref-${source}.pkl
         """
 }
 
@@ -128,7 +162,7 @@ process COLLECT_XREFS {
         tuple val(source), path(map_results, stageAs: "?/*" ), val(format), path(xref_in, stageAs: "?/*")
 
     output:
-        tuple val(source), path("xref-${source}.h5"), emit: xref_by_source_h5
+        tuple val(source), path("xref-${source}_*.h5"), emit: xref_by_source_h5
 
     script:
         """
@@ -138,6 +172,12 @@ process COLLECT_XREFS {
             --format $format \\
             --source $source \\
             --out ./xref-${source}.h5
+        """
+    
+    stub:
+        """
+        touch xref-${source}_001.h5
+        touch xref-${source}_002.h5
         """
 }
 
@@ -159,6 +199,11 @@ process COMBINE_ALL_XREFS {
         oma-build -vv combine-xrefs \\
             --out XRef-db.h5 \\
             --xrefs $xref_dbs \\
+        """
+    
+    stub:
+        """
+        touch XRef-db.h5
         """
 }
 
@@ -182,6 +227,11 @@ process BUILD_REDUCED_XREFS {
             --db $db \\
             --nr-procs ${task.cpus}
         """
+    
+    stub:
+        """
+        touch reduced-xrefs-db.h5
+        """
 }
 
 
@@ -201,5 +251,11 @@ process BUILD_NCBITAX_DB {
         def opt = (taxonomy_sqlite.name == "NO_FILE") ? "" : "--path $taxonomy_sqlite"
         """
         build_verify_taxdb.py $opt -vv --out-db tax.sqlite
-        """        
+        """
+    
+    stub:
+        """
+        touch tax.sqlite
+        touch tax.sqlite.traverse.pkl
+        """
 }
