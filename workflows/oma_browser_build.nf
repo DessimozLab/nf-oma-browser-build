@@ -78,7 +78,11 @@ workflow OMA_BROWSER_BUILD {
                        IMPORT_HDF5.out.db_h5,
                        IMPORT_HDF5.out.seqidx_h5,
                        IMPORT_HDF5.out.seq_buf,
-                       IMPORT_HDF5.out.source_xref_db)
+                       IMPORT_HDF5.out.source_xref_db,
+                       params.xref_uniprot_swissprot,
+                       params.xref_uniprot_trembl,
+                       params.xref_refseq,
+                       params.taxonomy_sqlite_path)
 
         INFER_KEYWORDS(IMPORT_HDF5.out.meta,
                        IMPORT_HDF5.out.db_h5,

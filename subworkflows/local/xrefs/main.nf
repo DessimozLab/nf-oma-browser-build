@@ -11,13 +11,15 @@ workflow GENERATE_XREFS {
         seqidx_h5
         seq_buf
         source_xref_h5
+        xref_swissprot_param
+        xref_trembl_param
+        xref_refseq_param
+        taxonomy_sqlite_param
 
     main:
-        uniprot_swissprot = Channel.fromPath(params.xref_uniprot_swissprot)
-        uniprot_trembl = Channel.fromPath(params.xref_uniprot_trembl)
-        def refseq_folder = params.xref_refseq
+        
 
-        PREPARE_XREFS(gs_tsv, db_h5, uniprot_swissprot, uniprot_trembl, refseq_folder)
+        PREPARE_XREFS(gs_tsv, db_h5, xref_swissprot_param, xref_trembl_param, xref_refseq_param, taxonomy_sqlite_param)
         
         MAP_XREFS_WF(
             meta,

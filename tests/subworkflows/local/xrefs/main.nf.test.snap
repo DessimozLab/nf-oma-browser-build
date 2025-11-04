@@ -1,5 +1,5 @@
 {
-    "Test dataflow of xref subworkflow (with --stub-run mode)": {
+    "Test dataflow of xref subworkflow with stub-run mode": {
         "content": [
             {
                 "0": [
@@ -26,6 +26,35 @@
             "nf-test": "0.9.3",
             "nextflow": "24.10.5"
         },
-        "timestamp": "2025-11-03T18:43:55.116175"
+        "timestamp": "2025-11-04T15:01:39.814186"
+    },
+    "No xref mapping enabled": {
+        "content": [
+            {
+                "0": [
+                    "taxmap.pkl:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "1": [
+                    "XRef-db.h5:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "2": [
+                    "reduced-xrefs-db.h5:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "red_xref_db": [
+                    "reduced-xrefs-db.h5:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "taxmap": [
+                    "taxmap.pkl:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "xref_db": [
+                    "XRef-db.h5:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2025-11-04T15:01:44.979548"
     }
 }
