@@ -101,6 +101,9 @@ process MAP_XREFS {
         def seq_idx_db_size = seq_idx_db.size()
         def rand_nr = (Math.random()*10000 as Integer) as String
         """
+        echo "Requested memory: ${task.memory}"
+        echo "Available CPUs: ${task.cpus}"
+
         copy_to_tmp_if_space() {
             local source_file="\$1"
             local file_size="\$2"
