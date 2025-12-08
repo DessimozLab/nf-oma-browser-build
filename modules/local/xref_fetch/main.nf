@@ -147,7 +147,8 @@ process MAP_XREFS {
             --db $db \\
             --seq-idx-db $seq_idx_db \\
             --xref-source-db $src_xref_db \\
-            --nr-procs ${task.cpus}
+            --nr-procs ${task.cpus} \\
+            #--align-inexact
         """
 
     stub:
