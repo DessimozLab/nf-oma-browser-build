@@ -37,7 +37,8 @@ process FILTER_AND_SPLIT {
             --xref $xref \\
             --out-prefix ./xref-${source} \\
             --format $format \\
-            --tax-map $tax_map
+            --tax-map $tax_map \\
+            --nr-procs ${task.cpus}
         """
     
     stub:
