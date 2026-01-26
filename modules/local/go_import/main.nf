@@ -1,7 +1,7 @@
 // Processes
 
 process GO_IMPORT {
-    label "process_single"
+    label "process_medium"
     label "HIGH_IO_ACCESS"
     container "docker.io/dessimozlab/omabuild:edge"
     
@@ -24,6 +24,7 @@ process GO_IMPORT {
             --tax-map $tax_map \\
             --obo $obo \\
             --gaf $gaf \\
+            --nr-procs ${task.cpus}
         """
 
     stub:
