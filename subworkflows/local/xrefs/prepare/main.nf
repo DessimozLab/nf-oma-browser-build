@@ -1,5 +1,5 @@
 
-include { FETCH_REFSEQ; FILTER_AND_SPLIT; RELEVANT_TAXID_MAP ; BUILD_NCBITAX_DB  } from "./../../../../modules/local/xref_fetch"
+include { FETCH_REFSEQ; FILTER_AND_SPLIT; RELEVANT_TAXID_MAP  } from "./../../../../modules/local/xref_fetch"
 
 workflow PREPARE_XREFS {
     take:
@@ -8,15 +8,12 @@ workflow PREPARE_XREFS {
         xref_swissprot_param
         xref_trembl_param
         xref_refseq_param
-        taxonomy_sqlite_param
+        taxonomy_sqlite
+        taxonomy_traverse_pkl
 
     main:
         // compute relevant taxid mapping for crossreference mappings
-        tax_db = (taxonomy_sqlite_param != null) ? 
-            Channel.fromPath(taxonomy_sqlite_param, type: "file") : 
-            Channel.fromPath("$projectDir/assets/NO_FILE")
-        BUILD_NCBITAX_DB(tax_db)
-        RELEVANT_TAXID_MAP(gs_tsv, database, BUILD_NCBITAX_DB.out.tax_db, BUILD_NCBITAX_DB.out.tax_pkl)
+        RELEVANT_TAXID_MAP(gs_tsv, database, taxonomy_sqlite, taxonomy_traverse_pkl)
 
         // Check if we have any xref sources
         def has_xrefs = (xref_swissprot_param != null || 

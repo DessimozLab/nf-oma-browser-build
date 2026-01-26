@@ -188,3 +188,34 @@ process COMBINE_H5_FILES {
             --splice-json $splice_json
         """
 }
+
+
+process DUMP_SPECIES_AND_TAXMAP {
+    label "process_single"
+    container "docker.io/dessimozlab/omabuild:edge"
+    tag "Dumping species and taxonomic mapping"
+
+    input:
+        path db
+        path taxonomy
+        path taxonomy_traverse_pkl
+
+    output:
+        path "oma-species.txt", emit: species_tsv
+        path "taxonomymap.pkl", emit: tax_map_pickle
+
+    script:
+        """
+        oma-dump -vv species \\
+            --db $db \\
+            --tax-sqlite $taxonomy \\
+            --out-species oma-species.txt \\
+            --out-tax-map taxonomymap.pkl
+        """
+
+    stub:
+        """
+        touch species.tsv
+        touch tax_map.tsv
+        """
+}
