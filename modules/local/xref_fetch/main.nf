@@ -213,7 +213,7 @@ process COMBINE_ALL_XREFS {
 }
 
 process BUILD_REDUCED_XREFS {
-    label "process_low"
+    label "process_medium"
     container "docker.io/dessimozlab/omabuild:edge"
     tag "Building a reduced set of xrefs for lookup and search"
 
