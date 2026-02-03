@@ -4,13 +4,17 @@
 include { CONVERT_GS; CONVERT_PROTEINS; CONVERT_TAXONOMY; CONVERT_OMA_GROUPS; CONVERT_SPLICE_MAP } from "./../../../modules/local/darwin_extract"
 
 workflow EXTRACT_DARWIN {
+    take:
+        genomes_dir_path
+        matrix_file_path
+        taxonomy_sqlite
+        taxonomy_traverse_pkl
         
     main:
-        def genomes_folder = file(params.genomes_dir)
-        def matrix_file = file(params.matrix_file)
+        def genomes_folder = file(genomes_dir_path, checkIfExists: true, type: 'dir')
+        def matrix_file = file(matrix_file_path, checkIfExists: true, type: 'file')
 
         def summaries = genomes_folder / "Summaries.drw"
-        def taxonomy = genomes_folder / "taxonomy.sqlite"
         def splice_data = genomes_folder / "Splicings.drw"
         def subgenome = genomes_folder / "SubGenomes.drw"
         CONVERT_GS(genomes_folder, matrix_file, summaries)
@@ -24,7 +28,7 @@ workflow EXTRACT_DARWIN {
         CONVERT_PROTEINS(convert_jobs)
         CONVERT_OMA_GROUPS(matrix_file)
         CONVERT_SPLICE_MAP(splice_data)
-        CONVERT_TAXONOMY(CONVERT_GS.out.gs_tsv, taxonomy)
+        CONVERT_TAXONOMY(CONVERT_GS.out.gs_tsv, taxonomy_sqlite, taxonomy_traverse_pkl)
 
 
     emit:

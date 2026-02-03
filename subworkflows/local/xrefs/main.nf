@@ -2,6 +2,7 @@
 include { PREPARE_XREFS } from "./prepare"
 include { MAP_XREFS_WF  } from "./map"
 include { BUILD_REDUCED_XREFS} from "./../../../modules/local/xref_fetch"
+include { DUMP_XREFS } from "./../../../modules/local/xref_fetch"
 
 workflow GENERATE_XREFS {
     take:
@@ -14,12 +15,14 @@ workflow GENERATE_XREFS {
         xref_swissprot_param
         xref_trembl_param
         xref_refseq_param
-        taxonomy_sqlite_param
+        taxonomy_sqlite
+        taxonomy_traverse_pkl
+        dump_xrefs
 
     main:
         
 
-        PREPARE_XREFS(gs_tsv, db_h5, xref_swissprot_param, xref_trembl_param, xref_refseq_param, taxonomy_sqlite_param)
+        PREPARE_XREFS(gs_tsv, db_h5, xref_swissprot_param, xref_trembl_param, xref_refseq_param, taxonomy_sqlite, taxonomy_traverse_pkl)
         
         MAP_XREFS_WF(
             meta,
@@ -30,10 +33,18 @@ workflow GENERATE_XREFS {
             seq_buf,
             source_xref_h5)
         BUILD_REDUCED_XREFS(db_h5, MAP_XREFS_WF.out.xref_db)
-
+        
+        if (dump_xrefs){
+            DUMP_XREFS(MAP_XREFS_WF.out.xref_db, db_h5)
+            dumps = DUMP_XREFS.out.dumps
+        } else {
+            dumps = Channel.empty()
+        }
+        
 
     emit:
         taxmap  = PREPARE_XREFS.out.taxmap
         xref_db = MAP_XREFS_WF.out.xref_db
         red_xref_db = BUILD_REDUCED_XREFS.out.red_xref_db_h5
+        dumps = dumps
 }

@@ -22,6 +22,7 @@ workflow HOGID_MAP {
                 return it[1]
             old: true
                 return it[1]
+        }
         split_old_target_lsh.view()
         HOG_MAP_IDS(split_old_target_lsh.target, split_old_target_lsh.old.collect())
 

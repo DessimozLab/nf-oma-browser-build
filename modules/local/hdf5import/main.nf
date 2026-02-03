@@ -173,6 +173,7 @@ process COMBINE_H5_FILES {
         path hogs_h5
         path vps
         path splice_json
+        path divergence_times_tsv
 
     output:
         path "OmaServer.h5", emit: db_h5
@@ -185,6 +186,38 @@ process COMBINE_H5_FILES {
 
         oma-build -vv splice \
             --db OmaServer.h5 \
-            --splice-json $splice_json
+            --splice-json $splice_json \
+            --divergence-times $divergence_times_tsv
+        """
+}
+
+
+process DUMP_SPECIES_AND_TAXMAP {
+    label "process_single"
+    container "docker.io/dessimozlab/omabuild:edge"
+    tag "Dumping species and taxonomic mapping"
+
+    input:
+        path db
+        path taxonomy
+        path taxonomy_traverse_pkl
+
+    output:
+        path "oma-species.txt", emit: species_tsv
+        path "taxonomymap.pkl", emit: tax_map_pickle
+
+    script:
+        """
+        oma-dump -vv species \\
+            --db $db \\
+            --tax-sqlite $taxonomy \\
+            --out-species oma-species.txt \\
+            --out-tax-map taxonomymap.pkl
+        """
+
+    stub:
+        """
+        touch species.tsv
+        touch tax_map.tsv
         """
 }

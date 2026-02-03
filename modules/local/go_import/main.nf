@@ -32,3 +32,28 @@ process GO_IMPORT {
         touch GO.h5
         """
 }
+
+
+process DUMP_GO_ANNOTATIONS {
+    label "process_single"
+    container "docker.io/dessimozlab/omabuild:edge"
+    tag "Dumping GO annotations"
+
+    input:
+        path db
+
+    output:
+        path "oma-go.txt.gz", emit: go_dump
+
+    script:
+        """
+        oma-dump -vv go \\
+            --db $db \\
+            --out-go ./oma-go.txt.gz 
+        """
+    
+    stub:
+        """
+        touch oma-go.txt.gz
+        """
+}

@@ -39,8 +39,7 @@ workflow OMA_browser_build {
 
     emit:
         db = OMA_BROWSER_BUILD.out.db
-        seqidx = OMA_BROWSER_BUILD.out.seqidx_h5
-        seq_buf = OMA_BROWSER_BUILD.out.seq_buf
+        aux_data = OMA_BROWSER_BUILD.out.aux_data
         downloads = OMA_BROWSER_BUILD.out.downloads
         rdf = OMA_BROWSER_BUILD.out.rdf
 }
@@ -66,8 +65,7 @@ workflow {
 
     publish:
         OMA_browser_build.out.db          >> 'main_db'
-        OMA_browser_build.out.seqidx      >> 'data'
-        OMA_browser_build.out.seq_buf     >> 'data'
+        OMA_browser_build.out.aux_data    >> 'data'
         OMA_browser_build.out.downloads   >> 'downloads'
         OMA_browser_build.out.rdf         >> 'RDF'
 }

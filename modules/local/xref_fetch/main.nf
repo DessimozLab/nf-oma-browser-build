@@ -239,28 +239,27 @@ process BUILD_REDUCED_XREFS {
         """
 }
 
-
-process BUILD_NCBITAX_DB {
+process DUMP_XREFS {
     label "process_single"
     container "docker.io/dessimozlab/omabuild:edge"
-    tag "Verify / Build NCBITax database"
+    tag "Dumping xrefs to tsv files"
 
     input:
-        path taxonomy_sqlite
+        path xref_db
+        path db
 
     output:
-        path "tax.sqlite", emit: tax_db
-        path "tax.sqlite.traverse.pkl", emit: tax_pkl
-
-    script:
-        def opt = (taxonomy_sqlite.name == "NO_FILE") ? "" : "--path $taxonomy_sqlite"
-        """
-        build_verify_taxdb.py $opt -vv --out-db tax.sqlite
-        """
+        path "oma-*txt.gz", emit: dumps
     
-    stub:
+    script:
         """
-        touch tax.sqlite
-        touch tax.sqlite.traverse.pkl
+        oma-dump -vv xrefs \\
+            --xref-db $xref_db \\
+            --db $db \\
+            --out-uniprot oma-uniprot.txt.gz \\
+            --out-refseq oma-refseq.txt.gz \\
+            --out-entrez oma-entrez.txt.gz \\
+            --out-ensembl oma-ensembl.txt.gz \\
+            --out-ncbi oma-ncbi.txt.gz
         """
 }

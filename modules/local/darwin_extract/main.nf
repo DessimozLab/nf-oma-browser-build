@@ -104,6 +104,7 @@ process CONVERT_TAXONOMY {
     input:
         path gs_tsv
         path sqlite_taxonomy
+        path taxonomy_traverse_pkl     // this file is implicitly used and must be located at the same place as sqlite_taxonomy
 
     output:
         path "taxonomy.tsv",          emit: tax_tsv
