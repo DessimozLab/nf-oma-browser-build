@@ -28,13 +28,28 @@ process HOGPROP {
 
     script:
         """
+        set -o pipefail
+        stderr_file="hogprop.err"
+
         hogprop --oxml $orthoxml \
             --oma_db $omadb \
             --go_filter all \
             --result ./go.h5 \
             --combination max \
             --myid $chunk \
-            --njobs $nr_chunks
+            --njobs $nr_chunks \
+            2> >(tee "\$stderr_file" >&2)
+
+        exit_code=\$?
+        if [[ \${exit_code} -eq 1 ]]; then
+            if tail -n 10000 \$stderr_file | \
+                grep -qE 'HDF5ExtError|H5Dread|unable to read raw data chunk|transport endpoint shutdown'
+            then
+                echo "Retryable HDF5 error detected" >&2
+                exit 143
+            fi
+        fi
+        exit \${exit_code}
         """
 
     stub:
@@ -46,6 +61,7 @@ process HOGPROP {
 process HOGPROP_COLLECT {
     label "process_single"
     label "process_high_memory"
+    label "process_long"
     container "docker.io/dessimozlab/omabuild:edge"
 
     input:
@@ -69,6 +85,8 @@ process HOGPROP_COLLECT {
 
 process HOGPROP_CONVERT_TO_BROWSERDB_FORMAT {
     label "process_single"
+    label "process_high_memory"
+    label "process_long"
     container "docker.io/dessimozlab/omabuild:edge"
 
     input:
