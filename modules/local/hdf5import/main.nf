@@ -173,6 +173,7 @@ process COMBINE_H5_FILES {
         path hogs_h5
         path vps
         path splice_json
+        path divergence_times_tsv
 
     output:
         path "OmaServer.h5", emit: db_h5
@@ -185,7 +186,8 @@ process COMBINE_H5_FILES {
 
         oma-build -vv splice \
             --db OmaServer.h5 \
-            --splice-json $splice_json
+            --splice-json $splice_json \
+            --divergence-times $divergence_times_tsv
         """
 }
 

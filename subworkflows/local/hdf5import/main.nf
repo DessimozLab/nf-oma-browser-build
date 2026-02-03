@@ -3,7 +3,7 @@
 // Modules
 include { ADD_GENOMES; BUILD_SEQINDEX; BUILD_HOG_H5; ADD_PAIRWISE_ORTHOLOGS; COMBINE_H5_FILES } from "./../../../modules/local/hdf5import"
 include { DUMP_SPECIES_AND_TAXMAP } from '../../../modules/local/hdf5import/main.nf'
-
+include { DATE_SPECIES_TREE } from '../../../modules/local/timetree/main.nf'
 
 workflow IMPORT_HDF5 {
     take:
@@ -38,6 +38,8 @@ workflow IMPORT_HDF5 {
             ADD_GENOMES.out.db_h5,
             taxonomy_sqlite,
             tax_traverse_pkl)
+        DATE_SPECIES_TREE(ADD_GENOMES.out.db_h5, DUMP_SPECIES_AND_TAXMAP.out.species_tsv, taxonomy_sqlite, tax_traverse_pkl)
+
         BUILD_SEQINDEX(db_with_meta)
         BUILD_HOG_H5(db_with_meta, hogs)
         meta = db_with_meta.map{ it[0] }
@@ -50,7 +52,8 @@ workflow IMPORT_HDF5 {
                          ADD_GENOMES.out.db_h5,
                          BUILD_HOG_H5.out.hog_h5,
                          ADD_PAIRWISE_ORTHOLOGS.out.vps_h5,
-                         splice_json)
+                         splice_json, 
+                         DATE_SPECIES_TREE.out.divergence_tsv)
 
     emit:
         meta = meta
