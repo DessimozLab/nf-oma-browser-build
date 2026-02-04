@@ -148,14 +148,18 @@
         },
         "xref_uniprot_trembl": {
           "type": "string",
-          "description": "UniProtKB/TrEMBL annotations in text format"
+          "description": "UniProtKB/TrEMBL annotations in text format.",
+          "help_text": "If not provided, no TrEMBL cross-references will be included. The generic ftp url for TrEMBL is https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.dat.gz"
         },
         "taxonomy_sqlite_path": {
-          "type": "string"
+          "type": "string",
+          "description": "Path to a sqlite database containing the combined NCBI/GTDB taxonomy data.",
+          "help_text": "If not provided it will be generated automatically and cached"
         },
         "xref_refseq": {
           "type": "string",
-          "description": "Folder containing RefSeq gbff files."
+          "description": "'download' or folder containing RefSeq gbff files.",
+          "help_text": "If not specified, no RefSeq crossreferences will be download (default). If set to 'download', the latest RefSeq gbff files will be downloaded from NCBI FTP server. Alternatively, a folder containing local *.gbff.gz files can be provided."
         }
       }
     },
