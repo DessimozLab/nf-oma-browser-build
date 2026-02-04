@@ -3,7 +3,7 @@ process EDGEHOG {
     label "single_process"
     label "process_long"
     label "process_high_memory"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:edge"
 
     input:
         path augmented_orthoxml

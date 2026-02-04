@@ -1,7 +1,7 @@
 
 process FETCH_REFSEQ {
     label "process_low"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:edge"
 
     output:
         path "*.gpff.gz", emit: refseq_proteins
@@ -23,7 +23,7 @@ process FETCH_REFSEQ {
 process FILTER_AND_SPLIT {
     tag "$source"
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:edge"
 
     input:
         tuple path(xref), val(format), val(source), path(tax_map)
@@ -50,7 +50,7 @@ process FILTER_AND_SPLIT {
 
 process RELEVANT_TAXID_MAP {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:edge"
 
     input:
         path gs_tsv
@@ -81,7 +81,7 @@ process MAP_XREFS {
     label "process_medium"
     label "process_long"
     label "HIGH_IO_ACCESS"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:edge"
     tag "Maps xref ${xref_in} from ${source}"
 
     input:
@@ -160,7 +160,7 @@ process MAP_XREFS {
 
 process COLLECT_XREFS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:edge"
     tag "Collecting xrefs for $source"
 
     input:
@@ -189,7 +189,7 @@ process COLLECT_XREFS {
 
 process COMBINE_ALL_XREFS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:edge"
     tag "Combining all xrefs into single hdf5 db"
 
     input:
@@ -214,7 +214,7 @@ process COMBINE_ALL_XREFS {
 
 process BUILD_REDUCED_XREFS {
     label "process_medium"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:edge"
     tag "Building a reduced set of xrefs for lookup and search"
 
     input:
@@ -241,7 +241,7 @@ process BUILD_REDUCED_XREFS {
 
 process DUMP_XREFS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:edge"
     tag "Dumping xrefs to tsv files"
 
     input:
