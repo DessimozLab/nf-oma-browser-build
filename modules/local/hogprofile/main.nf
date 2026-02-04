@@ -1,6 +1,6 @@
 process INFER_HOG_PROFILES {
     label "process_medium"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:1.5.0"
 
     input:
         val meta

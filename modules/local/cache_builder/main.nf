@@ -2,7 +2,7 @@
 
 process GENERATE_JOBS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:1.5.0"
     
     input:
         path db
@@ -28,7 +28,7 @@ process GENERATE_JOBS {
 }
 
 process BUILD_VPTAB_DATABASE {
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:1.5.0"
     
     input:
         path db
@@ -55,7 +55,7 @@ process BUILD_VPTAB_DATABASE {
 process COMPUTE_CACHE {
     label "process_single"
     label "HIGH_IO_ACCESS"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:1.5.0"
     tag "Cache builder ${job_file}"
 
     input:
@@ -81,7 +81,7 @@ process COMPUTE_CACHE {
 
 process COMBINE_JOBS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:1.5.0"
     
     input:
         path(job_res, stageAs: "res???/*")
