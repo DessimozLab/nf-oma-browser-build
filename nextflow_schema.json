@@ -64,7 +64,7 @@
         "pairwise_orthologs_folder": {
           "type": "string",
           "description": "Pairwise Orthologs (only by Standard OMA pipeline)",
-	  "help_text": "Folder where the pairwise orthologs in TSV format are stored. Can also be a single compressed tarball (ending in '.tgz') that contains all the files. This can be needed for big datasets and quotas on the number of files"
+          "help_text": "Folder where the pairwise orthologs in TSV format are stored. Can also be a single compressed tarball (ending in '.tgz') that contains all the files. This can be needed for big datasets and quotas on the number of files"
         },
         "matrix_file": {
           "type": "string",
@@ -148,7 +148,6 @@
         },
         "xref_uniprot_trembl": {
           "type": "string",
-          "default": "/dev/null",
           "description": "UniProtKB/TrEMBL annotations in text format"
         },
         "taxonomy_sqlite_path": {
@@ -212,6 +211,19 @@
         }
       }
     },
+    "production_oma_output_settings": {
+      "title": "Production OMA output settings",
+      "type": "object",
+      "description": "Parameters concerning additional output files usually needed for the production OMA Browser instance",
+      "properties": {
+        "oma_dumps": {
+          "type": "boolean",
+          "description": "Flag to activate dumping various files for the download section",
+          "fa_icon": "fas fa-toggle-on",
+          "help_text": "Activating oma_dumps will enable species, sequences, GO annotations files as text files for the download section."
+        }
+      }
+    },
     "generic_options": {
       "title": "Generic options",
       "type": "object",
@@ -264,6 +276,9 @@
     },
     {
       "$ref": "#/$defs/exporting_as_rdf"
+    },
+    {
+      "$ref": "#/$defs/production_oma_output_settings"
     },
     {
       "$ref": "#/$defs/generic_options"
