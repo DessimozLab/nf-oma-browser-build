@@ -117,7 +117,6 @@ process ADD_PAIRWISE_ORTHOLOGS {
         path "vps.h5", emit: vps_h5
 
     script:
-        def vps = vps_base.name != 'NO_FILE' ? "--vps-base $vps_base" : ''
         def homoeologs = homoeologs_base.name != 'NO_FILE2' ? "--homoeologs-base $homoeologs_base" : ''
         """
         
