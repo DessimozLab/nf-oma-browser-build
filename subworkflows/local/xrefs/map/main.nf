@@ -6,18 +6,22 @@ include { MAP_XREFS; COLLECT_XREFS; COMBINE_ALL_XREFS } from "./../../../../modu
 
 workflow MAP_XREFS_WF {
     take:
+        meta
         xref
         tax_map
         db
         seq_idx_db
+        seq_buf
         source_xref_db
 
     main:
-        map_xref_params = xref
+        map_xref_params = meta
+           .combine(xref)
            .combine(tax_map)
            .combine(db)
            .combine(seq_idx_db)
-           .combine(source_xref_db) 
+           .combine(seq_buf)
+           .combine(source_xref_db)
         MAP_XREFS(map_xref_params)
         grouped_by_source = MAP_XREFS.out.matched_xrefs
             .groupTuple()
@@ -27,7 +31,7 @@ workflow MAP_XREFS_WF {
             .map{_source, h5db -> h5db}
             .mix(source_xref_db)
             .collect()
-        COMBINE_ALL_XREFS(xref_dbs_list)
+        COMBINE_ALL_XREFS(meta, xref_dbs_list)
     emit:
         xref_db = COMBINE_ALL_XREFS.out.xref_db_h5
 }

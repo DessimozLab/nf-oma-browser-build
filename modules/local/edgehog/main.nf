@@ -3,28 +3,25 @@ process EDGEHOG {
     label "single_process"
     label "process_long"
     label "process_high_memory"
-    container "docker.io/dessimozlab/omabuild:1.4.0"
+    container "docker.io/dessimozlab/omabuild:1.5.0"
 
     input:
         path augmented_orthoxml
-        path speciestree
         path oma_db
 
     output:
         path "edgehog_output/Synteny.h5", emit: anc_synteny_h5
 
     script:
-        def unzip = (augmented_orthoxml.endsWith(".gz")) ? "gunzip -c $augmented_orthoxml > \$TMPDIR/oma-hogs.orthoxml" : "ln -s ${augmented_orthoxml} edgehog-hogs.orthoxml"
-        def hog_path = (augmented_orthoxml.endsWith(".gz")) ? "\$TMPDIR/oma-hogs.orthoxml" : "edgehog-hogs.orthoxml"
-        def trimed_tree = "simplified_${speciestree}"
+        def unzip = (augmented_orthoxml.name.endsWith(".gz")) ? "gunzip -c $augmented_orthoxml > edgehog-hogs.orthoxml" : "ln -s ${augmented_orthoxml} edgehog-hogs.orthoxml"
         """
         $unzip 
-        trim_uninformative_levels.py \\
-            --tree $speciestree \\
-            --out $trimed_tree
+        extract_speciestree_from_orthoxml.py \\
+            --orthoxml edgehog-hogs.orthoxml \\
+            --out speciestree.nwk
         
-        edgehog --hogs $hog_path \\
-                --species_tree $trimed_tree \\
+        edgehog --hogs edgehog-hogs.orthoxml \\
+                --species_tree speciestree.nwk \\
                 --hdf5 $oma_db \\
                 --date_edges \\
                 --out-format HDF5

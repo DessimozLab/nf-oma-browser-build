@@ -1,10 +1,12 @@
 process CONVERT_SPECIES_TREE {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.4.0"
+    container "docker.io/dessimozlab/omabuild:1.5.0"
 
     input:
         path speciestree
         path mapping_file
+        path taxonomy_sqlite
+        path taxonomy_traverse_pkl    // this file is implicitly used and must be located at the same place as taxonomy_sqlite
 
     output:
         path "gs.tsv", emit: gs_tsv
@@ -16,6 +18,7 @@ process CONVERT_SPECIES_TREE {
         convert_species_tree.py \\
              --tree $speciestree \\
              $map_file \\
+             --taxonomy $taxonomy_sqlite \\
              --out-tax tax.tsv \\
              --out-genomes gs.tsv
         """
@@ -23,7 +26,7 @@ process CONVERT_SPECIES_TREE {
 
 process CONVERT_PROTEOME {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.4.0"
+    container "docker.io/dessimozlab/omabuild:1.5.0"
 
     input:
         tuple val(meta), path(genome), path(matrix)
@@ -51,7 +54,7 @@ process CONVERT_PROTEOME {
 
 process CONVERT_SPLICINGS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.4.0"
+    container "docker.io/dessimozlab/omabuild:1.5.0"
 
     input:
         path splicefolder
@@ -68,7 +71,7 @@ process CONVERT_SPLICINGS {
 
 process FINALIZE_GS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.4.0"
+    container "docker.io/dessimozlab/omabuild:1.5.0"
 
     input:
         path gs_tsv
@@ -88,7 +91,7 @@ process FINALIZE_GS {
 
 process  MERGE_JSON {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.4.0"
+    container "docker.io/dessimozlab/omabuild:1.5.0"
 
     input:
         path json_files

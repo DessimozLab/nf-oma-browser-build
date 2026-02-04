@@ -88,6 +88,9 @@ Convert OMA run into OMA Browser release
 | Parameter | Description | Type | Default | Required |
 |-----------|-----------|-----------|-----------|-----------|
 | `oma_source` | Selection of OMA data source. Can be either 'FastOMA' or 'Production'. The selection requires setting either the parameters for FastOMA or Production. | `string` | FastOMA |  |
+| `oma_version` | Version of the OMA Browser instance. It defaults to 'All.<Mon><YEAR>' | `string` |  |  |  |
+| `oma_release_char` | Release specific character (used in HOG ids) <details><summary>Help</summary><small>A single capital letter [A-Z] which makes the
+HOG-IDs unique accross different releases.</small></details>| `string` |  |  |  |
 
 ### FastOMA Input data
 
@@ -109,6 +112,7 @@ Input files genereated from an OMA Production run
 | `matrix_file` | OMA Groups file | `string` |  |  |
 | `hog_orthoxml` | Hierarchcial orthologous groups (HOGs) in orthoxml format | `string` |  | True |
 | `genomes_dir` | Folder containing genomes | `string` |  | True |
+| `homoeologs_folder` | Folder containing the homoeologs files | `string` |  |  |  |
 
 ### Domain data
 
@@ -116,36 +120,87 @@ File paths for domain annotations
 
 | Parameter | Description | Type | Default | Required |
 |-----------|-----------|-----------|-----------|-----------|
-| `cath_names_path` | File containing CATH domain descriptions | `string` | http://download.cathdb.info/cath/releases/latest-release/cath-classification-data/cath-names.txt |  |
-| `known_domains` | Folder containing known domain assignments files | `string` |  |  |
-| `pfam_names_path` | File containing Pfam descriptions | `string` | https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.clans.tsv.gz |  |
+| `infer_domains` | Flag indicating whether domains are inferred using the CATH/Gene3d pipeline. <details><summary>Help</summary><small>If set to true, the
+pipeline will run the CATH/Gene3D pipeline to infer domain assignments. This will require substantial amount of compute time. The set of already known
+domains (see parameter 'known_domains') will be used to skip the inference of domains that are already known. If set to false, the pipeline will use the
+known domain assignments provided in the 'known_domains' parameter.</small></details>| `boolean` |  |  |  |
+| `known_domains` | Folder containing known domain assignments files. <details><summary>Help</summary><small>The folder must contain csv/tsv files that
+contain three columns (md5hash of sequence, CATH-domain-id, region on sequence). The output of a previous run of this pipeline can thus be used as
+input.</small></details>| `string` |  |  |  |
+| `cath_names_path` | File containing CATH domain descriptions | `string` |
+http://download.cathdb.info/cath/releases/latest-release/cath-classification-data/cath-names.txt |  |  |
+| `hmm_db` | Path where the domain hmms for the cath/gene3d pipeline are located. | `string` |
+ftp://orengoftp.biochem.ucl.ac.uk/gene3d/v21.0.0/gene3d_hmmsearch/hmms.tar.gz |  |  |
+| `cath_domain_list` | File with mapping from hmm id to cath domain id. | `string` |
+http://download.cathdb.info/cath/releases/latest-release/cath-classification-data/cath-domain-list.txt |  |  |
+| `discontinuous_regs` | File provided by gene3d to handle discontinuous regions | `string` |
+http://download.cathdb.info/gene3d/v21.0.0/gene3d_hmmsearch/discontinuous/discontinuous_regs.pkl |  |  |
+| `pfam_names_path` | File containing Pfam descriptions | `string` | https://ftp.ebi.ac.uk/pub/databases/Pfam/current_release/Pfam-A.clans.tsv.gz |  |  |
+
 
 ### Crossreferences
 
 Integrate crossreferences
 
-| Parameter | Description | Type | Default | Required |
-|-----------|-----------|-----------|-----------|-----------|
-| `xref_uniprot_swissprot` | UniProtKB/SwissProt annotation in text format | `string` | https://ftp.ebi.ac.uk/pub/databases/uniprot/knowledgebase/uniprot_sprot.dat.gz |  |
-| `xref_uniprot_trembl` | UniProtKB/TrEMBL annotations in text format | `string` | /dev/null |  |
-| `taxonomy_sqlite_path` |  | `string` |  |  |
-| `xref_refseq` | Folder containing RefSeq gbff files. | `string` |  |  |
+| Parameter | Description | Type | Default | Required | Hidden |
+|-----------|-----------|-----------|-----------|-----------|-----------|
+| `xref_uniprot_swissprot` | UniProtKB/SwissProt annotation in text format | `string` |
+https://ftp.ebi.ac.uk/pub/databases/uniprot/knowledgebase/uniprot_sprot.dat.gz |  |  |
+| `xref_uniprot_trembl` | UniProtKB/TrEMBL annotations in text format. <details><summary>Help</summary><small>If not provided, no TrEMBL cross-references
+will be included. The generic ftp url for TrEMBL is
+https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.dat.gz</small></details>| `string` |  |  |  |
+| `taxonomy_sqlite_path` | Path to a sqlite database containing the combined NCBI/GTDB taxonomy data. <details><summary>Help</summary><small>If not provided
+it will be generated automatically and cached</small></details>| `string` |  |  |  |
+| `xref_refseq` | 'download' or folder containing RefSeq gbff files. <details><summary>Help</summary><small>If not specified, no RefSeq crossreferences will
+be download (default). If set to 'download', the latest RefSeq gbff files will be downloaded from NCBI FTP server. Alternatively, a folder containing local
+*.gbff.gz files can be provided.</small></details>| `string` |  |  |  |
 
 ### Gene Ontology
 
 Gene Ontology files to integrate
 
-| Parameter | Description | Type | Default | Required |
-|-----------|-----------|-----------|-----------|-----------|
-| `go_obo` | Gene Ontology OBO file | `string` | http://purl.obolibrary.org/obo/go/go-basic.obo |  |
-| `go_gaf` | Gene Ontology annotations (GAF format). This can the GOA database or a glob pattern with local files in gaf format. | `string` | https://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/goa_uniprot_all.gaf.gz |  |
+| Parameter | Description | Type | Default | Required | Hidden |
+|-----------|-----------|-----------|-----------|-----------|-----------|
+| `go_obo` | Gene Ontology OBO file | `string` | http://purl.obolibrary.org/obo/go/go-basic.obo |  |  |
+| `go_gaf` | Gene Ontology annotations (GAF format). This can the GOA database or a glob pattern with local files in gaf format. | `string` |
+https://ftp.ebi.ac.uk/pub/databases/GO/goa/UNIPROT/goa_uniprot_all.gaf.gz |  |  |
+
+### OMAmer
+
+Parameters regarding building OMAmer databases based on the generated OMA instance
+
+| Parameter | Description | Type | Default | Required | Hidden |
+|-----------|-----------|-----------|-----------|-----------|-----------|
+| `omamer_levels` | Comma-seperated list of taxonomic levels for which OMAmer databases should be built. <details><summary>Help</summary><small>The input
+string is parsed as a comma-seperated list, e.g. given 'Mammalia,Primates' as parameter value would build two OMAmer databases, one for Mammalia and one for
+Primates. Note that the taxonomic levels must exist in the input species tree.</small></details>| `string` |  |  |  |
+
+### Exporting as RDF
+
+Parameters regarding the export as rdf triples
+
+| Parameter | Description | Type | Default | Required | Hidden |
+|-----------|-----------|-----------|-----------|-----------|-----------|
+| `rdf_export` | Flag to activate export as RDF triples <details><summary>Help</summary><small>Activating rdf_export will enable the dump of RDF ttl files
+which can be imported into a Sparql endpoint.</small></details>| `boolean` |  |  |  |
+| `rdf_orthOntology` | user provided orthOntology file. If not provided, default ontology will be used | `string` |  |  |  |
+| `rdf_prefixes` | user provided rdf prefix mapping. if not provided, default prefixes will be used. | `string` |  |  |  |
+
+### Production OMA output settings
+
+Parameters concerning additional output files usually needed for the production OMA Browser instance
+
+| Parameter | Description | Type | Default | Required | Hidden |
+|-----------|-----------|-----------|-----------|-----------|-----------|
+| `oma_dumps` | Flag to activate dumping various files for the download section <details><summary>Help</summary><small>Activating oma_dumps will enable
+species, sequences, GO annotations files as text files for the download section.</small></details>| `boolean` |  |  |  |
 
 ### Generic options
 
 Less common options for the pipeline, typically set in a config file.
 
-| Parameter | Description | Type | Default | Required |
-|-----------|-----------|-----------|-----------|-----------|
-| `custom_config_version` | version of configuration base to include (nf-core configs) | `string` | master |  |
-| `custom_config_base` | location where to look for nf-core/configs | `string` | https://raw.githubusercontent.com/nf-core/configs/master |  |
-
+| Parameter | Description | Type | Default | Required | Hidden |
+|-----------|-----------|-----------|-----------|-----------|-----------|
+| `help` | Display help text. | `boolean` |  |  | True |
+| `custom_config_version` | version of configuration base to include (nf-core configs) | `string` | master |  | True |
+| `custom_config_base` | location where to look for nf-core/configs | `string` | https://raw.githubusercontent.com/nf-core/configs/master |  | True |

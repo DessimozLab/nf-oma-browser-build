@@ -1,0 +1,87 @@
+nextflow_workflow {
+
+    name "Test Workflow GENERATE_XREFS"
+    script "subworkflows/local/xrefs/main.nf"
+    workflow "GENERATE_XREFS"
+
+    test("Test dataflow of xref subworkflow with stub-run mode") {
+
+        when {
+            params {
+                // define parameters here. Example:
+                outdir = "tests/results"
+                xref_refseq = null
+                xref_uniprot_swissprot = "tests/data/xrefs/uniprot_swissprot_test.fasta"
+                xref_uniprot_trembl = "tests/data/xrefs/uniprot_trembl_test.fasta"
+                taxonomy_sqlite_path = "testdata/taxonomy.sqlite"
+            }
+            workflow {
+                """
+                // define inputs of the workflow here. Example:
+                input[0] = Channel.value([id: 'test_run', name: 'Test Run', description: 'A test run for unit testing', nr_of_sequences: 1000000])
+                input[1] = Channel.fromPath('tests/data/xrefs/test_gs_xref.tsv')
+                input[2] = Channel.fromPath('tests/data/oma_browser/test_db.h5')
+                input[3] = Channel.fromPath('tests/data/oma_browser/test_seqidx.h5')
+                input[4] = Channel.fromPath('tests/data/oma_browser/test_seqbuf.bin')
+                input[5] = Channel.fromPath('tests/data/xrefs/test_source_xref_db.h5')
+                input[6] = params.xref_uniprot_swissprot
+                input[7] = params.xref_uniprot_trembl
+                input[8] = params.xref_refseq
+                input[9] = Channel.fromPath('testdata/taxonomy.sqlite')
+                input[10]= Channel.fromPath('testdata/taxonomy.sqlite.traverse.pkl')
+                input[11]= false
+                """
+            }
+            // run in stub mode only!
+            options "-stub-run"
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.succeeded().size() == 9
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+    
+
+    test("No xref mapping enabled") {
+
+        when {
+            params {
+                // define parameters here. Example:
+                outdir = "tests/results"
+                xref_refseq = null
+                xref_uniprot_swissprot = null
+                xref_uniprot_trembl = null
+            }
+            workflow {
+                """
+                // define inputs of the workflow here. Example:
+                input[0] = Channel.value([id: 'test_run', name: 'Test Run', description: 'A test run for unit testing', nr_of_sequences: 1000000])
+                input[1] = Channel.fromPath('tests/data/xrefs/test_gs_xref.tsv')
+                input[2] = Channel.fromPath('tests/data/oma_browser/test_db.h5')
+                input[3] = Channel.fromPath('tests/data/oma_browser/test_seqidx.h5')
+                input[4] = Channel.fromPath('tests/data/oma_browser/test_seqbuf.bin')
+                input[5] = Channel.fromPath('tests/data/xrefs/test_source_xref_db.h5')
+                input[6] = params.xref_uniprot_swissprot
+                input[7] = params.xref_uniprot_trembl
+                input[8] = params.xref_refseq
+                input[9] = Channel.fromPath('testdata/taxonomy.sqlite')
+                input[10]= Channel.fromPath('testdata/taxonomy.sqlite.traverse.pkl')
+                input[11]= false
+                """
+            }
+            // run in stub mode only!
+            options "-stub-run"
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.succeeded().size() == 3
+            assert snapshot(workflow.out).match()
+        }
+
+    }
+
+}

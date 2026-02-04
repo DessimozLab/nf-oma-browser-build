@@ -2,26 +2,34 @@
 
 // Modules
 include { CONVERT_SPECIES_TREE; CONVERT_PROTEOME; CONVERT_SPLICINGS ; FINALIZE_GS ; MERGE_JSON } from "./../../../modules/local/fastoma_extract"
+include { PREPARE_OMA_TAXONOMY } from "./../../../modules/local/omataxonomy"
 
 workflow EXTRACT_FASTOMA {
-    
-    main:
-        species_tree = Channel.fromPath(params.fastoma_species_tree, type: "file", checkIfExists: true)
-        species_mapping = (params.fastoma_speciesdata != null) ? Channel.fromPath(params.fastoma_speciesdata, type: "file") : Channel.fromPath("$projectDir/assets/NO_FILE")
+    take:
+        fastoma_species_tree_path
+        fastoma_speciesdata_path
+        fastoma_proteomes_path
+        matrix_file_path
+        taxonomy_sqlite
+        taxonomy_traverse_pkl
+
         
-        CONVERT_SPECIES_TREE(species_tree, species_mapping)
+    main:
+        species_tree = Channel.fromPath(fastoma_species_tree_path, type: "file", checkIfExists: true)
+        species_mapping = (fastoma_speciesdata_path != null) ? Channel.fromPath(fastoma_speciesdata_path, type: "file") : Channel.fromPath("$projectDir/assets/NO_FILE")
+        
+        CONVERT_SPECIES_TREE(species_tree, species_mapping, taxonomy_sqlite, taxonomy_traverse_pkl)
         convert_jobs = CONVERT_SPECIES_TREE.out.gs_tsv
             | splitCsv(sep: "\t", header: true)
             | map { row ->
-                println "Processing row: ${row}"
-                def dbfile = file("${params.fastoma_proteomes}/${row.Name}.fa")
-                def matrix = (params.matrix_file != null) ? file("${params.matrix_file}") : file("$projectDir/assets/NO_FILE")
+                def dbfile = file("${fastoma_proteomes_path}/${row.Name}.fa", checkIfExists: true)
+                def matrix = (matrix_file_path != null) ? file("${matrix_file_path}") : file("$projectDir/assets/NO_FILE")
                 return tuple( row, dbfile, matrix )
                 }
             | transpose
         
         CONVERT_PROTEOME(convert_jobs)
-        CONVERT_SPLICINGS(file(params.fastoma_proteomes))
+        CONVERT_SPLICINGS(file(fastoma_proteomes_path))
         FINALIZE_GS(
              CONVERT_SPECIES_TREE.out.gs_tsv,
              CONVERT_PROTEOME.out.meta.collect()
@@ -38,5 +46,11 @@ workflow EXTRACT_FASTOMA {
 }
 
 workflow {
-    EXTRACT_FASTOMA()
+    PREPARE_OMA_TAXONOMY(params.taxonomy_sqlite_path)
+    EXTRACT_FASTOMA(params.fastoma_species_tree,
+                    params.fastoma_speciesdata,
+                    params.fastoma_proteomes,
+                    params.matrix_file,
+                    PREPARE_OMA_TAXONOMY.out.tax_db,
+                    PREPARE_OMA_TAXONOMY.out.tax_pkl)
 }

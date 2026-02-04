@@ -1,0 +1,72 @@
+{
+    "Test dataflow of xref subworkflow with stub-run mode": {
+        "content": [
+            {
+                "0": [
+                    "taxmap.pkl:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "1": [
+                    "XRef-db.h5:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "2": [
+                    "reduced-xrefs-db.h5:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "3": [
+                    
+                ],
+                "dumps": [
+                    
+                ],
+                "red_xref_db": [
+                    "reduced-xrefs-db.h5:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "taxmap": [
+                    "taxmap.pkl:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "xref_db": [
+                    "XRef-db.h5:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2026-02-04T09:51:14.123588"
+    },
+    "No xref mapping enabled": {
+        "content": [
+            {
+                "0": [
+                    "taxmap.pkl:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "1": [
+                    "XRef-db.h5:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "2": [
+                    "reduced-xrefs-db.h5:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "3": [
+                    
+                ],
+                "dumps": [
+                    
+                ],
+                "red_xref_db": [
+                    "reduced-xrefs-db.h5:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "taxmap": [
+                    "taxmap.pkl:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ],
+                "xref_db": [
+                    "XRef-db.h5:md5,d41d8cd98f00b204e9800998ecf8427e"
+                ]
+            }
+        ],
+        "meta": {
+            "nf-test": "0.9.3",
+            "nextflow": "24.10.5"
+        },
+        "timestamp": "2026-02-04T09:51:18.829737"
+    }
+}

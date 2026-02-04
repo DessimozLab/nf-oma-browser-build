@@ -20,14 +20,9 @@ def logo() {
     ${c_reset}${c_dim}------------------------------------------------------------------------------${c_reset}""".stripIndent()
 }
 
-// Print the logo
-log.info logo()
-
 // Load Plugins
 include { validateParameters; paramsSummaryLog } from 'plugin/nf-schema'
 
-// Validate input parameters
-validateParameters()
 
 // Subworkflows
 include {OMA_BROWSER_BUILD} from "./workflows/oma_browser_build"
@@ -44,32 +39,35 @@ workflow OMA_browser_build {
 
     emit:
         db = OMA_BROWSER_BUILD.out.db
-        seqidx = OMA_BROWSER_BUILD.out.seqidx_h5
+        aux_data = OMA_BROWSER_BUILD.out.aux_data
         downloads = OMA_BROWSER_BUILD.out.downloads
         rdf = OMA_BROWSER_BUILD.out.rdf
 }
 
 workflow {
     main:
+        log.info logo()
+        // Validate input parameters
+        validateParameters()
         OMA_browser_build()
+
+    
+        workflow.onComplete = {
+            log.info "Pipeline completed at: ${workflow.complete}"
+            log.info "Time to complete workflow execution: ${workflow.duration}"
+            log.info "Execution status: ${workflow.success ? 'Successful' : 'Failed'}"
+            log.info "Reports stored in ${workflow.outputDir}/reports/nextflow"
+        }
+
+        workflow.onError = {
+            log.warn "Error... Pipeline execution stopped with the following message: $workflow.errorMessage"
+        } 
 
     publish:
         OMA_browser_build.out.db          >> 'main_db'
-        OMA_browser_build.out.seqidx      >> 'data'
+        OMA_browser_build.out.aux_data    >> 'data'
         OMA_browser_build.out.downloads   >> 'downloads'
         OMA_browser_build.out.rdf         >> 'RDF'
-
-}
-
-workflow.onComplete {
-    println "Pipeline completed at: ${workflow.complete}"
-    println "Time to complete workflow execution: ${workflow.duration}"
-    println "Execution status: ${workflow.success ? 'Successful' : 'Failed'}"
-    println "Reports stored in ${workflow.outputDir}/reports/nextflow"
-}
-
-workflow.onError {
-    println "Error... Pipeline execution stopped with the following message: $workflow.errorMessage"
 }
 
 

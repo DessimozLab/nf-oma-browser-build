@@ -64,7 +64,7 @@
         "pairwise_orthologs_folder": {
           "type": "string",
           "description": "Pairwise Orthologs (only by Standard OMA pipeline)",
-          "format": "directory-path"
+          "help_text": "Folder where the pairwise orthologs in TSV format are stored. Can also be a single compressed tarball (ending in '.tgz') that contains all the files. This can be needed for big datasets and quotas on the number of files"
         },
         "matrix_file": {
           "type": "string",
@@ -148,15 +148,18 @@
         },
         "xref_uniprot_trembl": {
           "type": "string",
-          "default": "/dev/null",
-          "description": "UniProtKB/TrEMBL annotations in text format"
+          "description": "UniProtKB/TrEMBL annotations in text format.",
+          "help_text": "If not provided, no TrEMBL cross-references will be included. The generic ftp url for TrEMBL is https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_trembl.dat.gz"
         },
         "taxonomy_sqlite_path": {
-          "type": "string"
+          "type": "string",
+          "description": "Path to a sqlite database containing the combined NCBI/GTDB taxonomy data.",
+          "help_text": "If not provided it will be generated automatically and cached"
         },
         "xref_refseq": {
           "type": "string",
-          "description": "Folder containing RefSeq gbff files."
+          "description": "'download' or folder containing RefSeq gbff files.",
+          "help_text": "If not specified, no RefSeq crossreferences will be download (default). If set to 'download', the latest RefSeq gbff files will be downloaded from NCBI FTP server. Alternatively, a folder containing local *.gbff.gz files can be provided."
         }
       }
     },
@@ -212,6 +215,19 @@
         }
       }
     },
+    "production_oma_output_settings": {
+      "title": "Production OMA output settings",
+      "type": "object",
+      "description": "Parameters concerning additional output files usually needed for the production OMA Browser instance",
+      "properties": {
+        "oma_dumps": {
+          "type": "boolean",
+          "description": "Flag to activate dumping various files for the download section",
+          "fa_icon": "fas fa-toggle-on",
+          "help_text": "Activating oma_dumps will enable species, sequences, GO annotations files as text files for the download section."
+        }
+      }
+    },
     "generic_options": {
       "title": "Generic options",
       "type": "object",
@@ -264,6 +280,9 @@
     },
     {
       "$ref": "#/$defs/exporting_as_rdf"
+    },
+    {
+      "$ref": "#/$defs/production_oma_output_settings"
     },
     {
       "$ref": "#/$defs/generic_options"

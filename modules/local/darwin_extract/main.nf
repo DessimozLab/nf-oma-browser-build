@@ -1,7 +1,7 @@
 process CONVERT_GS {
     tag "Convert GenomeSummaries to JSON format"
     label "process_single"
-    container "docker.io/dessimozlab/omadarwin:1.4.0"
+    container "docker.io/dessimozlab/omadarwin:1.5.0"
 
     input:
         path genomes
@@ -29,7 +29,7 @@ process CONVERT_GS {
 process CONVERT_PROTEINS {
     tag "Convert Proteins from ${genome.UniProtSpeciesCode} to JSON format"
     label "process_single"
-    container "docker.io/dessimozlab/omadarwin:1.4.0"
+    container "docker.io/dessimozlab/omadarwin:1.5.0"
 
     input:
         tuple val(genome), path(dbpath), path(subgenome)
@@ -56,7 +56,7 @@ process CONVERT_PROTEINS {
 process CONVERT_OMA_GROUPS {
     tag "Extract OMA Groups"
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.4.0"
+    container "docker.io/dessimozlab/omabuild:1.5.0"
 
     input:
         path matrix_file
@@ -73,7 +73,7 @@ process CONVERT_OMA_GROUPS {
 process CONVERT_SPLICE_MAP {
     tag "Convert Splicing information to json"
     label "process_single"
-    container "docker.io/dessimozlab/omadarwin:1.4.0"
+    container "docker.io/dessimozlab/omadarwin:1.5.0"
 
     input:
         path splice_drw
@@ -99,17 +99,21 @@ process CONVERT_SPLICE_MAP {
 process CONVERT_TAXONOMY {
     tag "Convert Taxonomy of genomes using omataxonomy"
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.4.0"
+    container "docker.io/dessimozlab/omabuild:1.5.0"
 
     input:
         path gs_tsv
         path sqlite_taxonomy
+        path taxonomy_traverse_pkl     // this file is implicitly used and must be located at the same place as sqlite_taxonomy
 
     output:
         path "taxonomy.tsv",          emit: tax_tsv
+        path "taxid_merges.tsv",      emit: taxid_merges_tsv, optional: true
 
     script:
         """
-        subtaxonomy-from-genomes.py --input $gs_tsv --database $sqlite_taxonomy --out taxonomy.tsv
+        subtaxonomy-from-genomes.py --input $gs_tsv \\
+             --database $sqlite_taxonomy \\
+             --out taxonomy.tsv --merges taxid_merges.tsv
         """
 }

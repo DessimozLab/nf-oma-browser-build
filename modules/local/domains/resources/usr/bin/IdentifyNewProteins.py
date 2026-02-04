@@ -33,18 +33,24 @@ def load_existing_domain_annotations(fnames):
                     if err > 10:
                         raise ValueError('too many broken hashes')
                 else:
-                    hashes.add(md5.encode('utf-8'))
+                    hashes.add(md5)
     return hashes
 
 
 class NewSeqsFilter(object):
     def __init__(self, existing):
         self.known_hashes = existing
+        self.hit = 0
+        self.miss = 0
+        logger.info(f"Initialized Filter with {len(existing)} sequences")
 
     def examine(self, seq_records):
         for srec in seq_records:
             if not srec.id in self.known_hashes:
+                self.miss += 1
                 yield srec
+            else:
+                self.hit += 1
 
 
 class BufferedSeqWriter(object):
@@ -96,6 +102,8 @@ def find_missing(db_fn, existing_fns, out_fn_prefix=None):
     with BufferedSeqWriter(out_fn_prefix) as writer:
         for cnt, missing in enumerate(filt.examine(iter_seqs_from_db(db_fn))):
             writer.write(missing)
+    logger.info(f"FilterStats: {filt.hit} known, {filt.miss} new sequences")
+    logger.info(f"{cnt-filt.miss} sequences without existing domain annotations ({filt.miss}) were reported multiple times")
 
 
 if __name__ == '__main__':
@@ -110,5 +118,3 @@ if __name__ == '__main__':
                         format="%(asctime)-15s %(name)s %(levelname)-8s: %(message)s")
 
     find_missing(conf.db, conf.anno, out_fn_prefix=conf.out)
-                 #'/scratch/beegfs/monthly/aaltenho/Browser/cath/all_domains.csv.gz',
-                 #'/scratch/beegfs/monthly/aaltenho/Browser/cath/missing_domains')

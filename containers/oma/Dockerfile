@@ -7,7 +7,7 @@ FROM basis AS builder
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
        build-essential \
-       libhdf5-103 \
+       libhdf5-310 \
        libhdf5-dev \
        git-core \
        pkg-config \

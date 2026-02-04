@@ -21,10 +21,9 @@ workflow ANCESTRAL_GO {
 
         branch_c.no_anno
             .map {"No genes with annotations found. Skipping ancestral go inference with HOGPROP"}
-            .view()
 
         chunks = branch_c.with_anno.map { n ->
-               def nr_chunks = Math.max(Math.ceil(n / 1000.0), 2) as Integer
+               def nr_chunks = Math.max(Math.ceil(n / 10000.0), 2) as Integer
                (1..nr_chunks).toList()
             }.flatten()
         nr_chunks = chunks.max()
