@@ -27,7 +27,9 @@ nextflow_workflow {
                 input[6] = params.xref_uniprot_swissprot
                 input[7] = params.xref_uniprot_trembl
                 input[8] = params.xref_refseq
-                input[9] = params.taxonomy_sqlite_path
+                input[9] = Channel.fromPath('testdata/taxonomy.sqlite')
+                input[10]= Channel.fromPath('testdata/taxonomy.sqlite.traverse.pkl')
+                input[11]= false
                 """
             }
             // run in stub mode only!
@@ -36,7 +38,7 @@ nextflow_workflow {
 
         then {
             assert workflow.success
-            assert workflow.trace.succeeded().size() == 10
+            assert workflow.trace.succeeded().size() == 9
             assert snapshot(workflow.out).match()
         }
 
@@ -65,7 +67,9 @@ nextflow_workflow {
                 input[6] = params.xref_uniprot_swissprot
                 input[7] = params.xref_uniprot_trembl
                 input[8] = params.xref_refseq
-                input[9] = params.taxonomy_sqlite_path
+                input[9] = Channel.fromPath('testdata/taxonomy.sqlite')
+                input[10]= Channel.fromPath('testdata/taxonomy.sqlite.traverse.pkl')
+                input[11]= false
                 """
             }
             // run in stub mode only!
@@ -74,7 +78,7 @@ nextflow_workflow {
 
         then {
             assert workflow.success
-            assert workflow.trace.succeeded().size() == 4
+            assert workflow.trace.succeeded().size() == 3
             assert snapshot(workflow.out).match()
         }
 
