@@ -12,7 +12,7 @@
     script:
         def prefix_arg = (prefixes.name != 'NO_FILE') ? "--ontology $prefixes" : "--ontology /usr/biosoda/prefixes.owl"
         """
-        OMAHDF5ToRDF.py -v \\
+        OMAHDF5ToRDF -v \\
             --out ./ \\
             ${prefix_arg} \\
             --nr-processes ${task.cpus} \\
