@@ -4,6 +4,7 @@ import logging
 import collections
 import re
 import io
+import os
 import sys
 import csv
 import pickle
@@ -16,6 +17,25 @@ import omataxonomy
 from pyoma.browser.db import Taxonomy
 logger = logging.getLogger('date_species_tree')
 Genome = collections.namedtuple('Genome', ['uniprot_species_code', 'sciname', 'taxid'])
+
+
+def load_proxy_settings() -> Dict[str, str]:
+    """
+    Load proxy settings from environment variables.
+
+    Returns:
+    Dict[str, str] | None: A dictionary of proxy settings for requests, or None if no proxies are set.
+    """
+    proxies = {}
+    logger.info("environment variabels: %s", os.environ)
+    for protocol in ['http', 'https']:
+        logger.info("checking for %s proxy settings in environment variables...", protocol)
+        logger.info(f"{protocol}_proxy: %s", os.getenv(f"{protocol}_proxy"))
+        proxy_url = os.getenv(f"{protocol}_proxy") or os.getenv(f"{protocol.upper()}_PROXY")
+        if proxy_url:
+            proxies[protocol] = proxy_url
+            logger.info("Using %s proxy: %s", protocol, proxy_url)
+    return proxies
 
 
 def date_specieslist_with_timetree(scinames:List[str]) -> dendropy.Tree:
@@ -41,6 +61,10 @@ def date_specieslist_with_timetree(scinames:List[str]) -> dendropy.Tree:
     handle.seek(0)
     
     with requests.Session() as session:
+        logger.info("Using proxies default: %s", session.proxies)
+        session.proxies.update(load_proxy_settings())
+        logger.info("Using proxies: %s", session.proxies)
+        
         r1 = session.post(
             "https://timetree.org/ajax/prune/load_names/",
             files={"file": handle},
@@ -136,7 +160,7 @@ def assign_dates(oma_tree: dendropy.Tree, dated_tree: dendropy.Tree) -> dendropy
     dendropy.Tree: The OMA species tree with assigned divergence times.
     """
     # store ages from dated tree as attributes in the tree
-    dated_tree.node_ages()
+    dated_tree.node_ages(ultrametricity_precision=1)
 
     oma_leaves = {leaf.taxon.label: leaf for leaf in oma_tree.leaf_iter()}
     def descendeant_labels(node):
