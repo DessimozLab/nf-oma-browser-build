@@ -14,7 +14,8 @@ def subtaxonomy_from_genomes(tax, genomes):
         tree = tree.children[0]
     
     ensure_unique_names(tree)
-
+    
+    root_written = False
     for node in tree.traverse(strategy="preorder"):
         parent_taxid = node.up.taxid if node.up is not None and node != tree else 0
         if node.taxid == parent_taxid:
@@ -22,9 +23,12 @@ def subtaxonomy_from_genomes(tax, genomes):
         
         is_genome_level = False
         if node.taxid in (131567, 1):
+            if root_written:
+                continue
             node.taxid = 0
             parent_taxid = -1
             sciname = "LUCA"
+            root_written = True
         elif node.sci_name.startswith("d__"):
             sciname = node.sci_name.replace("d__", "")
             node.taxid = tax.get_name_translator([sciname])[sciname][0]
