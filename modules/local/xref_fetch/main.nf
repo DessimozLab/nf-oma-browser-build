@@ -111,9 +111,7 @@ process MAP_XREFS {
             local unique_name="\$3"
             
             # Get available space in tmpDir
-            free_blocks=\$(df -P "\$tmpDir" | tail -1 | awk '{print \$4}')
-            block_size=\$(df -P "\$tmpDir" | tail -1 | awk '{print \$2}')
-            free_space=\$((free_blocks * block_size))
+            free_space=\$(df -kP "\$tmpDir" | tail -1 | awk '{print \$4 * 1024}')
 
             if [ "\$file_size" -le "\$free_space" ]; then
                 local_file="\${tmpDir}/\$unique_name"

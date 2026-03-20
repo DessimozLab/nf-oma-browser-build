@@ -15,9 +15,7 @@ process INFER_FINGERPRINTS {
         """
         # Check if TMPDIR on compute node has enough space for the sequence buffer
         tmpDir="\${TMPDIR:-/tmp}"
-        free_blocks=\$(df -P "\$tmpDir" | tail -1 | awk '{print \$4}')
-        block_size=\$(df -P "\$tmpDir" | tail -1 | awk '{print \$2}')
-        free_space=\$((free_blocks * block_size))
+        free_space=\$(df -kP "\$tmpDir" | tail -1 | awk '{print \$4 * 1024}')
 
         if [ "${buffSize}" -le "\$free_space" ]; then
             local_seq="\${tmpDir}/${uniqueName}"
