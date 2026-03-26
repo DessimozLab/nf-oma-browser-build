@@ -102,11 +102,12 @@ process MAP_XREFS {
         def seq_buf_size = seq_buf.size()
         def seq_idx_db_size = seq_idx_db.size()
         def rand_nr = (Math.random()*10000 as Integer) as String
-        template "copy_to_local.sh"
+        def templ = template("copy_to_local.sh")
         """
         echo "Requested memory: ${task.memory}"
         echo "Available CPUs: ${task.cpus}"
-
+        ${templ.text}
+        
         copy_files_to_local "${local_path}" \\
             "$seq_buf" "${seq_buf_size}" "${seq_buf.name}_${rand_nr}" \\
             "$seq_idx_db" "${seq_idx_db_size}" "${seq_idx_db.name}_${rand_nr}"

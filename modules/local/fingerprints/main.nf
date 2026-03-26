@@ -14,8 +14,9 @@ process INFER_FINGERPRINTS {
         def local_path = task.ext?.copy_to_local_path ?: ''
         def buffSize = seq_buf.size()
         def uniqueName = "${seq_buf.name}_" + ((Math.random()*10000 as Integer) as String)
-        template "copy_to_local.sh"
+        def templ = template("copy_to_local.sh")
         """
+        ${templ.text}
         copy_files_to_local "${local_path}" \\
             "$seq_buf" "${buffSize}" ${uniqueName}
         
