@@ -8,14 +8,14 @@ process IDENTIFY_ALPHAFOLD_ENTRIES{
         path xrefs_h5
 
     output:
-        path "af-*.txt", emit: alphafold_batches
+        path "af-*.tsv.gz", emit: alphafold_batches
         path "predict-*.fa.gz", emit: fasta_batches
 
     script:
         """
-        identify_af_entries.py -v \\ 
+        identify_af_entries.py \\
             --db $db_h5 \\
-            --xrefs $xrefs_h5 \\ 
+            --xrefs $xrefs_h5 \\
             --batch-size 400000 \\
             --out-prefix af- \\
             --fasta-out-prefix predict-
@@ -37,7 +37,7 @@ process DOWNLOAD_CIF_FILES_FROM_ALPHAFOLD {
 
     script:
         """
-        download_af_cif_files.py -v \\
+        download_af_cif_files.py \\
             $batch_file \\
             --out-cif-folder cif-${meta.id} \\
             --out-missing missing-${meta.id}.txt \\

@@ -11,7 +11,7 @@ process FOLDSEEK_EMBED_3DI {
     tuple val(meta), path(pdb)
 
     output:
-    tuple val(meta), path("${meta.id}_3di.fasta"), emit: db
+    tuple val(meta), path("${meta.id}_3di.fasta"), emit: fasta
     path "versions.yml"                          , emit: versions
 
     when:
@@ -21,10 +21,22 @@ process FOLDSEEK_EMBED_3DI {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
+    # Check if input is a tar file
+    if [[ "$pdb" == *.tar ]] || [[ "$pdb" == *.tar.gz ]] || [[ "$pdb" == *.tgz ]]; then
+        echo "Tar archive detected: $pdb"
+        # Extract the tar file to a temporary directory
+        tmp_dir="extracted"
+        mkdir -p "\$tmp_dir"
+        tar -xf "$pdb" -C "\$tmp_dir"
+        input_arg="\$tmp_dir"
+    else
+        input_arg="$pdb"
+    fi
+    
     mkdir -p ${prefix}
     foldseek \\
         createdb \\
-        ${pdb} \\
+        \${input_arg} \\
         ${prefix}/${prefix} \\
         ${args}
     
@@ -33,6 +45,10 @@ process FOLDSEEK_EMBED_3DI {
         ${prefix}/${prefix}_ss_h 
 
     foldseek convert2fasta ${prefix}/${prefix}_ss ${prefix}_3di.fasta
+    
+    if [[ -n "\$tmp_dir" ]]; then
+        rm -rf "\$tmp_dir"
+    fi
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

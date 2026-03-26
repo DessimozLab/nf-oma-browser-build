@@ -2,16 +2,15 @@
 
 import logging
 import collections
-import io
 import os
-import threading
+import itertools
 import csv
-import time
 import gzip
 from pathlib import Path
 import numpy
 import tables
 from pyoma.browser.db import Database
+from pyoma.browser.models import ProteinEntry
 
 
 def identify_af_entries(db, xref_db_path=None):
@@ -22,7 +21,7 @@ def identify_af_entries(db, xref_db_path=None):
     xref_tab: tables.Table = xref.get_node('/XRef')
     verf_enum = xref_tab.get_enum("Verification")
     af_acc = collections.defaultdict(set)
-    it = xref_tab.where(f"(XRefSouce <= 10) & (Verification == {verf_enum['exact']})")
+    it = xref_tab.where(f"(XRefSource <= 10) & (Verification == {verf_enum['exact']})")
     for row in it:
         acc = row["XRefId"].decode("utf-8")
         if "_" in acc:
@@ -47,7 +46,7 @@ def write_af_accessions(accs, out_prefix, batch_size):
     
     batch_num = 0
     batch = []
-    for acc, hashes in accs.items()):
+    for acc, hashes in accs.items():
         batch.append([acc, len(hashes), ",".join(map(str, hashes))])
         if len(batch) >= batch_size:
             write_batch(batch, batch_num)
@@ -62,13 +61,13 @@ def write_non_af_fastas(db, af_accs, fasta_out_prefix, batch_size):
     
     batch_num = 0
     batch_len = 0
-    seen_md5 = set(md5 for md5 in itertools.from_iter(af_accs.values())
-    out_file = f"{fasta_out_prefix}{batch_num:03d}.fasta.gz"
+    seen_md5 = set(md5 for md5 in itertools.chain.from_iterable(af_accs.values()))
+    out_file = f"{fasta_out_prefix}{batch_num:03d}.fa.gz"
     fout = gzip.open(out_file, "wt")
     for row in db.db.get_node('/Protein/Entries'):
         pe = ProteinEntry(db, row.fetch_all_fields())
         if pe.sequence_md5 not in seen_md5:
-            fout.write(f">{pe.sequence_md5 | pe.omaid}\n{pe.sequence}\n")
+            fout.write(f">{pe.sequence_md5} | {pe.omaid}\n{pe.sequence}\n")
             batch_len += 1
         if batch_len >= batch_size:
             fout.close()
@@ -98,5 +97,5 @@ def main():
         write_af_accessions(af_accs, conf.out_prefix, conf.batch_size)
         write_non_af_fastas(db, af_accs, conf.fasta_out_prefix, conf.batch_size)
 
-if __main__ == "__main__":
+if __name__ == "__main__":
     main()

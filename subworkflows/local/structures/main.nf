@@ -13,7 +13,7 @@ workflow CREATE_3DI_STRUCTURE_DB {
 
         // download corresponding CIF files from AlphaFold
         batches = IDENTIFY_ALPHAFOLD_ENTRIES.out.alphafold_batches.map {
-            batch_file -> tuple(batch_file.baseName, batch_file)
+            batch_file -> tuple(['id': batch_file.simpleName], batch_file)
         }
         DOWNLOAD_CIF_FILES_FROM_ALPHAFOLD(batches)
         // and generate 3DI fasta files from them

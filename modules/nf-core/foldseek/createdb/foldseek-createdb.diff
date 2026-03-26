@@ -16,13 +16,32 @@ Changes in 'foldseek/createdb/main.nf':
      output:
 -    tuple val(meta), path("${meta.id}"), emit: db
 -    path "versions.yml"                , emit: versions
-+    tuple val(meta), path("${meta.id}_3di.fasta"), emit: db
++    tuple val(meta), path("${meta.id}_3di.fasta"), emit: fasta
 +    path "versions.yml"                          , emit: versions
  
      when:
      task.ext.when == null || task.ext.when
-@@ -27,6 +27,12 @@
-         ${pdb} \\
+@@ -21,12 +21,34 @@
+     def args = task.ext.args ?: ''
+     def prefix = task.ext.prefix ?: "${meta.id}"
+     """
++    # Check if input is a tar file
++    if [[ "$pdb" == *.tar ]] || [[ "$pdb" == *.tar.gz ]] || [[ "$pdb" == *.tgz ]]; then
++        echo "Tar archive detected: $pdb"
++        # Extract the tar file to a temporary directory
++        tmp_dir="extracted"
++        mkdir -p "\$tmp_dir"
++        tar -xf "$pdb" -C "\$tmp_dir"
++        input_arg="\$tmp_dir"
++    else
++        input_arg="$pdb"
++    fi
++    
+     mkdir -p ${prefix}
+     foldseek \\
+         createdb \\
+-        ${pdb} \\
++        \${input_arg} \\
          ${prefix}/${prefix} \\
          ${args}
 +    
@@ -31,10 +50,14 @@ Changes in 'foldseek/createdb/main.nf':
 +        ${prefix}/${prefix}_ss_h 
 +
 +    foldseek convert2fasta ${prefix}/${prefix}_ss ${prefix}_3di.fasta
++    
++    if [[ -n "\$tmp_dir" ]]; then
++        rm -rf "\$tmp_dir"
++    fi
  
      cat <<-END_VERSIONS > versions.yml
      "${task.process}":
-@@ -38,21 +44,7 @@
+@@ -38,21 +60,7 @@
      def prefix = task.ext.prefix ?: "${meta.id}"
  
      """
@@ -59,5 +82,17 @@ Changes in 'foldseek/createdb/main.nf':
      "${task.process}":
 
 'modules/nf-core/foldseek/createdb/tests/main.nf.test.snap' is unchanged
-'modules/nf-core/foldseek/createdb/tests/main.nf.test' is unchanged
+Changes in 'foldseek/createdb/tests/main.nf.test':
+--- modules/nf-core/foldseek/createdb/tests/main.nf.test
++++ modules/nf-core/foldseek/createdb/tests/main.nf.test
+@@ -2,7 +2,7 @@
+ 
+     name "Test Process FOLDSEEK_CREATEDB"
+     script "../main.nf"
+-    process "FOLDSEEK_CREATEDB"
++    process "FOLDSEEK_EMBED_3DI"
+     tag "modules"
+     tag "modules_nfcore"
+     tag "foldseek"
+
 ************************************************************

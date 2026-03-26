@@ -7,6 +7,7 @@ import os
 import threading
 import csv
 import time
+import re
 import gzip
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -43,7 +44,7 @@ def make_cif_url_template(cif_url:str) -> str:
     match = re.search(pattern, cif_url)
     if not match:
         raise ValueError("URL does not match expected pattern")
-    prefix, acc, middle, version. suffix = match.groups()
+    prefix, acc, middle, version, suffix = match.groups()
     template = f"{prefix}{{acc}}{middle}{version}{suffix}"
     return template
 
@@ -52,9 +53,9 @@ def make_cif_url_template(cif_url:str) -> str:
 # Download function
 # ---------------------------
 def download_one(acc: str, url_template: str, output_dir: Path, timeout: int, max_retries: int , pool_maxsize: int):
-    session = get_session()
+    session = get_session(pool_maxsize)
     url = url_template.format(acc=acc)
-    filepath = output_dir / f"{acc}.cif.gz")
+    filepath = output_dir / f"{acc}.cif.gz"
 
     # skip if already exists (important for resume)
     if filepath.exists():
@@ -85,7 +86,7 @@ def download_one(acc: str, url_template: str, output_dir: Path, timeout: int, ma
 # ---------------------------
 def download_alphafold_requests(accessions, output_dir, summary_file, timeout, max_retries, n_threads, missing_log):
     output_dir = Path(output_dir)
-    output_dir.make_dirs(exist_ok=True, parents=True)
+    output_dir.mkdir(exist_ok=True, parents=True)
 
     url_template = get_cif_url_template()
 
@@ -125,8 +126,9 @@ def main():
     conf = parser.parse_args()
 
     # read accessions
-    with gzip.open(conf.accessions_file, rt) as f:
-        accessions = [line.strip() for line in f if line.strip()]
+    with gzip.open(conf.accessions_file, 'rt', newline="") as f:
+        reader = csv.DictReader(f, delimiter="\t")
+        accessions = [row['Accession'].strip() for row in reader]
     
     download_alphafold_requests(
         accessions=accessions,
@@ -139,5 +141,5 @@ def main():
     )
 
 
-if __name__ == "__main__"
+if __name__ == "__main__":
     main()

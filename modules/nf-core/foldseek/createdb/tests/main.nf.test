@@ -2,7 +2,7 @@ nextflow_process {
 
     name "Test Process FOLDSEEK_CREATEDB"
     script "../main.nf"
-    process "FOLDSEEK_CREATEDB"
+    process "FOLDSEEK_EMBED_3DI"
     tag "modules"
     tag "modules_nfcore"
     tag "foldseek"
