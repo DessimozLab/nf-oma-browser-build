@@ -20,6 +20,7 @@ include { EXTRACT_FASTOMA } from '../subworkflows/local/extract_fastoma/main.nf'
 include { ANCESTRAL_GO   } from "../subworkflows/local/ancestral_go/main.nf"
 include { RDF_EXPORT } from '../subworkflows/local/rdf_export/main.nf'
 include { PREPARE_OMA_TAXONOMY } from '../modules/local/omataxonomy/main.nf'
+include { CREATE_3DI_STRUCTURE_DB } from '../subworkflows/local/structures/main.nf'
 
 workflow OMA_BROWSER_BUILD {
 
@@ -106,6 +107,11 @@ workflow OMA_BROWSER_BUILD {
                        PREPARE_OMA_TAXONOMY.out.tax_pkl,
                        params.oma_dumps)
         download_files = download_files.mix(GENERATE_XREFS.out.dumps)
+        
+        if (params.structure_db) {
+            CREATE_3DI_STRUCTURE_DB(IMPORT_HDF5.out.db_h5, GENERATE_XREFS.out.xref_db)
+            download_files = download_files.mix(CREATE_3DI_STRUCTURE_DB.out.structure_db_h5)
+        }
 
         INFER_KEYWORDS(IMPORT_HDF5.out.meta,
                        IMPORT_HDF5.out.db_h5,
