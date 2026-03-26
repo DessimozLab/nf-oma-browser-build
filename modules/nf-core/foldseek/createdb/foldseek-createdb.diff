@@ -1,0 +1,63 @@
+Changes in component 'nf-core/foldseek/createdb'
+'modules/nf-core/foldseek/createdb/environment.yml' is unchanged
+'modules/nf-core/foldseek/createdb/meta.yml' is unchanged
+Changes in 'foldseek/createdb/main.nf':
+--- modules/nf-core/foldseek/createdb/main.nf
++++ modules/nf-core/foldseek/createdb/main.nf
+@@ -1,4 +1,4 @@
+-process FOLDSEEK_CREATEDB {
++process FOLDSEEK_EMBED_3DI {
+     tag "$meta.id"
+     label 'process_single'
+ 
+@@ -11,8 +11,8 @@
+     tuple val(meta), path(pdb)
+ 
+     output:
+-    tuple val(meta), path("${meta.id}"), emit: db
+-    path "versions.yml"                , emit: versions
++    tuple val(meta), path("${meta.id}_3di.fasta"), emit: db
++    path "versions.yml"                          , emit: versions
+ 
+     when:
+     task.ext.when == null || task.ext.when
+@@ -27,6 +27,12 @@
+         ${pdb} \\
+         ${prefix}/${prefix} \\
+         ${args}
++    
++    foldseek lndb \\
++        ${prefix}/${prefix}_h \\
++        ${prefix}/${prefix}_ss_h 
++
++    foldseek convert2fasta ${prefix}/${prefix}_ss ${prefix}_3di.fasta
+ 
+     cat <<-END_VERSIONS > versions.yml
+     "${task.process}":
+@@ -38,21 +44,7 @@
+     def prefix = task.ext.prefix ?: "${meta.id}"
+ 
+     """
+-    mkdir -p ${prefix}
+-    touch ${prefix}/${prefix}
+-    touch ${prefix}/${prefix}_ca
+-    touch ${prefix}/${prefix}_ca.dbtype
+-    touch ${prefix}/${prefix}_ca.index
+-    touch ${prefix}/${prefix}_h
+-    touch ${prefix}/${prefix}_h.dbtype
+-    touch ${prefix}/${prefix}_h.index
+-    touch ${prefix}/${prefix}_ss
+-    touch ${prefix}/${prefix}_ss.dbtype
+-    touch ${prefix}/${prefix}_ss.index
+-    touch ${prefix}/${prefix}.dbtype
+-    touch ${prefix}/${prefix}.index
+-    touch ${prefix}/${prefix}.lookup
+-    touch ${prefix}/${prefix}.source
++    touch ${prefix}_3di.fasta
+ 
+     cat <<-END_VERSIONS > versions.yml
+     "${task.process}":
+
+'modules/nf-core/foldseek/createdb/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/foldseek/createdb/tests/main.nf.test' is unchanged
+************************************************************

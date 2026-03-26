@@ -1,33 +1,49 @@
 {
-  "name": "oma-browser-build",
-  "homePage": "",
-  "repos": {
-    "https://github.com/nf-core/modules.git": {
-      "modules": {
-        "nf-core": {
-          "hmmer/hmmpress": {
-            "branch": "master",
-            "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-            "installed_by": ["modules"]
-          },
-          "hmmer/hmmsearch": {
-            "branch": "master",
-            "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
-            "installed_by": ["modules"],
-            "patch": "modules/nf-core/hmmer/hmmsearch/hmmer-hmmsearch.diff"
-          },
-          "tar": {
-            "branch": "master",
-            "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
-            "installed_by": ["modules"]
-          },
-          "untar": {
-            "branch": "master",
-            "git_sha": "00ee87ebb541af0008596400ce6d5f66d79d5408",
-            "installed_by": ["modules"]
-          }
+    "name": "oma-browser-build",
+    "homePage": "",
+    "repos": {
+        "https://github.com/nf-core/modules.git": {
+            "modules": {
+                "nf-core": {
+                    "foldseek/createdb": {
+                        "branch": "master",
+                        "git_sha": "a6da46de17d2e921b4575d68390f21040c93b886",
+                        "installed_by": [
+                            "modules"
+                        ],
+                        "patch": "modules/nf-core/foldseek/createdb/foldseek-createdb.diff"
+                    },
+                    "hmmer/hmmpress": {
+                        "branch": "master",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "installed_by": [
+                            "modules"
+                        ]
+                    },
+                    "hmmer/hmmsearch": {
+                        "branch": "master",
+                        "git_sha": "05954dab2ff481bcb999f24455da29a5828af08d",
+                        "installed_by": [
+                            "modules"
+                        ],
+                        "patch": "modules/nf-core/hmmer/hmmsearch/hmmer-hmmsearch.diff"
+                    },
+                    "tar": {
+                        "branch": "master",
+                        "git_sha": "41dfa3f7c0ffabb96a6a813fe321c6d1cc5b6e46",
+                        "installed_by": [
+                            "modules"
+                        ]
+                    },
+                    "untar": {
+                        "branch": "master",
+                        "git_sha": "00ee87ebb541af0008596400ce6d5f66d79d5408",
+                        "installed_by": [
+                            "modules"
+                        ]
+                    }
+                }
+            }
         }
-      }
     }
-  }
 }
