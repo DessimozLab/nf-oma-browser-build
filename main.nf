@@ -73,8 +73,8 @@ workflow {
 
 output {
    main_db {
-       path { db ->
-           { file -> "data/OmaServer.h5" }
+       path { _db ->
+           { _file -> "data/OmaServer.h5" }
        }
        mode 'copy'
    }
