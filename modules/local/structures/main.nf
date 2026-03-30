@@ -12,10 +12,11 @@ process IDENTIFY_ALPHAFOLD_ENTRIES{
         path "predict-*.fa.gz", emit: fasta_batches
 
     script:
+        def xref_arg = xrefs_h5 ? "--xrefs $xrefs_h5" : ''
         """
         identify_af_entries.py \\
             --db $db_h5 \\
-            --xrefs $xrefs_h5 \\
+            $xref_arg \\
             --batch-size 400000 \\
             --out-prefix af- \\
             --fasta-out-prefix predict-
