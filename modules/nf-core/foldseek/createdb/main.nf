@@ -9,6 +9,7 @@ process FOLDSEEK_EMBED_3DI {
 
     input:
     tuple val(meta), path(pdb)
+    path weights
 
     output:
     tuple val(meta), path("${meta.id}_3di.fasta"), emit: fasta
@@ -20,7 +21,10 @@ process FOLDSEEK_EMBED_3DI {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
+    def weights_arg = weights ? "--prostt5-model ${weights}" : ''
     """
+    tmp_dir=""
+    
     # Check if input is a tar file
     if [[ "$pdb" == *.tar ]] || [[ "$pdb" == *.tar.gz ]] || [[ "$pdb" == *.tgz ]]; then
         echo "Tar archive detected: $pdb"
@@ -38,7 +42,8 @@ process FOLDSEEK_EMBED_3DI {
         createdb \\
         \${input_arg} \\
         ${prefix}/${prefix} \\
-        ${args}
+        ${args} \\
+        ${weights_arg} \\
     
     foldseek lndb \\
         ${prefix}/${prefix}_h \\

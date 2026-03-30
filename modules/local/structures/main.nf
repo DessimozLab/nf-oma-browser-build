@@ -47,3 +47,20 @@ process DOWNLOAD_CIF_FILES_FROM_ALPHAFOLD {
         """
 
 }
+
+
+process DOWNLOAD_PROSTT5_MODEL {
+    label 'process_single'
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/foldseek:9.427df8a--pl5321hb365157_0':
+        'biocontainers/foldseek:9.427df8a--pl5321hb365157_0' }"
+    storeDir "${params.outputDir ?: './results'}/ProstT5"
+
+    output:
+    tuple path("ProstT5_weights"), emit: weights
+
+    script:
+    """
+    foldseek databases ProstT5 ProstT5_weights/ tmp/
+    """
+}

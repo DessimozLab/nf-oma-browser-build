@@ -1,6 +1,8 @@
 #!/usr/bin/env nextflow
-include { IDENTIFY_ALPHAFOLD_ENTRIES; DOWNLOAD_CIF_FILES_FROM_ALPHAFOLD } from "./../../../modules/local/structures/"
-include { FOLDSEEK_EMBED_3DI } from "./../../../modules/nf-core/foldseek/createdb"
+include { IDENTIFY_ALPHAFOLD_ENTRIES; DOWNLOAD_CIF_FILES_FROM_ALPHAFOLD; DOWNLOAD_PROSTT5_MODEL } from "./../../../modules/local/structures/"
+include { FOLDSEEK_EMBED_3DI as FOLDSEEK_CIF_TO_3DI } from "./../../../modules/nf-core/foldseek/createdb"
+include { FOLDSEEK_EMBED_3DI as INFER_3DI_FROM_FASTA } from "./../../../modules/nf-core/foldseek/createdb"
+
 
 workflow CREATE_3DI_STRUCTURE_DB {
     take:
@@ -12,19 +14,34 @@ workflow CREATE_3DI_STRUCTURE_DB {
         IDENTIFY_ALPHAFOLD_ENTRIES(db_h5, xref_h5)
 
         // download corresponding CIF files from AlphaFold
-        batches = IDENTIFY_ALPHAFOLD_ENTRIES.out.alphafold_batches.map {
+        batches = IDENTIFY_ALPHAFOLD_ENTRIES.out.alphafold_batches.flatMap().map {
             batch_file -> tuple(['id': batch_file.simpleName], batch_file)
         }
         DOWNLOAD_CIF_FILES_FROM_ALPHAFOLD(batches)
         // and generate 3DI fasta files from them
-        FOLDSEEK_EMBED_3DI(DOWNLOAD_CIF_FILES_FROM_ALPHAFOLD.out.cif)
-        
+        FOLDSEEK_CIF_TO_3DI(
+            DOWNLOAD_CIF_FILES_FROM_ALPHAFOLD.out.cif,
+            channel.value([])
+        )
+               
         // // get fasta sequences for the UP entries without AlphaFold structures, to be used as input for 3DI inference as well
         // FASTA_OF_MISSING_ALPHAFOLD_ENTRIES(db_h5, DOWNLOAD_CIF_FILES_FROM_ALPHAFOLD.out.missing)
 
+        DOWNLOAD_PROSTT5_MODEL()
         // // encode non-AlphaFold entries with foldseek and PROST5 into 3DI sequences
         // encode_batches = IDENTIFY_ALPHAFOLD_ENTRIES.out.fasta_batches.mix(FASTA_OF_MISSING_ALPHAFOLD_ENTRIES.out.fasta)
-        // INFER_3DI_FROM_FASTA(encode_batches)
+        DOWNLOAD_PROSTT5_MODEL.out.weights.view();
+        encode_batches = IDENTIFY_ALPHAFOLD_ENTRIES.out.fasta_batches
+            .map {
+               batch_file -> 
+                   tuple(['id': batch_file.simpleName], batch_file)
+            }
+        encode_batches.view()
+        INFER_3DI_FROM_FASTA(
+            encode_batches, 
+            DOWNLOAD_PROSTT5_MODEL.out.weights.first()
+        )
+            
 
 
         // BUILD_STRUCTURE_DB(
@@ -37,6 +54,6 @@ workflow CREATE_3DI_STRUCTURE_DB {
     
     emit:
         //structure_db_h5 = BUILD_STRUCTURE_DB.out.structure_db_h5
-        structure_db_h5 = FOLDSEEK_EMBED_3DI.out.fasta.map{_meta, fasta -> fasta}.collect()
+        structure_db_h5 = FOLDSEEK_CIF_TO_3DI.out.fasta.map{_meta, fasta -> fasta}.collect()
 
 }
