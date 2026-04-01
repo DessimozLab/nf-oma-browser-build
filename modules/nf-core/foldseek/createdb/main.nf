@@ -1,6 +1,6 @@
 process FOLDSEEK_EMBED_3DI {
     tag "$meta.id"
-    label 'process_single'
+    label 'process_low'
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -42,6 +42,7 @@ process FOLDSEEK_EMBED_3DI {
         createdb \\
         \${input_arg} \\
         ${prefix}/${prefix} \\
+        --threads ${task.cpus} \\
         ${args} \\
         ${weights_arg} \\
     
