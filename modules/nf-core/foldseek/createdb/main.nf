@@ -4,8 +4,8 @@ process FOLDSEEK_EMBED_3DI {
 
     conda "${moduleDir}/environment.yml"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/foldseek:9.427df8a--pl5321hb365157_0':
-        'biocontainers/foldseek:9.427df8a--pl5321hb365157_0' }"
+        'https://depot.galaxyproject.org/singularity/foldseek:10.941cd33--h5021889_1':
+        'biocontainers/foldseek:10.941cd33--h5021889_1' }"
 
     input:
     tuple val(meta), path(pdb)
