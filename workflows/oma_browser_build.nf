@@ -109,8 +109,9 @@ workflow OMA_BROWSER_BUILD {
         download_files = download_files.mix(GENERATE_XREFS.out.dumps)
         
         if (params.structure_db) {
-            CREATE_3DI_STRUCTURE_DB(IMPORT_HDF5.out.db_h5, GENERATE_XREFS.out.xref_db)
-            download_files = download_files.mix(CREATE_3DI_STRUCTURE_DB.out.structure_db_h5)
+            CREATE_3DI_STRUCTURE_DB(IMPORT_HDF5.out.db_h5, GENERATE_XREFS.out.xref_db, params.store_cif, params.export_foldseek_db)
+            auxillary_data_files = auxillary_data_files.mix(CREATE_3DI_STRUCTURE_DB.out.structure_db_h5)
+            download_files = download_files.mix(CREATE_3DI_STRUCTURE_DB.out.foldseek_db)
         }
 
         INFER_KEYWORDS(IMPORT_HDF5.out.meta,

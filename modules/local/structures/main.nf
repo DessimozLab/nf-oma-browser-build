@@ -106,3 +106,41 @@ process BUILD_STRUCTURE_DB {
     touch structure_db.h5
     """
 }
+
+process EXPORT_FOLDSEEK_DB {
+    label "process_single"
+    tag "Exporting structure DB for FoldSeek"
+    container "docker.io/dessimozlab/omabuild:edge"
+
+    input:
+    tuple val(meta), path(db_h5), path(structure_db_h5)
+        
+    output:
+    tuple val(meta), path("${meta.id}")     , emit: foldseek_db
+
+    when:
+    task.ext.when == null || task.ext.when
+
+    script:
+    """
+    export_as_foldseek_db.py \\
+        --db-h5 $db_h5 \\
+        --struct-db $structure_db_h5 \\
+        --out-prefix ${meta.id}
+    """
+
+    stub:
+    """
+    mkdir -p ${meta.id}
+    touch ${meta.id}/${meta.id}
+    touch ${meta.id}/${meta.id}.index
+    touch ${meta.id}/${meta.id}.dbtype
+    touch ${meta.id}/${meta.id}_h
+    touch ${meta.id}/${meta.id}_h.index
+    touch ${meta.id}/${meta.id}_h.dbtype
+    touch ${meta.id}/${meta.id}_ss
+    touch ${meta.id}/${meta.id}_ss.index
+    touch ${meta.id}/${meta.id}_ss.dbtype
+    """
+
+}

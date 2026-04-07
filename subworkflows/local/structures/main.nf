@@ -3,12 +3,15 @@ include { IDENTIFY_ALPHAFOLD_ENTRIES; DOWNLOAD_CIF_FILES_FROM_ALPHAFOLD; DOWNLOA
 include { FOLDSEEK_EMBED_3DI as FOLDSEEK_CIF_TO_3DI } from "./../../../modules/nf-core/foldseek/createdb"
 include { FOLDSEEK_EMBED_3DI as INFER_3DI_FROM_FASTA } from "./../../../modules/nf-core/foldseek/createdb"
 include { BUILD_STRUCTURE_DB } from "./../../../modules/local/structures/"
+include { EXPORT_FOLDSEEK_DB } from "./../../../modules/local/structures/"
 
 
 workflow CREATE_3DI_STRUCTURE_DB {
     take:
         db_h5
         xref_h5
+        store_cif
+        export_foldseek_db
     
     main:
         // ----------------------------------------------------------------
@@ -72,7 +75,7 @@ workflow CREATE_3DI_STRUCTURE_DB {
             .collect()
 
         // CIF files — pass empty list if params.store_cif is false
-        cif_collected = params.store_cif
+        cif_collected = store_cif
             ? DOWNLOAD_CIF_FILES_FROM_ALPHAFOLD.out.cif
                 .map { _meta, cif -> cif }
                 .collect()
@@ -88,16 +91,16 @@ workflow CREATE_3DI_STRUCTURE_DB {
             inferred_fastas_collected,
             cif_collected
         )
-        // BUILD_STRUCTURE_DB(
-        //     db_h5,
-        //     CONVERT_CIF_TO_3DI_FASTA.out.fasta_3di.collect(),
-        //     DOWNLOAD_CIF_FILES_FROM_ALPHAFOLD.out.cif_folder.collect(),
-        //     INFER_3DI_FROM_FASTA.out.inferred_3di.collect()
-        // )
 
-    
+        export_params = export_foldseek_db
+            ? db_h5.combine(BUILD_STRUCTURE_DB.out.structure_db_h5)
+                .map{ db, structure_db -> tuple(['id': "oma_foldseek"], db, structure_db)}
+            : channel.value([])
+        EXPORT_FOLDSEEK_DB(export_params)
+        
     emit:
         //structure_db_h5 = BUILD_STRUCTURE_DB.out.structure_db_h5
         structure_db_h5 = BUILD_STRUCTURE_DB.out.structure_db_h5
+        foldseek_db = EXPORT_FOLDSEEK_DB.out.foldseek_db
 
 }
