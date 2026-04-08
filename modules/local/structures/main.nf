@@ -144,3 +144,30 @@ process EXPORT_FOLDSEEK_DB {
     """
 
 }
+
+process EXTRACT_MISSING_AA_SEQS {
+    tag "${meta.id}"
+    label 'process_low'
+    container "docker.io/dessimozlab/omabuild:edge"
+
+    input:
+    tuple val(meta), path(mapping_tsv), path(missing_txt)
+    path db_h5
+
+    output:
+    tuple val(meta), path("missing_seqs_${meta.id}.fa"), emit: fasta
+
+    script:
+    """
+    extract_missing_aa_seqs.py \\
+        --db-h5       ${db_h5} \\
+        --mapping-tsv ${mapping_tsv} \\
+        --missing-txt ${missing_txt} \\
+        --output      missing_seqs_${meta.id}.fa
+    """
+
+    stub:
+    """
+    touch missing_seqs_${meta.id}.fa
+    """
+}
