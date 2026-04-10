@@ -58,7 +58,7 @@ process DOWNLOAD_PROSTT5_MODEL {
     storeDir "${params.outputDir ?: './results'}/ProstT5"
 
     output:
-    tuple path("ProstT5_weights"), emit: weights
+    path "ProstT5_weights", emit: weights
 
     script:
     """

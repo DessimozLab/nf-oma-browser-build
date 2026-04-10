@@ -61,8 +61,8 @@ workflow CREATE_3DI_STRUCTURE_DB {
             .filter{ _meta, fasta -> fasta.size() > 0 } // only keep batches with missing sequences
             
         INFER_3DI_FROM_FASTA(
-            encode_batches.mix(rescue_batches), 
-            DOWNLOAD_PROSTT5_MODEL.out.weights
+            encode_batches.mix(rescue_batches),
+            DOWNLOAD_PROSTT5_MODEL.out.weights.first()
         )
 
         // ----------------------------------------------------------------
