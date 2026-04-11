@@ -118,7 +118,7 @@ def extract_sequences(
 
             for md5 in md5s:
                 # Look up all OMA entries sharing this md5
-                for row in entry_tab.where('MD5ProtHash == md5', {"md5": md5.encode('ascii')}):
+                for row in entry_tab.where('MD5ProteinHash == md5', {"md5": md5.encode('ascii')}):
                     entry = row.fetch_all_fields()
                     try:
                         seq: str = db.get_sequence(entry)
