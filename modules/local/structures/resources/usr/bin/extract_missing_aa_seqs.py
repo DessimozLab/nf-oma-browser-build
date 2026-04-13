@@ -121,7 +121,7 @@ def extract_sequences(
                 for row in entry_tab.where('MD5ProteinHash == md5', {"md5": md5.encode('ascii')}):
                     entry = row.fetch_all_fields()
                     try:
-                        seq: str = db.get_sequence(entry)
+                        seq: bytes = db.get_sequence(entry)
                     except Exception as exc:
                         print(
                             f"[WARN] Could not retrieve sequence for EntryNr {entry['EntryNr']} "
@@ -143,7 +143,7 @@ def extract_sequences(
                 out.write(f">{md5}\n")
                 # Wrap sequence at 80 characters
                 for i in range(0, len(seq), 80):
-                    out.write(seq[i : i + 80] + "\n")
+                    out.write(seq[i : i + 80].decode() + "\n")
                 n_written += 1
 
     print(

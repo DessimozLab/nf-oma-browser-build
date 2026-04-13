@@ -15,6 +15,7 @@ workflow CREATE_3DI_STRUCTURE_DB {
         export_foldseek_db
     
     main:
+        db_h5 = db_h5.first()
         // ----------------------------------------------------------------
         // 1. Identify AlphaFold entries and download their CIF files
         // ----------------------------------------------------------------
@@ -34,8 +35,6 @@ workflow CREATE_3DI_STRUCTURE_DB {
             channel.value([])
         )
                
-        // // get fasta sequences for the UP entries without AlphaFold structures, to be used as input for 3DI inference as well
-        // FASTA_OF_MISSING_ALPHAFOLD_ENTRIES(db_h5, DOWNLOAD_CIF_FILES_FROM_ALPHAFOLD.out.missing)
         // ----------------------------------------------------------------
         // 3. Rescue missing AlphaFold entries:
         //    join the mapping TSV with the missing-*.txt from the same batch
