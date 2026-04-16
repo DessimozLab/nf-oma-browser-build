@@ -73,7 +73,7 @@ def write_non_af_fastas(db, af_accs, fasta_out_prefix, batch_size):
             fout.close()
             logging.info(f"Wrote {batch_len} sequences to {out_file}")
             batch_num += 1
-            out_file = f"{fasta_out_prefix}{batch_num:03d}.fasta.gz"
+            out_file = f"{fasta_out_prefix}{batch_num:03d}.fa.gz"
             fout = gzip.open(out_file, "wt")
             batch_len = 0
     fout.close()
