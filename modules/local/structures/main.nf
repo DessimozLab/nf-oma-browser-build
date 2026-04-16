@@ -68,6 +68,7 @@ process DOWNLOAD_PROSTT5_MODEL {
 
 process BUILD_STRUCTURE_DB {
     label "process_single"
+    label "process_high_memory"
     container "docker.io/dessimozlab/omabuild:edge"
     tag "Build structure DB"
     
