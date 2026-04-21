@@ -59,8 +59,7 @@ process HOGPROP {
 }
 
 process HOGPROP_COLLECT {
-    label "process_single"
-    label "process_high_memory"
+    label "process_high"
     label "process_long"
     container "docker.io/dessimozlab/omabuild:edge"
 
@@ -73,7 +72,7 @@ process HOGPROP_COLLECT {
 
     script:
         """
-        hogprop-browser-convert --oma_db $omadb --input-folder results/ --out go.h5
+        hogprop-browser-convert --oma_db $omadb --input-folder results/ --out go.h5 --nworkers ${task.cpus}
         """
 
     stub:
