@@ -1,7 +1,7 @@
 // Processes
 
 process GO_IMPORT {
-    label "process_medium"
+    label "process_high"
     label "HIGH_IO_ACCESS"
     container "docker.io/dessimozlab/omabuild:edge"
     
@@ -17,7 +17,7 @@ process GO_IMPORT {
     
     script:
         """
-        oma-build -vv import-go \\
+        oma-build -v import-go \\
             --xref-db $xref_db \\
             --og-db $og_db \\
             --out ./GO.h5 \\
