@@ -216,7 +216,7 @@ process DUMP_SPECIES_AND_TAXMAP {
 
     stub:
         """
-        touch species.tsv
-        touch tax_map.tsv
+        touch oma-species.txt
+        touch taxonomymap.pkl
         """
 }

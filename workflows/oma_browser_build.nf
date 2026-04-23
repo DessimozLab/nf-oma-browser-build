@@ -9,6 +9,7 @@ include { INFER_KEYWORDS } from "./../modules/local/keywords"
 include { INFER_HOG_PROFILES } from "./../modules/local/hogprofile"
 include { INFER_FINGERPRINTS } from '../modules/local/fingerprints/main.nf'
 include { OMAMER_BUILD } from '../modules/local/omamer/main.nf'
+include { DUMP_PROTEINS } from '../modules/local/export/main.nf'
 
 // Subworkflows
 include { EXTRACT_DARWIN } from "./../subworkflows/local/extract_darwin"
@@ -160,7 +161,10 @@ workflow OMA_BROWSER_BUILD {
                                             INFER_KEYWORDS.out.oma_group_keywords,
                                             INFER_FINGERPRINTS.out.oma_group_fingerprints,
                                             INFER_KEYWORDS.out.oma_hog_keywords)
-
+        if (params.oma_dumps) {
+            DUMP_PROTEINS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
+            download_files = download_files.mix(DUMP_PROTEINS.out.dumps)
+        }
         if (params.rdf_export) {
             RDF_EXPORT(IMPORT_HDF5.out.augmented_orthoxml,
                        COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5,
