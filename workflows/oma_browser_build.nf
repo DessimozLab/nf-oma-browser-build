@@ -66,12 +66,7 @@ workflow OMA_BROWSER_BUILD {
                     splice_json,
                     PREPARE_OMA_TAXONOMY.out.tax_db,
                     PREPARE_OMA_TAXONOMY.out.tax_pkl)
-        // collect auxillary files for the data folder
-        auxillary_data_files = IMPORT_HDF5.out.seqidx_h5.mix(
-            IMPORT_HDF5.out.seq_buf,
-            IMPORT_HDF5.out.tax_map_pickle
-        )
-
+        
         // import Domains
         DOMAINS(IMPORT_HDF5.out.db_h5)
 
@@ -82,6 +77,14 @@ workflow OMA_BROWSER_BUILD {
                  GEN_BROWSER_AUX_FILES.out.speciestree_phyloxml,
                  IMPORT_HDF5.out.orthoxml,
                  IMPORT_HDF5.out.species_info)
+
+        // collect auxillary files for the data folder
+        auxillary_data_files = IMPORT_HDF5.out.seqidx_h5.mix(
+            IMPORT_HDF5.out.seq_buf,
+            IMPORT_HDF5.out.tax_map_pickle,
+            GEN_BROWSER_AUX_FILES.out.speciestree_newick,
+            GEN_BROWSER_AUX_FILES.out.speciestree_phyloxml,
+        )
 
         // create OMAmer databases for levels defined in params.omamer_levels
         if (params.omamer_levels != null) {
