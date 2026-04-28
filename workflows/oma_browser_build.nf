@@ -163,7 +163,8 @@ workflow OMA_BROWSER_BUILD {
         COMBINE_HDF_AND_UPDATE_SUMMARY_DATA(h5_dbs_to_combine.collect(),
                                             INFER_KEYWORDS.out.oma_group_keywords,
                                             INFER_FINGERPRINTS.out.oma_group_fingerprints,
-                                            INFER_KEYWORDS.out.oma_hog_keywords)
+                                            INFER_KEYWORDS.out.oma_hog_keywords, 
+                                            params.canonical_source_order)
         if (params.oma_dumps) {
             DUMP_PROTEINS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
             download_files = download_files.mix(DUMP_PROTEINS.out.dumps)

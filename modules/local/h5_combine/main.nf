@@ -7,17 +7,22 @@ process COMBINE_HDF_AND_UPDATE_SUMMARY_DATA {
         path oma_group_keywords, name: "Keywords.txt"
         path oma_group_fingerprints, name: "Fingerprints.txt"
         path oma_hog_keywords, name: 'RootHOG_Keywords.txt'
+        val  canonical_source_order
 
     output:
         path "combined_file.h5", emit: combined_h5
 
     script:
+        def source_order_args = canonical_source_order
+            ? canonical_source_order.tokenize(',').collect { "\"${it.trim()}\"" }.join(' ')
+            : ''
         """
         rm -f combined_file.h5
         h5-merge.py -vv --out combined_file.h5 $h5files
 
         oma-build -vv update-summary \\
-            --db combined_file.h5
+            --db combined_file.h5 \\
+            ${source_order_args ? "--canonical-id-source ${source_order_args}" : ''}
         """
 
     stub:
