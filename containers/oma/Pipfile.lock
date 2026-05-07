@@ -2146,7 +2146,7 @@
             ],
             "git": "git+${LABGIT}/pyoma.git",
             "markers": "python_version >= '3.6'",
-            "ref": "bb5df14e7cd716b50acdc6d65e783ea3d99c5f84"
+            "ref": "95ffeb37af89f0dd77ab81118e507a94adf40f3b"
         },
         "pyopa": {
             "hashes": [
