@@ -24,6 +24,7 @@ process EDGEHOG {
                 --species_tree speciestree.nwk \\
                 --hdf5 $oma_db \\
                 --date_edges \\
+                --orient_edges \\
                 --out-format HDF5
         """
 
