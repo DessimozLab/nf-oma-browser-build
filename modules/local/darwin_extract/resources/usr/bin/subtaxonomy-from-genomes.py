@@ -70,7 +70,11 @@ def subtaxonomy_from_genomes(tax, genomes):
                         # and add all genomes as children of this node
                         if len(genomes[node.taxid]) == 1:
                             # only one genome for this taxid
-                            sciname = genomes[node.taxid][0]['SciName']
+                            the_genome = genomes[node.taxid][0]
+                            sciname = the_genome['SciName']
+                            if sciname.endswith(f" - {the_genome['UniProtSpeciesCode']}"):
+                                sciname = sciname[:-len(f" - {the_genome['UniProtSpeciesCode']}")].strip()
+                            print(f"WARNING: node: {node.taxid}; sciname: {node.sci_name}; {len(node.children)} sub-clades; only one genome with sciname: {the_genome['SciName']}; using internal node {sciname}", file=sys.stderr)
                         else:  # more than one genome
                             genomes_scinames = [g['SciName'] for g in genomes[node.taxid]]
                             print(f"node: {node.taxid}; sciname: {sciname}; {len(node.children)} sub-clades; genomes_scinames: {genomes_scinames}")
