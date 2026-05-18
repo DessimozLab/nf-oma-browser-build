@@ -24,3 +24,44 @@ process DUMP_PROTEINS {
         touch oma-cds.fa.gz
         """
 }
+
+process DUMP_UNIPROT_CROSSLINKS {
+    input:
+    path db
+
+    output:
+    path "UniProt-OMA.txt.gz", emit: uniprot_oma_mapping
+
+    script:
+    """
+    oma-dump -v uniprot-crosslinks \\
+        --db $db \\
+        --out UniProt-OMA.txt.gz
+    """
+
+    stub:
+    """
+    touch UniProt-OMA.txt.gz
+    """
+}
+
+process DUMP_NCBI_CROSSLINKS {
+    input:
+    path db
+
+    output:
+    path "ncbi/*", emit: ncbi_linkout_files
+
+    script:
+    """
+    mkdir -p ./ncbi
+    oma-dump -v ncbi-linkout \\
+        --db $db \\
+        --out ncbi/
+    """
+
+    stub:
+    """
+    touch NCBI-OMA.txt.gz
+    """
+}

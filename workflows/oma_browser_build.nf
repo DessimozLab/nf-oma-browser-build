@@ -10,6 +10,8 @@ include { INFER_HOG_PROFILES } from "./../modules/local/hogprofile"
 include { INFER_FINGERPRINTS } from '../modules/local/fingerprints/main.nf'
 include { OMAMER_BUILD } from '../modules/local/omamer/main.nf'
 include { DUMP_PROTEINS } from '../modules/local/export/main.nf'
+include { PREPARE_OMA_TAXONOMY } from '../modules/local/omataxonomy/main.nf'
+include { DUMP_UNIPROT_CROSSLINKS; DUMP_NCBI_CROSSLINKS } from '../modules/local/export/main.nf'
 
 // Subworkflows
 include { EXTRACT_DARWIN } from "./../subworkflows/local/extract_darwin"
@@ -20,7 +22,6 @@ include { CACHE_BUILDER  } from "./../subworkflows/local/cache_builder"
 include { EXTRACT_FASTOMA } from '../subworkflows/local/extract_fastoma/main.nf'
 include { ANCESTRAL_GO   } from "../subworkflows/local/ancestral_go/main.nf"
 include { RDF_EXPORT } from '../subworkflows/local/rdf_export/main.nf'
-include { PREPARE_OMA_TAXONOMY } from '../modules/local/omataxonomy/main.nf'
 
 workflow OMA_BROWSER_BUILD {
 
@@ -167,22 +168,22 @@ workflow OMA_BROWSER_BUILD {
                                             params.canonical_source_order)
         if (params.oma_dumps) {
             DUMP_PROTEINS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
-            download_files = download_files.mix(DUMP_PROTEINS.out.dumps)
+            DUMP_UNIPROT_CROSSLINKS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
+            DUMP_NCBI_CROSSLINKS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
+            download_files = download_files.mix(DUMP_PROTEINS.out.dumps, DUMP_UNIPROT_CROSSLINKS.out.uniprot_oma_mapping)
         }
         if (params.rdf_export) {
             RDF_EXPORT(IMPORT_HDF5.out.augmented_orthoxml,
                        COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5,
                        params.oma_dumps)
-            rdf_out = RDF_EXPORT.out.rdf_turtles
             download_files = download_files.mix(RDF_EXPORT.out.rdf_tarball)
-        } else {
-            rdf_out = Channel.empty()
         }
     emit:
         db        = COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5
         downloads = download_files
         aux_data  = auxillary_data_files
-        rdf       = rdf_out
+        rdf       = params.rdf_export ? RDF_EXPORT.out.rdf_turtles : Channel.empty()
+        ncbi      = params.oma_dumps ? DUMP_NCBI_CROSSLINKS.out.ncbi_linkout_files : Channel.empty()
 
 }
 
