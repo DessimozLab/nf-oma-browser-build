@@ -104,7 +104,7 @@ def timetree_from_speciesmap(mapping: Dict[str, str]) -> dendropy.Tree:
     map_back = {}
     pat = re.compile(r"[^a-zA-Z0-9_]")
     for code, name in mapping.items():
-        name = name.replace("(", "").replace(")", "").replace('.', "")
+        name = str(name).replace("(", "").replace(")", "").replace('.', "")
         name = pat.sub("_", name)
         map_back[name] = code
     
