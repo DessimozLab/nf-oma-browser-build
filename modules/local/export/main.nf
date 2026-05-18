@@ -26,6 +26,9 @@ process DUMP_PROTEINS {
 }
 
 process DUMP_UNIPROT_CROSSLINKS {
+    container "docker.io/dessimozlab/omabuild:edge"
+    tag "Dumping linkout mapping between UniProt and OMA"
+
     input:
     path db
 
@@ -46,6 +49,9 @@ process DUMP_UNIPROT_CROSSLINKS {
 }
 
 process DUMP_NCBI_CROSSLINKS {
+    container "docker.io/dessimozlab/omabuild:edge"
+    tag "Dumping linkout mapping between NCBI and OMA"
+    
     input:
     path db
 
