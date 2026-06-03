@@ -1,6 +1,7 @@
 process HOG_LSH_BUILD {
     label "process_medium"
     container "docker.io/dessimozlab/omabuild:edge"
+    tag "HOG LSH build for ${meta.id}"
 
     input:
         tuple val(meta), path(omadb)
@@ -42,7 +43,8 @@ process HOG_MAP_IDS {
         oma-build -vv hogmap-ids \\
             --target $target_lsh \\
             --old $old_releases_lsh \\
-            --out "OmaServer.hogmap.h5"
+            --out "OmaServer.hogmap.h5" \\
+            --index-class forest
         """
 
     stub:
