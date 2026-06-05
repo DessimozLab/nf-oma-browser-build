@@ -40,7 +40,7 @@ process HOG_MAP_IDS {
 
     script:
         """
-        oma-build -vv hogmap-ids \\
+        oma-build -v hogmap-ids \\
             --target $target_lsh \\
             --old $old_releases_lsh \\
             --out "OmaServer.hogmap.h5" \\
