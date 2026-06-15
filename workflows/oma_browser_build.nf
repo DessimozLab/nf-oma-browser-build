@@ -168,9 +168,10 @@ workflow OMA_BROWSER_BUILD {
                                             params.canonical_source_order)
         if (params.oma_dumps) {
             DUMP_PROTEINS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
+            DUMP_OMA_GROUPS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
             DUMP_UNIPROT_CROSSLINKS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
             DUMP_NCBI_CROSSLINKS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
-            download_files = download_files.mix(DUMP_PROTEINS.out.dumps, DUMP_UNIPROT_CROSSLINKS.out.uniprot_oma_mapping)
+            download_files = download_files.mix(DUMP_PROTEINS.out.dumps, DUMP_OMA_GROUPS.out.dumps, DUMP_UNIPROT_CROSSLINKS.out.uniprot_oma_mapping)
         }
         if (params.rdf_export) {
             RDF_EXPORT(IMPORT_HDF5.out.augmented_orthoxml,

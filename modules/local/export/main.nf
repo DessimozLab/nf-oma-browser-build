@@ -25,6 +25,31 @@ process DUMP_PROTEINS {
         """
 }
 
+process DUMP_OMA_GROUPS {
+    label "process_single"
+    container "docker.io/dessimozlab/omabuild:edge"
+    tag "Dumping OMA Groups"
+
+    input:
+        path db
+
+    output:
+        path "oma-groups.*.gz", emit: dumps
+
+    script:
+        """
+        oma-dump -v oma-groups \\
+            --db $db \\
+            --out-txt oma-groups.txt.gz \\
+            --out-orthoxml oma-groups.orthoXML.gz
+        """
+
+    stub:
+        """
+        touch oma-groups.txt.gz
+        """
+}
+
 process DUMP_UNIPROT_CROSSLINKS {
     container "docker.io/dessimozlab/omabuild:edge"
     tag "Dumping linkout mapping between UniProt and OMA"
