@@ -35,13 +35,15 @@ process DUMP_OMA_GROUPS {
 
     output:
         path "oma-groups.*.gz", emit: dumps
+        path "group-descriptions.txt.gz", emit: group_descriptions
 
     script:
         """
         oma-dump -v oma-groups \\
             --db $db \\
             --out-txt oma-groups.txt.gz \\
-            --out-orthoxml oma-groups.orthoXML.gz
+            --out-orthoxml oma-groups.orthoXML.gz \\
+            --out-keywords group-descriptions.txt.gz
         """
 
     stub:

@@ -12,6 +12,7 @@ include { OMAMER_BUILD } from '../modules/local/omamer/main.nf'
 include { DUMP_PROTEINS } from '../modules/local/export/main.nf'
 include { PREPARE_OMA_TAXONOMY } from '../modules/local/omataxonomy/main.nf'
 include { DUMP_UNIPROT_CROSSLINKS; DUMP_NCBI_CROSSLINKS } from '../modules/local/export/main.nf'
+include { DUMP_OMA_GROUPS } from '../modules/local/export/main.nf'
 
 // Subworkflows
 include { EXTRACT_DARWIN } from "./../subworkflows/local/extract_darwin"
@@ -171,7 +172,7 @@ workflow OMA_BROWSER_BUILD {
             DUMP_OMA_GROUPS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
             DUMP_UNIPROT_CROSSLINKS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
             DUMP_NCBI_CROSSLINKS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
-            download_files = download_files.mix(DUMP_PROTEINS.out.dumps, DUMP_OMA_GROUPS.out.dumps, DUMP_UNIPROT_CROSSLINKS.out.uniprot_oma_mapping)
+            download_files = download_files.mix(DUMP_PROTEINS.out.dumps, DUMP_OMA_GROUPS.out.dumps, DUMP_OMA_GROUPS.out.group_descriptions, DUMP_UNIPROT_CROSSLINKS.out.uniprot_oma_mapping)
         }
         if (params.rdf_export) {
             RDF_EXPORT(IMPORT_HDF5.out.augmented_orthoxml,
