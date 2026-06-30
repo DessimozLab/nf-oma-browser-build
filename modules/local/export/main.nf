@@ -52,6 +52,31 @@ process DUMP_OMA_GROUPS {
         """
 }
 
+process DUMP_ID_HISTORY {
+    label "process_single"
+    container "docker.io/dessimozlab/omabuild:edge"
+    tag "Dumping ID histories"
+
+    input:
+        path db
+        path prev_db
+
+    output:
+        path "IDHistory-*.txt.gz", emit: id_histories
+
+    script:
+        """
+        oma-dump -v id-history \\
+            --db $db \\
+            --prev-dbs $prev_db
+        """
+
+    stub:
+        """
+        touch IDHistory-test-to-test.txt.gz
+        """
+}
+
 process DUMP_UNIPROT_CROSSLINKS {
     container "docker.io/dessimozlab/omabuild:edge"
     tag "Dumping linkout mapping between UniProt and OMA"

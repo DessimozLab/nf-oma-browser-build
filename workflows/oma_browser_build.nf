@@ -23,6 +23,7 @@ include { CACHE_BUILDER  } from "./../subworkflows/local/cache_builder"
 include { EXTRACT_FASTOMA } from '../subworkflows/local/extract_fastoma/main.nf'
 include { ANCESTRAL_GO   } from "../subworkflows/local/ancestral_go/main.nf"
 include { RDF_EXPORT } from '../subworkflows/local/rdf_export/main.nf'
+include { DUMP_ID_HISTORY } from '../modules/local/export/main.nf'
 
 workflow OMA_BROWSER_BUILD {
 
@@ -170,9 +171,22 @@ workflow OMA_BROWSER_BUILD {
         if (params.oma_dumps) {
             DUMP_PROTEINS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
             DUMP_OMA_GROUPS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
+            old_releases = params.old_releases
+                ? Channel.fromPath(params.old_releases)
+                    .filter { path -> !path.toString().contains(params.oma_version) }
+                    .collect()
+                    .ifEmpty([])
+                : Channel.value([])
+            DUMP_ID_HISTORY(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5, old_releases)
             DUMP_UNIPROT_CROSSLINKS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
             DUMP_NCBI_CROSSLINKS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
-            download_files = download_files.mix(DUMP_PROTEINS.out.dumps, DUMP_OMA_GROUPS.out.dumps, DUMP_OMA_GROUPS.out.group_descriptions, DUMP_UNIPROT_CROSSLINKS.out.uniprot_oma_mapping)
+            download_files = download_files.mix(
+                DUMP_PROTEINS.out.dumps, 
+                DUMP_OMA_GROUPS.out.dumps, 
+                DUMP_OMA_GROUPS.out.group_descriptions, 
+                DUMP_ID_HISTORY.out.id_histories,
+                DUMP_UNIPROT_CROSSLINKS.out.uniprot_oma_mapping
+            )
         }
         if (params.rdf_export) {
             RDF_EXPORT(IMPORT_HDF5.out.augmented_orthoxml,
