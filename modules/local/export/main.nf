@@ -4,7 +4,7 @@ process DUMP_PROTEINS {
     tag "Dumping protein sequences and annotations"
 
     input:
-        path db
+        tuple val(meta), path(db)
         
     output:
         path "oma-*", emit: dumps
@@ -31,7 +31,7 @@ process DUMP_OMA_GROUPS {
     tag "Dumping OMA Groups"
 
     input:
-        path db
+        tuple val(meta), path(db)
 
     output:
         path "oma-groups.*.gz", emit: dumps
@@ -78,11 +78,12 @@ process DUMP_ID_HISTORY {
 }
 
 process DUMP_UNIPROT_CROSSLINKS {
+    label "process_single"
     container "docker.io/dessimozlab/omabuild:edge"
     tag "Dumping linkout mapping between UniProt and OMA"
 
     input:
-    path db
+    tuple val(meta), path(db)
 
     output:
     path "UniProt-OMA.txt.gz", emit: uniprot_oma_mapping
@@ -101,11 +102,12 @@ process DUMP_UNIPROT_CROSSLINKS {
 }
 
 process DUMP_NCBI_CROSSLINKS {
+    label "process_single"
     container "docker.io/dessimozlab/omabuild:edge"
     tag "Dumping linkout mapping between NCBI and OMA"
     
     input:
-    path db
+    tuple val(meta), path(db)
 
     output:
     path "ncbi/*", emit: ncbi_linkout_files
@@ -121,5 +123,24 @@ process DUMP_NCBI_CROSSLINKS {
     stub:
     """
     touch NCBI-OMA.txt.gz
+    """
+}
+
+process DUMP_VPAIRS {
+    label "process_single"
+    container "docker.io/dessimozlab/omabuild:edge"
+    tag "Dumping vpairs"
+
+    input:
+    tuple val(meta), path(db)
+
+    output:
+    path "oma-pairs.txt.gz", emit: vpairs
+
+    script:
+    """
+    oma-dump -v pairwise-orthologs \\
+        --db $db \\
+        --out oma-pairs.txt.gz
     """
 }

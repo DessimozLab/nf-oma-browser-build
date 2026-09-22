@@ -12,7 +12,7 @@ include { OMAMER_BUILD } from '../modules/local/omamer/main.nf'
 include { DUMP_PROTEINS } from '../modules/local/export/main.nf'
 include { PREPARE_OMA_TAXONOMY } from '../modules/local/omataxonomy/main.nf'
 include { DUMP_UNIPROT_CROSSLINKS; DUMP_NCBI_CROSSLINKS } from '../modules/local/export/main.nf'
-include { DUMP_OMA_GROUPS } from '../modules/local/export/main.nf'
+include { DUMP_OMA_GROUPS ; DUMP_VPAIRS } from '../modules/local/export/main.nf'
 
 // Subworkflows
 include { EXTRACT_DARWIN } from "./../subworkflows/local/extract_darwin"
@@ -169,8 +169,9 @@ workflow OMA_BROWSER_BUILD {
                                             INFER_KEYWORDS.out.oma_hog_keywords, 
                                             params.canonical_source_order)
         if (params.oma_dumps) {
-            DUMP_PROTEINS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
-            DUMP_OMA_GROUPS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
+            meta_and_db = IMPORT_HDF5.out.meta.combine(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
+            DUMP_PROTEINS(meta_and_db)
+            DUMP_OMA_GROUPS(meta_and_db)
             old_releases = params.old_releases
                 ? Channel.fromPath(params.old_releases)
                     .filter { path -> !path.toString().contains(params.oma_version) }
@@ -178,14 +179,16 @@ workflow OMA_BROWSER_BUILD {
                     .ifEmpty([])
                 : Channel.value([])
             DUMP_ID_HISTORY(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5, old_releases)
-            DUMP_UNIPROT_CROSSLINKS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
-            DUMP_NCBI_CROSSLINKS(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
+            DUMP_UNIPROT_CROSSLINKS(meta_and_db)
+            DUMP_NCBI_CROSSLINKS(meta_and_db)
+            DUMP_VPAIRS(meta_and_db)
             download_files = download_files.mix(
                 DUMP_PROTEINS.out.dumps, 
                 DUMP_OMA_GROUPS.out.dumps, 
                 DUMP_OMA_GROUPS.out.group_descriptions, 
                 DUMP_ID_HISTORY.out.id_histories,
-                DUMP_UNIPROT_CROSSLINKS.out.uniprot_oma_mapping
+                DUMP_UNIPROT_CROSSLINKS.out.uniprot_oma_mapping,
+                DUMP_VPAIRS.out.vpairs
             )
         }
         if (params.rdf_export) {
