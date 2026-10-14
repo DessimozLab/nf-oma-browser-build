@@ -12,7 +12,7 @@ include { OMAMER_BUILD } from '../modules/local/omamer/main.nf'
 include { DUMP_PROTEINS } from '../modules/local/export/main.nf'
 include { PREPARE_OMA_TAXONOMY } from '../modules/local/omataxonomy/main.nf'
 include { DUMP_UNIPROT_CROSSLINKS; DUMP_NCBI_CROSSLINKS } from '../modules/local/export/main.nf'
-include { DUMP_OMA_GROUPS ; DUMP_VPAIRS } from '../modules/local/export/main.nf'
+include { DUMP_OMA_GROUPS ; DUMP_VPAIRS ; DUMP_ROOTHOG_DESCRIPTIONS} from '../modules/local/export/main.nf'
 
 // Subworkflows
 include { EXTRACT_DARWIN } from "./../subworkflows/local/extract_darwin"
@@ -182,13 +182,15 @@ workflow OMA_BROWSER_BUILD {
             DUMP_UNIPROT_CROSSLINKS(meta_and_db)
             DUMP_NCBI_CROSSLINKS(meta_and_db)
             DUMP_VPAIRS(meta_and_db)
+            DUMP_ROOTHOG_DESCRIPTIONS(meta_and_db)
             download_files = download_files.mix(
                 DUMP_PROTEINS.out.dumps, 
                 DUMP_OMA_GROUPS.out.dumps, 
                 DUMP_OMA_GROUPS.out.group_descriptions, 
                 DUMP_ID_HISTORY.out.id_histories,
                 DUMP_UNIPROT_CROSSLINKS.out.uniprot_oma_mapping,
-                DUMP_VPAIRS.out.vpairs
+                DUMP_VPAIRS.out.vpairs,
+                DUMP_ROOTHOG_DESCRIPTIONS.out.roothog_descriptions
             )
         }
         if (params.rdf_export) {

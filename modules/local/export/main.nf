@@ -143,4 +143,33 @@ process DUMP_VPAIRS {
         --db $db \\
         --out oma-pairs.txt.gz
     """
+
+    stub:
+    """
+    touch oma-pairs.txt.gz
+    """
+}
+
+process DUMP_ROOTHOG_DESCRIPTIONS {
+    label "process_single"
+    container "docker.io/dessimozlab/omabuild:edge"
+    tag "Dumping rootHOG descriptions"
+
+    input:
+    tuple val(meta), path(db)
+
+    output:
+    path "roothog-descriptions.txt.gz", emit: roothog_descriptions
+
+    script:
+    """
+    oma-dump -v roothog-descriptions \\
+        --db $db \\
+        --out roothog-descriptions.txt.gz
+    """
+
+    stub:
+    """
+    touch roothog-descriptions.txt.gz
+    """
 }
