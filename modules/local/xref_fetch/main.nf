@@ -236,6 +236,7 @@ process DUMP_XREFS {
             --out-refseq oma-refseq.txt.gz \\
             --out-entrez oma-entrez.txt.gz \\
             --out-ensembl oma-ensembl.txt.gz \\
+            --out-source oma-source.txt.gz \\
             --out-ncbi oma-ncbi.txt.gz
         """
 }
