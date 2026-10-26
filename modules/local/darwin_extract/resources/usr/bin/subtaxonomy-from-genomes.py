@@ -16,38 +16,38 @@ def subtaxonomy_from_genomes(tax, genomes):
     ensure_unique_names(tree)
     seen = set()
     for node in tree.traverse(strategy="preorder"):
-        parent_taxid = node.up.taxid if node.up is not None and node != tree else 0
-        if node.taxid == parent_taxid:
+        parent_taxid = node.up.props['taxid'] if node.up is not None and node != tree else 0
+        if node.props['taxid'] == parent_taxid:
             continue
         
         is_genome_level = False
-        if node.taxid in (131567, 1):
-            node.taxid = 0
+        if node.props['taxid'] in (131567, 1):
+            node.add_prop('taxid', 0)
             parent_taxid = -1
             sciname = "LUCA"
-        elif node.sci_name.startswith("d__"):
-            sciname = node.sci_name.replace("d__", "")
-            node.taxid = tax.get_name_translator([sciname])[sciname][0]
+        elif node.props['sci_name'].startswith("d__"):
+            sciname = node.props['sci_name'].replace("d__", "")
+            node.add_prop('taxid', tax.get_name_translator([sciname])[sciname][0])
         else:
-            sciname = node.sci_name
-            if node.taxid in genomes:
+            sciname = node.props['sci_name']
+            if node.props['taxid'] in genomes:
                 # this taxid has at least one genome
                 # check, if there exist also sub-clades with genomes
                 has_sub_clades = len(node.children) > 0
 
-                if len(genomes[node.taxid]) == 1 and not has_sub_clades:
+                if len(genomes[node.props['taxid']]) == 1 and not has_sub_clades:
                     # regular case: one genome for this taxid, no further sub-clades extending it
                     # ensure that tax-name matches genome sciname
-                    genome = genomes[node.taxid][0]
+                    genome = genomes[node.props['taxid']][0]
                     sciname = genome['SciName']
                     is_genome_level = True
                 else:
                     # more complicated cases. Lets distinguish:
                     # 1. node more than genomes, but no sub-clades with genomes
-                    if len(genomes[node.taxid]) > 1 and not has_sub_clades:
-                        genomes_scinames = [g['SciName'] for g in genomes[node.taxid]]
+                    if len(genomes[node.props['taxid']]) > 1 and not has_sub_clades:
+                        genomes_scinames = [g['SciName'] for g in genomes[node.props['taxid']]]
                         prefix = commonprefix(genomes_scinames)
-                        print(f"node: {node.taxid}; sciname: {sciname}; genomes_scinames: {genomes_scinames}; one_is_prefix: {any(g == prefix for g in genomes_scinames)}")
+                        print(f"node: {node.props['taxid']}; sciname: {sciname}; genomes_scinames: {genomes_scinames}; one_is_prefix: {any(g == prefix for g in genomes_scinames)}")
                         if min((len(z) for z in genomes_scinames)) == max((len(z) for z in genomes_scinames)):
                             # at least two genomes which contains expected species sciname - os_code. 
                             # We use the expected species sciname as the ancestral taxonomy name
@@ -61,23 +61,23 @@ def subtaxonomy_from_genomes(tax, genomes):
                             # In this case, we don't change the scinames and don't add an extra internal node.
                             # instead all genomes will be added as children of the current parrent.
                             taxtab.extend([(genome['GenomeId'], parent_taxid, genome['SciName'], True) 
-                                          for genome in genomes[node.taxid]])
+                                          for genome in genomes[node.props['taxid']]])
                             continue
 
                     # 2. node has sub-clades with genomes
-                    elif has_sub_clades: # asserted that len(genomes[node.taxid]) >= 1
+                    elif has_sub_clades: # asserted that len(genomes[node.props['taxid']]) >= 1
                         # we need to create an internal node for this taxid
                         # and add all genomes as children of this node
-                        if len(genomes[node.taxid]) == 1:
+                        if len(genomes[node.props['taxid']]) == 1:
                             # only one genome for this taxid
-                            the_genome = genomes[node.taxid][0]
+                            the_genome = genomes[node.props['taxid']][0]
                             sciname = the_genome['SciName']
                             if sciname.endswith(f" - {the_genome['UniProtSpeciesCode']}"):
                                 sciname = sciname[:-len(f" - {the_genome['UniProtSpeciesCode']}")].strip()
-                            print(f"WARNING: node: {node.taxid}; sciname: {node.sci_name}; {len(node.children)} sub-clades; only one genome with sciname: {the_genome['SciName']}; using internal node {sciname}", file=sys.stderr)
+                            print(f"WARNING: node: {node.props['taxid']}; sciname: {node.props['sci_name']}; {len(node.children)} sub-clades; only one genome with sciname: {the_genome['SciName']}; using internal node {sciname}", file=sys.stderr)
                         else:  # more than one genome
-                            genomes_scinames = [g['SciName'] for g in genomes[node.taxid]]
-                            print(f"node: {node.taxid}; sciname: {sciname}; {len(node.children)} sub-clades; genomes_scinames: {genomes_scinames}")
+                            genomes_scinames = [g['SciName'] for g in genomes[node.props['taxid']]]
+                            print(f"node: {node.props['taxid']}; sciname: {sciname}; {len(node.children)} sub-clades; genomes_scinames: {genomes_scinames}")
                             if min((len(z) for z in genomes_scinames)) == max((len(z) for z in genomes_scinames)):
                                 # at least two genomes which contains expected species sciname - os_code. 
                                 # We use the expected species sciname as the ancestral taxonomy name
@@ -85,20 +85,20 @@ def subtaxonomy_from_genomes(tax, genomes):
                     else:
                         raise RuntimeError("Unexpected case: genomes with no sub-clades but no single genome either")
                     # create the current ncbi taxlevel node
-                    print(f"node: {node.taxid}; sciname: {sciname}")
-                    if node.sci_name != sciname:
-                        print(f"WARNING: taxonomy name mismatch: {node.sci_name} != {sciname}", file=sys.stderr)
-                    taxtab.append((node.taxid, parent_taxid, sciname, False))
-                    for genome in genomes[node.taxid]:
+                    print(f"node: {node.props['taxid']}; sciname: {sciname}")
+                    if node.props['sci_name'] != sciname:
+                        print(f"WARNING: taxonomy name mismatch: {node.props['sci_name']} != {sciname}", file=sys.stderr)
+                    taxtab.append((node.props['taxid'], parent_taxid, sciname, False))
+                    for genome in genomes[node.props['taxid']]:
                         nam = genome['SciName']
                         if not nam.endswith(f" - {genome['UniProtSpeciesCode']}"):
                             nam += f" - {genome['UniProtSpeciesCode']}"
                             print(f"WARNING: appending species code to genome name: {nam}", file=sys.stderr)
-                        taxtab.append((genome['GenomeId'], node.taxid, nam, True))
+                        taxtab.append((genome['GenomeId'], node.props['taxid'], nam, True))
                     continue
-        if node.taxid not in seen:
-            seen.add(node.taxid)
-            taxtab.append((node.taxid, parent_taxid, sciname, is_genome_level))
+        if node.props['taxid'] not in seen:
+            seen.add(node.props['taxid'])
+            taxtab.append((node.props['taxid'], parent_taxid, sciname, is_genome_level))
     return taxtab
 
 
@@ -108,8 +108,8 @@ def ensure_unique_names(tree):
     """
     name_count = collections.defaultdict(list)
     for node in tree.traverse(strategy="preorder"):
-        if node.sci_name:
-            name_count[node.sci_name].append(node)
+        if node.props['sci_name']:
+            name_count[node.props['sci_name']].append(node)
 
     duplicates = {name for name, nodes in name_count.items() if len(nodes) > 1}
     if not duplicates:
@@ -137,20 +137,20 @@ def ensure_unique_names(tree):
         oldest = [n for n, parents in n2p.items() if len(parents & nodes_set) == 0]
         if len(oldest) != 1:
             raise RuntimeError("Could not uniquely identify the oldest node among duplicates")
-        print(f"Keeping oldest node {oldest[0].taxid} for name {oldest[0].sci_name}", file=sys.stderr)
+        print(f"Keeping oldest node {oldest[0].props['taxid']} for name {oldest[0].props['sci_name']}", file=sys.stderr)
         return oldest[0]
 
 
     for dup in duplicates:
         nodes = name_count[dup]
         node_to_keep = find_node_to_keep(nodes)
-        print(f"{dup}: {len(nodes)} ({list((n.taxid, n.rank) for n in nodes)}); "
-              f"keep {node_to_keep.taxid} [{node_to_keep.sci_name} - {node_to_keep.rank}]", file=sys.stderr)
+        print(f"{dup}: {len(nodes)} ({list((n.props['taxid'], n.props['rank']) for n in nodes)}); "
+              f"keep {node_to_keep.props['taxid']} [{node_to_keep.props['sci_name']} - {node_to_keep.props['rank']}]", file=sys.stderr)
         for node in nodes:
             if node is node_to_keep:
-                print(f" keep {node.taxid} [{node.sci_name} - {node.rank}; parent: {node.up.taxid}]")
+                print(f" keep {node.props['taxid']} [{node.props['sci_name']} - {node.props['rank']}; parent: {node.up.props['taxid']}]")
                 continue
-            print(f" remove {node.taxid} [{node.sci_name} - {node.rank}; parent: {node.up.taxid}; children: {list(n.taxid for n in node.children)}]")
+            print(f" remove {node.props['taxid']} [{node.props['sci_name']} - {node.props['rank']}; parent: {node.up.props['taxid']}; children: {list(n.props['taxid'] for n in node.children)}]")
             node.delete(prevent_nondicotomic=False)
         
 

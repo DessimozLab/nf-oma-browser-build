@@ -6,7 +6,7 @@ import shutil
 import sys
 import logging
 from pathlib import Path
-from omataxonomy import Taxonomy
+from omataxonomy import Taxonomy, is_taxadb_up_to_date
 logger = logging.getLogger('build_verify_taxdb')
 
 
@@ -22,7 +22,7 @@ def check_existance(db_path):
 
 def main():
     # Setup command-line argument parser
-    parser = argparse.ArgumentParser(description="Check if the ete3 NCBI taxonomy database can be loaded.")
+    parser = argparse.ArgumentParser(description="Check if the omataxonomy database can be loaded.")
     parser.add_argument("--path",  help="Path to the NCBI taxonomy database folder")
     parser.add_argument("-v", "--verbose", action="count", default=0, help="Increase verbosity level")
     parser.add_argument('--out-db', help="Name of the output database file")
@@ -40,14 +40,22 @@ def main():
     if args.path is not None:
         try:
             db, pkl = check_existance(args.path)
-            try:
-                print(f"creating symlink {db} to {out_db} and {pkl} to {out_pkl}")
-                out_db.symlink_to(db)
-                out_pkl.symlink_to(pkl)
-            except IOError as e:
-                print(f"Cannot create symlinks: {e} - Will copy files instead", file=sys.stderr)
+            if not is_taxadb_up_to_date(db):
+                # omataxonomy upgrades outdated databases in place (re-downloading the taxonomies).
+                # work on a copy, so that the input database is not modified through a symlink.
+                print(f"{db} has an outdated format and will be upgraded. Copying it to {out_db} first", file=sys.stderr)
                 shutil.copy(db, out_db)
-                shutil.copy(pkl, out_pkl)
+                if pkl.is_file():
+                    shutil.copy(pkl, out_pkl)
+            else:
+                try:
+                    print(f"creating symlink {db} to {out_db} and {pkl} to {out_pkl}")
+                    out_db.symlink_to(db)
+                    out_pkl.symlink_to(pkl)
+                except IOError as e:
+                    print(f"Cannot create symlinks: {e} - Will copy files instead", file=sys.stderr)
+                    shutil.copy(db, out_db)
+                    shutil.copy(pkl, out_pkl)
         except Exception as e:
             print(f"Error loading input taxonomy: {e}", file=sys.stderr)
             print(f"Generate new database file in {args.out_db}", file=sys.stderr)

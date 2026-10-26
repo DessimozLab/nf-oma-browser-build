@@ -5,7 +5,7 @@ import csv
 import re
 import logging
 from typing import Dict, List, Tuple
-import ete3
+import ete4
 import omataxonomy
 from pyoma.common import auto_open
 logger = logging.getLogger(__name__)
@@ -64,17 +64,17 @@ class TaxidProvider:
         return node
 
 
-def taxonomy_from_tree(tree: ete3.Tree, taxprovider:TaxidProvider) -> Tuple[List[Tuple[int, int, str]], List[Dict]]:
+def taxonomy_from_tree(tree: ete4.Tree, taxprovider:TaxidProvider) -> Tuple[List[Tuple[int, int, str]], List[Dict]]:
     tax = []
     gs = []
     sp_id_cnt = 0
     for node in tree.traverse("preorder"):
-        if node.up is None and node.name == '':
+        if node.up is None and not node.name:
             node.name = "Root"
         taxdata = taxprovider.get_node(node.name)
         logger.debug(f"Node {node} ({node.name}) -> {taxdata}")
-        node.add_feature('taxid', taxdata['NCBITaxonId'])
-        if node.is_leaf():
+        node.add_prop('taxid', taxdata['NCBITaxonId'])
+        if node.is_leaf:
             if "SciName" not in taxdata:
                 taxdata['SciName'] = taxdata["Name"]
             if 'Mnemonic' not in taxdata:
@@ -89,8 +89,8 @@ def taxonomy_from_tree(tree: ete3.Tree, taxprovider:TaxidProvider) -> Tuple[List
             if "OriginalNCBITaxonId" not in taxdata:
                 taxdata["OriginalNCBITaxonId"] = taxdata["NCBITaxonId"]
             gs.append(taxdata)
-        parent_taxid = node.up.taxid if node.up is not None else 0
-        tax.append((taxdata['NCBITaxonId'], parent_taxid, taxdata.get('SciName', taxdata['Name']), node.is_leaf()))
+        parent_taxid = node.up.props['taxid'] if node.up is not None else 0
+        tax.append((taxdata['NCBITaxonId'], parent_taxid, taxdata.get('SciName', taxdata['Name']), node.is_leaf))
     return tax, gs
 
 def parse_genomes_tsv(genomes_tsv):
@@ -122,11 +122,15 @@ if __name__ == '__main__':
     conf = parser.parse_args()
     logging.basicConfig(level=logging.DEBUG)
 
-    speciestree = ete3.Tree(conf.tree, format=1)
+    with open(conf.tree) as fh:
+        speciestree = ete4.Tree(fh, parser=1)
+    for node in speciestree.traverse():
+        if node.name is None:  # ete4 uses None for unnamed nodes, ete3 used ''
+            node.name = ''
     mapping = CustomDefaultDict() if conf.mapping is None else parse_genomes_tsv(conf.mapping)
     logger.info(mapping)
     taxprovider = TaxidProvider(mapping)
-    taxprovider.augment_by_taxonomy([n.name for n in speciestree.get_descendants()], conf.taxonomy)
+    taxprovider.augment_by_taxonomy([n.name for n in speciestree.descendants()], conf.taxonomy)
     taxtab, gs = taxonomy_from_tree(speciestree, taxprovider)
 
     with open(conf.out_tax, 'w') as f:

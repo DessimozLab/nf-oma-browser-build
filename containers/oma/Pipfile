@@ -9,7 +9,8 @@ hogprop = {git = "git+${LABGIT}/hogprop2"}
          #branch = "nf-convert",
          #ref = "v0.13.3"
 pyoma = {git = "git+${LABGIT}/pyoma.git", ref = "nf-convert", extras = ["create_db", "enrichment", "notebooks"]}
-omataxonomy = "*"
+omataxonomy = ">=0.5"  # ete4 based; the bin scripts use ete4 props on its trees
+ete4 = ">=4.3,<5"  # used directly by the resources/usr/bin scripts
 
 [dev-packages]
 

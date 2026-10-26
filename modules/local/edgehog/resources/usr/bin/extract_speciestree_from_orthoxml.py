@@ -2,7 +2,7 @@
 
 import argparse
 from xml.etree.ElementTree import XMLParser
-import ete3
+import ete4
 
 
 class StopParsing(Exception):
@@ -17,8 +17,9 @@ class TaxParser:
     def start(self, tag, attrib):
         if tag == "{http://orthoXML.org/2011/}taxon":
             print(tag, attrib)
-            taxon = ete3.Tree(name=attrib['name'])
-            taxon.add_feature('taxid', int(attrib['id']))
+            taxon = ete4.Tree()
+            taxon.name = attrib['name']
+            taxon.add_prop('taxid', int(attrib['id']))
             self.taxon_stack.append(taxon)
             if len(self.taxon_stack) > 1:
                 self.taxon_stack[-2].add_child(child=taxon)
@@ -30,7 +31,7 @@ class TaxParser:
                 self.root = taxon
                 raise StopParsing()
 
-def extract_speciestree_from_orthoxml(orthoxml_file: str) -> ete3.Tree:
+def extract_speciestree_from_orthoxml(orthoxml_file: str) -> ete4.Tree:
     taxparser = TaxParser()
     parser = XMLParser(target=taxparser)
     try:
@@ -49,4 +50,5 @@ if __name__ == "__main__":
     args = argparser.parse_args()
 
     species_tree = extract_speciestree_from_orthoxml(args.orthoxml)
-    species_tree.write(format=1, outfile=args.outtree, quoted_node_names=True, format_root_node=True)
+    # ete4 quotes node names with special characters automatically
+    species_tree.write(outfile=args.outtree, parser=1, format_root_node=True)
