@@ -5,7 +5,7 @@ name = "pypi"
 
 [packages]
 edgehog = "*"
-hogprop = {git = "git+${LABGIT}/hogprop2"}
+hogprop = {git = "git+${LABGIT}/hogprop2", ref="d3b0f3e56549d6a3bad012a9f03d6d282f1c1ef9"}
          #branch = "nf-convert",
          #ref = "v0.13.3"
 pyoma = {git = "git+${LABGIT}/pyoma.git", ref = "nf-convert", extras = ["create_db", "enrichment", "notebooks"]}
