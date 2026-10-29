@@ -1,7 +1,7 @@
 process INFER_FINGERPRINTS {
     label "process_single"
     label "HIGH_IO_ACCESS"
-    container "docker.io/dessimozlab/omabuild:1.6.0"
+    container "docker.io/dessimozlab/omabuild:edge"
 
     input:
         tuple val(meta), path(db_h5), path(seqidx_h5), path(seq_buf)

@@ -1,6 +1,6 @@
 process DUMP_PROTEINS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.6.0"
+    container "docker.io/dessimozlab/omabuild:edge"
     tag "Dumping protein sequences and annotations"
 
     input:
@@ -27,7 +27,7 @@ process DUMP_PROTEINS {
 
 process DUMP_OMA_GROUPS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.6.0"
+    container "docker.io/dessimozlab/omabuild:edge"
     tag "Dumping OMA Groups"
 
     input:
@@ -54,7 +54,7 @@ process DUMP_OMA_GROUPS {
 
 process DUMP_ID_HISTORY {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.6.0"
+    container "docker.io/dessimozlab/omabuild:edge"
     tag "Dumping ID histories"
 
     input:
@@ -79,7 +79,7 @@ process DUMP_ID_HISTORY {
 
 process DUMP_UNIPROT_CROSSLINKS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.6.0"
+    container "docker.io/dessimozlab/omabuild:edge"
     tag "Dumping linkout mapping between UniProt and OMA"
 
     input:
@@ -103,7 +103,7 @@ process DUMP_UNIPROT_CROSSLINKS {
 
 process DUMP_NCBI_CROSSLINKS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.6.0"
+    container "docker.io/dessimozlab/omabuild:edge"
     tag "Dumping linkout mapping between NCBI and OMA"
     
     input:
@@ -128,7 +128,7 @@ process DUMP_NCBI_CROSSLINKS {
 
 process DUMP_VPAIRS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.6.0"
+    container "docker.io/dessimozlab/omabuild:edge"
     tag "Dumping vpairs"
 
     input:
@@ -152,7 +152,7 @@ process DUMP_VPAIRS {
 
 process DUMP_ROOTHOG_DESCRIPTIONS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.6.0"
+    container "docker.io/dessimozlab/omabuild:edge"
     tag "Dumping rootHOG descriptions"
 
     input:
