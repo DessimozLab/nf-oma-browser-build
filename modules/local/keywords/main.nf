@@ -1,6 +1,6 @@
 process INFER_KEYWORDS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:${params.container_tag}"
 
     input:
         val meta

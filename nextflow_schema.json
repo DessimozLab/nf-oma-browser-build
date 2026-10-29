@@ -253,6 +253,14 @@
           "fa_icon": "fas fa-question-circle",
           "hidden": true
         },
+        "container_tag": {
+          "type": "string",
+          "default": "edge",
+          "description": "Tag of the dessimozlab containers (omabuild, omadarwin, omabuild-rdf-*) to use.",
+          "help_text": "The container build workflow tags the images with the branch name. CI sets this to the branch being tested.",
+          "fa_icon": "fab fa-docker",
+          "hidden": true
+        },
         "custom_config_version": {
           "type": "string",
           "description": "version of configuration base to include (nf-core configs)",

@@ -1,7 +1,7 @@
 process ASSIGN_CATH_SUPERFAMILIES {
     label "process_single"
     
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:${params.container_tag}"
 
     input:
         tuple val(meta), path(resolve_csh)

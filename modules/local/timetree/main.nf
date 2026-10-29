@@ -1,6 +1,6 @@
 process DATE_SPECIES_TREE {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:${params.container_tag}"
     tag "Dating species tree"
 
     input:

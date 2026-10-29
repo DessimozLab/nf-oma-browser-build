@@ -1,6 +1,6 @@
 process HOG_LSH_BUILD {
     label "process_medium"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:${params.container_tag}"
     tag "HOG LSH build for ${meta.id}"
 
     input:
@@ -29,7 +29,7 @@ process HOG_LSH_BUILD {
 
 process HOG_MAP_IDS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:edge"
+    container "docker.io/dessimozlab/omabuild:${params.container_tag}"
 
     input:
         path target_lsh

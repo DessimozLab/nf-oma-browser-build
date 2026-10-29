@@ -87,4 +87,15 @@ jobs:
           version: '24.10.5'
 
       - name: Run Nextflow pipeline
-        run: nextflow run main.nf -profile docker,test
+        # use the containers built by the job above. docker/metadata-action tags them with the
+        # branch name (type=ref,event=branch), where invalid tag characters are replaced by '-',
+        # and for version tags with the version without 'v' (type=semver,pattern={{version}}).
+        # the 'edge' tag is only set on the default branch.
+        run: |
+          if [ "${GITHUB_REF_TYPE}" = "tag" ]; then
+            CONTAINER_TAG="${GITHUB_REF_NAME#v}"
+          else
+            CONTAINER_TAG=$(echo "${GITHUB_REF_NAME}" | sed -E 's/[^a-zA-Z0-9._-]+/-/g')
+          fi
+          echo "using container tag ${CONTAINER_TAG}"
+          nextflow run main.nf -profile docker,test --container_tag "${CONTAINER_TAG}"
