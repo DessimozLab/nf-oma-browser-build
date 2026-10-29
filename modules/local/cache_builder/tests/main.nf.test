@@ -1,0 +1,27 @@
+nextflow_process {
+
+    name "Test Process GENERATE_JOBS"
+    script "../main.nf"
+    process "GENERATE_JOBS"
+
+    test("splits the OMA db into a singleton job plus one job per family chunk") {
+
+        options "-stub-run"
+
+        when {
+            process {
+                """
+                input[0] = file("${projectDir}/testdata/taxonomy.sqlite")
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert process.out.job_file[0].size() == 3
+            assert process.out.entry_to_fam_file[0].endsWith('cache-job_entry_to_fam.npy')
+        }
+
+    }
+
+}

@@ -49,6 +49,7 @@ process DUMP_OMA_GROUPS {
     stub:
         """
         touch oma-groups.txt.gz
+        touch group-descriptions.txt.gz
         """
 }
 
@@ -122,7 +123,8 @@ process DUMP_NCBI_CROSSLINKS {
 
     stub:
     """
-    touch NCBI-OMA.txt.gz
+    mkdir -p ncbi
+    touch ncbi/NCBI-OMA.txt.gz
     """
 }
 

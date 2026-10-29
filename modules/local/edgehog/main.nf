@@ -30,6 +30,7 @@ process EDGEHOG {
 
     stub:
         """
+        mkdir -p edgehog_output
         touch edgehog_output/Synteny.h5
         """
 }

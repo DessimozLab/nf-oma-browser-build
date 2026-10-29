@@ -22,6 +22,20 @@ process CONVERT_SPECIES_TREE {
              --out-tax tax.tsv \\
              --out-genomes gs.tsv
         """
+
+    stub:
+        // Fabricate one genome-summary row per UniProtSpeciesCode-like leaf name (5 upper-case
+        // letters) found in the species tree, so downstream per-genome processing has something
+        // to iterate over when this stub is used (e.g. under nf-test -stub-run).
+        """
+        touch tax.tsv
+        {
+            printf "Name\\tUniProtSpeciesCode\\tNCBITaxonId\\n"
+            grep -oE '[A-Z]{5}' $speciestree | sort -u | while read -r name; do
+                printf "%s\\t%s\\t0\\n" "\$name" "\$name"
+            done
+        } > gs.tsv
+        """
 }
 
 process CONVERT_PROTEOME {
@@ -49,6 +63,13 @@ process CONVERT_PROTEOME {
             --out-meta ${meta.Name}-meta.json \\
             --out-oma-groups ${meta.Name}-groups.json
         """
+
+    stub:
+        """
+        touch ${meta.Name}.json
+        touch ${meta.Name}-meta.json
+        touch ${meta.Name}-groups.json
+        """
 }
 
 
@@ -65,6 +86,11 @@ process CONVERT_SPLICINGS {
     script:
         """
         echo {} > splice.json
+        """
+
+    stub:
+        """
+        touch splice.json
         """
 }
 
@@ -87,6 +113,11 @@ process FINALIZE_GS {
             --genome-data $genome_jsons \\
             --out genome_data.tsv \\
         """
+
+    stub:
+        """
+        touch genome_data.tsv
+        """
 }
 
 process  MERGE_JSON {
@@ -102,5 +133,10 @@ process  MERGE_JSON {
     script:
         """
         merge_jsons.py --input $json_files --out oma-groups.json
+        """
+
+    stub:
+        """
+        touch oma-groups.json
         """
 }

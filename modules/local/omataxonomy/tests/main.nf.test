@@ -1,0 +1,53 @@
+nextflow_process {
+
+    name "Test Process PREPARE_OMA_TAXONOMY"
+    script "../main.nf"
+    process "PREPARE_OMA_TAXONOMY"
+
+    test("builds a fresh taxonomy db when input is the NO_FILE sentinel") {
+
+        options "-stub-run"
+
+        when {
+            params {
+                outdir = "tests/results"
+            }
+            process {
+                """
+                input[0] = file("${projectDir}/assets/NO_FILE")
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert process.out.tax_db[0].endsWith('tax.sqlite')
+            assert process.out.tax_pkl[0].endsWith('tax.sqlite.traverse.pkl')
+        }
+
+    }
+
+    test("reuses an existing taxonomy sqlite file when provided") {
+
+        options "-stub-run"
+
+        when {
+            params {
+                outdir = "tests/results"
+            }
+            process {
+                """
+                input[0] = file("${projectDir}/testdata/taxonomy.sqlite")
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert process.out.tax_db[0].endsWith('tax.sqlite')
+            assert process.out.tax_pkl[0].endsWith('tax.sqlite.traverse.pkl')
+        }
+
+    }
+
+}

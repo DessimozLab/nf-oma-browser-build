@@ -1,0 +1,59 @@
+nextflow_process {
+
+    name "Test Process COMBINE_HDF_AND_UPDATE_SUMMARY_DATA"
+    script "../main.nf"
+    process "COMBINE_HDF_AND_UPDATE_SUMMARY_DATA"
+
+    test("combines multiple hdf5 files with a canonical source order set") {
+
+        options "-stub-run"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    file("${projectDir}/testdata/taxonomy.sqlite"),
+                    file("${projectDir}/testdata/taxonomy.sqlite.traverse.pkl")
+                ]
+                input[1] = file("${projectDir}/testdata/cath-names.txt")
+                input[2] = file("${projectDir}/testdata/cath-names.txt")
+                input[3] = file("${projectDir}/testdata/cath-names.txt")
+                input[4] = "UniProtKB/SwissProt,SourceAC"
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert process.out.combined_h5[0].endsWith('combined_file.h5')
+        }
+
+    }
+
+    test("also succeeds when no canonical source order is given") {
+
+        options "-stub-run"
+
+        when {
+            process {
+                """
+                input[0] = [
+                    file("${projectDir}/testdata/taxonomy.sqlite"),
+                    file("${projectDir}/testdata/taxonomy.sqlite.traverse.pkl")
+                ]
+                input[1] = file("${projectDir}/testdata/cath-names.txt")
+                input[2] = file("${projectDir}/testdata/cath-names.txt")
+                input[3] = file("${projectDir}/testdata/cath-names.txt")
+                input[4] = ''
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert process.out.combined_h5[0].endsWith('combined_file.h5')
+        }
+
+    }
+
+}

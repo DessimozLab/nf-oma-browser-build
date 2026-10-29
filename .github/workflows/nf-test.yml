@@ -1,0 +1,40 @@
+name: nf-test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  nf-test:
+    name: run nf-test suite (stub mode)
+    # pushes to branches of this repo already trigger a run; only test PRs from forks again
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Install Nextflow
+        uses: nf-core/setup-nextflow@v2
+        with:
+          version: '24.10.5'
+
+      - name: Install nf-test
+        uses: nf-core/setup-nf-test@v2
+        with:
+          version: '0.9.5'
+
+      # all tests run with -stub-run and need neither docker nor the pipeline containers
+      - name: Run nf-test
+        run: nf-test test --ci --verbose --junitxml=nf-test-results.xml
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nf-test-results
+          path: |
+            nf-test-results.xml
+            .nf-test/tests/*/meta/nextflow.log
+          if-no-files-found: ignore

@@ -1,0 +1,31 @@
+nextflow_process {
+
+    name "Test Process INFER_FINGERPRINTS"
+    script "../main.nf"
+    process "INFER_FINGERPRINTS"
+
+    test("wires the db/seqidx/seqbuf tuple through to the fingerprints file") {
+
+        options "-stub-run"
+
+        when {
+            process {
+                """
+                input[0] = tuple(
+                    [id: 'test_run', nr_of_amino_acids: 3000],
+                    file("${projectDir}/testdata/taxonomy.sqlite"),
+                    file("${projectDir}/testdata/cath-names.txt"),
+                    file("${projectDir}/testdata/taxonomy.sqlite.traverse.pkl")
+                )
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert process.out.oma_group_fingerprints[0].endsWith('Fingerprints.txt')
+        }
+
+    }
+
+}

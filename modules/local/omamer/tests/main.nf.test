@@ -1,0 +1,54 @@
+nextflow_process {
+
+    name "Test Process OMAMER_BUILD"
+    script "../main.nf"
+    process "OMAMER_BUILD"
+
+    test("names the output database after the requested taxonomic level") {
+
+        options "-stub-run"
+
+        when {
+            process {
+                """
+                input[0] = tuple(
+                    [id: 'Metazoa'],
+                    file("${projectDir}/testdata/taxonomy.sqlite"),
+                    file("${projectDir}/testdata/fastoma/species_tree_checked.nwk")
+                )
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert process.out.omamer_db[0][0] == [id: 'Metazoa']
+            assert process.out.omamer_db[0][1].endsWith('Metazoa.h5')
+        }
+
+    }
+
+    test("uses a different level id for a different request") {
+
+        options "-stub-run"
+
+        when {
+            process {
+                """
+                input[0] = tuple(
+                    [id: 'Primates'],
+                    file("${projectDir}/testdata/taxonomy.sqlite"),
+                    file("${projectDir}/testdata/fastoma/species_tree_checked.nwk")
+                )
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert process.out.omamer_db[0][1].endsWith('Primates.h5')
+        }
+
+    }
+
+}

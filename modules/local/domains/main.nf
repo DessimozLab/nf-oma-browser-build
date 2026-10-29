@@ -16,6 +16,12 @@ process IDENTIFY_PROTEINS_WITHOUT_DOMAIN_ANNOTATION {
             --out prot-chunk \\
             ${domain_files.size() > 0 ? "--anno $domain_files" : ""}
         """
+
+    stub:
+        """
+        touch prot-chunk_001.fa
+        touch prot-chunk_002.fa
+        """
 }
 
 
@@ -34,6 +40,11 @@ process COLLECT_RESOLVED_DOMAIN_ANNOTATIONS {
         format_cath_results_to_mdas_format.py \\
             domains.tsv \\
             $domain_files
+        """
+
+    stub:
+        """
+        touch domains.tsv
         """
 }
 

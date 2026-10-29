@@ -69,3 +69,7 @@ venv.bak/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 
+
+### nf-test
+.nf-test/
+.nf-test.log

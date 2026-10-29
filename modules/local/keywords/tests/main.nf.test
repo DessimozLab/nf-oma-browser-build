@@ -1,0 +1,29 @@
+nextflow_process {
+
+    name "Test Process INFER_KEYWORDS"
+    script "../main.nf"
+    process "INFER_KEYWORDS"
+
+    test("emits both the OMA group and the root-HOG keyword files") {
+
+        options "-stub-run"
+
+        when {
+            process {
+                """
+                input[0] = [id: 'test_run', nr_of_sequences: 10]
+                input[1] = file("${projectDir}/testdata/taxonomy.sqlite")
+                input[2] = file("${projectDir}/testdata/cath-names.txt")
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert process.out.oma_group_keywords[0].endsWith('Keywords.txt')
+            assert process.out.oma_hog_keywords[0].endsWith('RootHOG_Keywords.txt')
+        }
+
+    }
+
+}

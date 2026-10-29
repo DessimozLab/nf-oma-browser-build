@@ -96,7 +96,7 @@ workflow OMA_BROWSER_BUILD {
                 .combine(GEN_BROWSER_AUX_FILES.out.speciestree_newick)
                 .map{level, db, tree -> [[id: level], db, tree]}
             OMAMER_BUILD(omamer_jobs)
-            download_files = download_files.mix(OMAMER_BUILD.out.omamer_db)
+            download_files = download_files.mix(OMAMER_BUILD.out.omamer_db.map { meta, db_file -> db_file })
         }
 
         // create crossreferences
@@ -201,7 +201,7 @@ workflow OMA_BROWSER_BUILD {
         }
     emit:
         db        = COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5
-        downloads = download_files
+        downloads = download_files.flatten()
         aux_data  = auxillary_data_files
         rdf       = params.rdf_export ? RDF_EXPORT.out.rdf_turtles : Channel.empty()
         ncbi      = params.oma_dumps ? DUMP_NCBI_CROSSLINKS.out.ncbi_linkout_files : Channel.empty()

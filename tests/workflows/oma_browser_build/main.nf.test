@@ -1,0 +1,122 @@
+nextflow_workflow {
+
+    name "Test Workflow OMA_BROWSER_BUILD"
+    script "workflows/oma_browser_build.nf"
+    workflow "OMA_BROWSER_BUILD"
+    // shared FastOMA inputs; each test overrides only the params it exercises
+    config "./nextflow.config"
+
+    test("FastOMA source with all optional outputs disabled") {
+
+        options "-stub-run"
+
+        when {
+            workflow {
+                """
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.out.ncbi.size() == 0
+            assert workflow.out.rdf.size() == 0
+        }
+
+    }
+
+    test("oma_dumps enabled triggers the download-section dump processes") {
+
+        options "-stub-run"
+
+        when {
+            params {
+                oma_dumps = true
+            }
+            workflow {
+                """
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.out.ncbi.size() == 1
+            def downloads = workflow.out.downloads.toString()
+            assert downloads.contains('oma-seqs.fa.gz')
+            assert downloads.contains('oma-groups.txt.gz')
+            assert downloads.contains('IDHistory')
+            assert downloads.contains('UniProt-OMA.txt.gz')
+        }
+
+    }
+
+    test("rdf_export enabled emits RDF turtles but no tarball without oma_dumps") {
+
+        options "-stub-run"
+
+        when {
+            params {
+                rdf_export = true
+            }
+            workflow {
+                """
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.out.rdf.size() == 2
+            assert workflow.trace.succeeded().findAll { it.name.contains(':RDF_EXPORT:TAR') }.size() == 0
+        }
+
+    }
+
+    test("omamer_levels builds one OMAmer database per requested level") {
+
+        options "-stub-run"
+
+        when {
+            params {
+                omamer_levels = "Metazoa,Primates"
+            }
+            workflow {
+                """
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            def downloads = workflow.out.downloads.toString()
+            assert downloads.contains('Metazoa.h5')
+            assert downloads.contains('Primates.h5')
+        }
+
+    }
+
+    test("Production source runs the darwin extraction branch instead of FastOMA") {
+
+        options "-stub-run"
+
+        when {
+            params {
+                oma_source  = "Production"
+                genomes_dir = "${projectDir}/testdata/fastoma/proteome"
+            }
+            workflow {
+                """
+                """
+            }
+        }
+
+        then {
+            assert workflow.success
+            assert workflow.trace.succeeded().findAll { it.name.contains('EXTRACT_DARWIN') }.size() > 0
+            assert workflow.trace.succeeded().findAll { it.name.contains('EXTRACT_FASTOMA') }.size() == 0
+        }
+
+    }
+
+}

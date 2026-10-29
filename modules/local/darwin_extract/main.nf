@@ -23,6 +23,20 @@ process CONVERT_GS {
           done
         EOF
         """
+
+    stub:
+        // Fabricate one genome-summary row per fasta file found in the genomes directory, so
+        // downstream per-genome processing has something to iterate over when this stub is used
+        // (e.g. under nf-test -stub-run).
+        """
+        {
+            printf "Name\\tDBpath\\tUniProtSpeciesCode\\tTotEntries\\tTotAA\\tIsPolyploid\\n"
+            for fasta in $genomes/*.fa; do
+                name=\$(basename "\$fasta" .fa)
+                printf "%s\\t%s\\t%s\\t%s\\t%s\\t%s\\n" "\$name" "\$fasta" "\$name" 10 3000 false
+            done
+        } > gs.tsv
+        """
 }
 
 
@@ -51,6 +65,11 @@ process CONVERT_PROTEINS {
           done
         EOF
         """
+
+    stub:
+        """
+        touch ${genome.UniProtSpeciesCode}.json
+        """
 }
 
 process CONVERT_OMA_GROUPS {
@@ -67,6 +86,11 @@ process CONVERT_OMA_GROUPS {
     script:
         """
         extract-oma-groups.py --matrix $matrix_file --out oma_groups.json
+        """
+
+    stub:
+        """
+        touch oma_groups.json
         """
 }
 
@@ -94,6 +118,11 @@ process CONVERT_SPLICE_MAP {
           done
         EOF
         """
+
+    stub:
+        """
+        touch splice.json
+        """
 }
 
 process CONVERT_TAXONOMY {
@@ -115,5 +144,11 @@ process CONVERT_TAXONOMY {
         subtaxonomy-from-genomes.py --input $gs_tsv \\
              --database $sqlite_taxonomy \\
              --out taxonomy.tsv --merges taxid_merges.tsv
+        """
+
+    stub:
+        """
+        touch taxonomy.tsv
+        touch taxid_merges.tsv
         """
 }

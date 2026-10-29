@@ -239,4 +239,13 @@ process DUMP_XREFS {
             --out-source oma-source.txt.gz \\
             --out-ncbi oma-ncbi.txt.gz
         """
+
+    stub:
+        """
+        touch oma-uniprot.txt.gz
+        touch oma-refseq.txt.gz
+        touch oma-entrez.txt.gz
+        touch oma-ensembl.txt.gz
+        touch oma-ncbi.txt.gz
+        """
 }

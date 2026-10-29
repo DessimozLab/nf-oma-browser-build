@@ -1,0 +1,47 @@
+nextflow_process {
+
+    name "Test Process EDGEHOG"
+    script "../main.nf"
+    process "EDGEHOG"
+
+    test("wires a plain orthoxml file through to the synteny output") {
+
+        options "-stub-run"
+
+        when {
+            process {
+                """
+                input[0] = file("${projectDir}/testdata/fastoma/FastOMA_HOGs.orthoxml")
+                input[1] = file("${projectDir}/testdata/taxonomy.sqlite")
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert process.out.anc_synteny_h5[0].endsWith('edgehog_output/Synteny.h5')
+        }
+
+    }
+
+    test("also succeeds with a gzip-compressed orthoxml file") {
+
+        options "-stub-run"
+
+        when {
+            process {
+                """
+                input[0] = file("${projectDir}/testdata/refseq-test.gpff.gz")
+                input[1] = file("${projectDir}/testdata/taxonomy.sqlite")
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert process.out.anc_synteny_h5[0].endsWith('edgehog_output/Synteny.h5')
+        }
+
+    }
+
+}

@@ -13,6 +13,11 @@ process COUNT_GENES_WITH_ANNOTATION {
         """
         count_genes_with_annotations.py --omadb ${omadb}
         """
+
+    stub:
+        """
+        echo "0"
+        """
 }
 
 

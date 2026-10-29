@@ -1,0 +1,47 @@
+nextflow_process {
+
+    name "Test Process DUMP_ID_HISTORY"
+    script "../main.nf"
+    process "DUMP_ID_HISTORY"
+
+    test("wires the current and previous db files through to an id-history dump") {
+
+        options "-stub-run"
+
+        when {
+            process {
+                """
+                input[0] = file("${projectDir}/testdata/taxonomy.sqlite")
+                input[1] = file("${projectDir}/testdata/taxonomy.sqlite.traverse.pkl")
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert process.out.id_histories[0].endsWith('.txt.gz')
+        }
+
+    }
+
+    test("also succeeds when there are no previous releases") {
+
+        options "-stub-run"
+
+        when {
+            process {
+                """
+                input[0] = file("${projectDir}/testdata/taxonomy.sqlite")
+                input[1] = []
+                """
+            }
+        }
+
+        then {
+            assert process.success
+            assert process.out.id_histories[0].endsWith('.txt.gz')
+        }
+
+    }
+
+}

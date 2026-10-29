@@ -36,10 +36,15 @@ process ADD_GENOMES {
         """
 
     stub:
+        // Populate the numeric fields that config/base.config's dynamic resource directives
+        // (memory/time/cpus keyed on meta.nr_of_*) read from this file, so downstream processes
+        // can still compute valid resource requirements when this stub is used.
         """
         touch OmaServer.h5
         touch SourceXRefs.h5
-        echo '{}' > summary.json
+        cat <<-END_JSON > summary.json
+        {"nr_of_genomes": 3, "nr_of_taxa": 5, "nr_of_sequences": 10, "nr_of_amino_acids": 3000, "max_nr_seqs_in_genome": 5}
+        END_JSON
         """
 }
 
@@ -66,6 +71,7 @@ process BUILD_SEQINDEX {
     stub:
         """
         touch OmaServer.h5.idx
+        touch sequences.bin
         """
 }
 
@@ -187,6 +193,11 @@ process COMBINE_H5_FILES {
             --db OmaServer.h5 \
             --splice-json $splice_json \
             --divergence-times $divergence_times_tsv
+        """
+
+    stub:
+        """
+        touch OmaServer.h5
         """
 }
 
