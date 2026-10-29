@@ -14,7 +14,7 @@ def subtaxonomy_from_genomes(tax, genomes):
         tree = tree.children[0]
     
     ensure_unique_names(tree)
-
+    seen = set()
     for node in tree.traverse(strategy="preorder"):
         parent_taxid = node.up.taxid if node.up is not None and node != tree else 0
         if node.taxid == parent_taxid:
@@ -70,7 +70,11 @@ def subtaxonomy_from_genomes(tax, genomes):
                         # and add all genomes as children of this node
                         if len(genomes[node.taxid]) == 1:
                             # only one genome for this taxid
-                            sciname = genomes[node.taxid][0]['SciName']
+                            the_genome = genomes[node.taxid][0]
+                            sciname = the_genome['SciName']
+                            if sciname.endswith(f" - {the_genome['UniProtSpeciesCode']}"):
+                                sciname = sciname[:-len(f" - {the_genome['UniProtSpeciesCode']}")].strip()
+                            print(f"WARNING: node: {node.taxid}; sciname: {node.sci_name}; {len(node.children)} sub-clades; only one genome with sciname: {the_genome['SciName']}; using internal node {sciname}", file=sys.stderr)
                         else:  # more than one genome
                             genomes_scinames = [g['SciName'] for g in genomes[node.taxid]]
                             print(f"node: {node.taxid}; sciname: {sciname}; {len(node.children)} sub-clades; genomes_scinames: {genomes_scinames}")
@@ -92,7 +96,9 @@ def subtaxonomy_from_genomes(tax, genomes):
                             print(f"WARNING: appending species code to genome name: {nam}", file=sys.stderr)
                         taxtab.append((genome['GenomeId'], node.taxid, nam, True))
                     continue
-        taxtab.append((node.taxid, parent_taxid, sciname, is_genome_level))
+        if node.taxid not in seen:
+            seen.add(node.taxid)
+            taxtab.append((node.taxid, parent_taxid, sciname, is_genome_level))
     return taxtab
 
 

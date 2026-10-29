@@ -1,6 +1,6 @@
  process RDF_FROM_HDF5{
     label "process_medium"
-    container "docker.io/dessimozlab/omabuild-rdf-py:1.5.0"
+    container "docker.io/dessimozlab/omabuild-rdf-py:1.6.0"
 
     input:
         path database
@@ -12,7 +12,7 @@
     script:
         def prefix_arg = (prefixes.name != 'NO_FILE') ? "--ontology $prefixes" : "--ontology /usr/biosoda/prefixes.owl"
         """
-        OMAHDF5ToRDF.py -v \\
+        OMAHDF5ToRDF -v \\
             --out ./ \\
             ${prefix_arg} \\
             --nr-processes ${task.cpus} \\

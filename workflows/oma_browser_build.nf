@@ -9,6 +9,10 @@ include { INFER_KEYWORDS } from "./../modules/local/keywords"
 include { INFER_HOG_PROFILES } from "./../modules/local/hogprofile"
 include { INFER_FINGERPRINTS } from '../modules/local/fingerprints/main.nf'
 include { OMAMER_BUILD } from '../modules/local/omamer/main.nf'
+include { DUMP_PROTEINS } from '../modules/local/export/main.nf'
+include { PREPARE_OMA_TAXONOMY } from '../modules/local/omataxonomy/main.nf'
+include { DUMP_UNIPROT_CROSSLINKS; DUMP_NCBI_CROSSLINKS } from '../modules/local/export/main.nf'
+include { DUMP_OMA_GROUPS ; DUMP_VPAIRS ; DUMP_ROOTHOG_DESCRIPTIONS} from '../modules/local/export/main.nf'
 
 // Subworkflows
 include { EXTRACT_DARWIN } from "./../subworkflows/local/extract_darwin"
@@ -19,7 +23,7 @@ include { CACHE_BUILDER  } from "./../subworkflows/local/cache_builder"
 include { EXTRACT_FASTOMA } from '../subworkflows/local/extract_fastoma/main.nf'
 include { ANCESTRAL_GO   } from "../subworkflows/local/ancestral_go/main.nf"
 include { RDF_EXPORT } from '../subworkflows/local/rdf_export/main.nf'
-include { PREPARE_OMA_TAXONOMY } from '../modules/local/omataxonomy/main.nf'
+include { DUMP_ID_HISTORY } from '../modules/local/export/main.nf'
 
 workflow OMA_BROWSER_BUILD {
 
@@ -65,12 +69,7 @@ workflow OMA_BROWSER_BUILD {
                     splice_json,
                     PREPARE_OMA_TAXONOMY.out.tax_db,
                     PREPARE_OMA_TAXONOMY.out.tax_pkl)
-        // collect auxillary files for the data folder
-        auxillary_data_files = IMPORT_HDF5.out.seqidx_h5.mix(
-            IMPORT_HDF5.out.seq_buf,
-            IMPORT_HDF5.out.tax_map_pickle
-        )
-
+        
         // import Domains
         DOMAINS(IMPORT_HDF5.out.db_h5)
 
@@ -81,6 +80,14 @@ workflow OMA_BROWSER_BUILD {
                  GEN_BROWSER_AUX_FILES.out.speciestree_phyloxml,
                  IMPORT_HDF5.out.orthoxml,
                  IMPORT_HDF5.out.species_info)
+
+        // collect auxillary files for the data folder
+        auxillary_data_files = IMPORT_HDF5.out.seqidx_h5.mix(
+            IMPORT_HDF5.out.seq_buf,
+            IMPORT_HDF5.out.tax_map_pickle,
+            GEN_BROWSER_AUX_FILES.out.speciestree_newick,
+            GEN_BROWSER_AUX_FILES.out.speciestree_phyloxml,
+        )
 
         // create OMAmer databases for levels defined in params.omamer_levels
         if (params.omamer_levels != null) {
@@ -159,22 +166,45 @@ workflow OMA_BROWSER_BUILD {
         COMBINE_HDF_AND_UPDATE_SUMMARY_DATA(h5_dbs_to_combine.collect(),
                                             INFER_KEYWORDS.out.oma_group_keywords,
                                             INFER_FINGERPRINTS.out.oma_group_fingerprints,
-                                            INFER_KEYWORDS.out.oma_hog_keywords)
-
+                                            INFER_KEYWORDS.out.oma_hog_keywords, 
+                                            params.canonical_source_order)
+        if (params.oma_dumps) {
+            meta_and_db = IMPORT_HDF5.out.meta.combine(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5)
+            DUMP_PROTEINS(meta_and_db)
+            DUMP_OMA_GROUPS(meta_and_db)
+            old_releases = params.old_releases
+                ? Channel.fromPath(params.old_releases)
+                    .filter { path -> !path.toString().contains(params.oma_version) }
+                    .collect()
+                    .ifEmpty([])
+                : Channel.value([])
+            DUMP_ID_HISTORY(COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5, old_releases)
+            DUMP_UNIPROT_CROSSLINKS(meta_and_db)
+            DUMP_NCBI_CROSSLINKS(meta_and_db)
+            DUMP_VPAIRS(meta_and_db)
+            DUMP_ROOTHOG_DESCRIPTIONS(meta_and_db)
+            download_files = download_files.mix(
+                DUMP_PROTEINS.out.dumps, 
+                DUMP_OMA_GROUPS.out.dumps, 
+                DUMP_OMA_GROUPS.out.group_descriptions, 
+                DUMP_ID_HISTORY.out.id_histories,
+                DUMP_UNIPROT_CROSSLINKS.out.uniprot_oma_mapping,
+                DUMP_VPAIRS.out.vpairs,
+                DUMP_ROOTHOG_DESCRIPTIONS.out.roothog_descriptions
+            )
+        }
         if (params.rdf_export) {
             RDF_EXPORT(IMPORT_HDF5.out.augmented_orthoxml,
                        COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5,
                        params.oma_dumps)
-            rdf_out = RDF_EXPORT.out.rdf_turtles
             download_files = download_files.mix(RDF_EXPORT.out.rdf_tarball)
-        } else {
-            rdf_out = Channel.empty()
         }
     emit:
         db        = COMBINE_HDF_AND_UPDATE_SUMMARY_DATA.out.combined_h5
         downloads = download_files
         aux_data  = auxillary_data_files
-        rdf       = rdf_out
+        rdf       = params.rdf_export ? RDF_EXPORT.out.rdf_turtles : Channel.empty()
+        ncbi      = params.oma_dumps ? DUMP_NCBI_CROSSLINKS.out.ncbi_linkout_files : Channel.empty()
 
 }
 

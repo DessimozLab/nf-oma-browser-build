@@ -1,6 +1,7 @@
 process HOG_LSH_BUILD {
     label "process_medium"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
+    tag "HOG LSH build for ${meta.id}"
 
     input:
         tuple val(meta), path(omadb)
@@ -28,7 +29,7 @@ process HOG_LSH_BUILD {
 
 process HOG_MAP_IDS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
 
     input:
         path target_lsh
@@ -39,10 +40,11 @@ process HOG_MAP_IDS {
 
     script:
         """
-        oma-build -vv hogmap-ids \\
+        oma-build -v hogmap-ids \\
             --target $target_lsh \\
             --old $old_releases_lsh \\
-            --out "OmaServer.hogmap.h5"
+            --out "OmaServer.hogmap.h5" \\
+            --index-class forest
         """
 
     stub:

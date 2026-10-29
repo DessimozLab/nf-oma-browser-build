@@ -42,6 +42,7 @@ workflow OMA_browser_build {
         aux_data = OMA_BROWSER_BUILD.out.aux_data
         downloads = OMA_BROWSER_BUILD.out.downloads
         rdf = OMA_BROWSER_BUILD.out.rdf
+        ncbi = OMA_BROWSER_BUILD.out.ncbi
 }
 
 workflow {
@@ -68,6 +69,7 @@ workflow {
         OMA_browser_build.out.aux_data    >> 'data'
         OMA_browser_build.out.downloads   >> 'downloads'
         OMA_browser_build.out.rdf         >> 'RDF'
+        OMA_browser_build.out.ncbi        >> 'ncbi'
 }
 
 
@@ -82,6 +84,7 @@ output {
    data      { mode 'copy' }
    downloads { mode 'copy' }
    RDF       { mode 'copy' }
+   ncbi      { mode 'copy' }
 }
 
 

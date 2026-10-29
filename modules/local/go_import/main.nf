@@ -1,9 +1,9 @@
 // Processes
 
 process GO_IMPORT {
-    label "process_medium"
+    label "process_high"
     label "HIGH_IO_ACCESS"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
     
     input:
         path xref_db
@@ -17,7 +17,7 @@ process GO_IMPORT {
     
     script:
         """
-        oma-build -vv import-go \\
+        oma-build -v import-go \\
             --xref-db $xref_db \\
             --og-db $og_db \\
             --out ./GO.h5 \\
@@ -36,7 +36,7 @@ process GO_IMPORT {
 
 process DUMP_GO_ANNOTATIONS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
     tag "Dumping GO annotations"
 
     input:

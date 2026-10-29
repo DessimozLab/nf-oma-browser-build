@@ -3,7 +3,7 @@ process EDGEHOG {
     label "single_process"
     label "process_long"
     label "process_high_memory"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
 
     input:
         path augmented_orthoxml
@@ -24,6 +24,7 @@ process EDGEHOG {
                 --species_tree speciestree.nwk \\
                 --hdf5 $oma_db \\
                 --date_edges \\
+                --orient_edges \\
                 --out-format HDF5
         """
 

@@ -160,6 +160,11 @@
           "type": "string",
           "description": "'download' or folder containing RefSeq gbff files.",
           "help_text": "If not specified, no RefSeq crossreferences will be download (default). If set to 'download', the latest RefSeq gbff files will be downloaded from NCBI FTP server. Alternatively, a folder containing local *.gbff.gz files can be provided."
+        },
+        "canonical_source_order": {
+          "type": "string",
+          "default": "SourceAC",
+          "description": "Order of cross-reference sources (comma separated) to determine the canonical id"
         }
       }
     },
@@ -225,6 +230,13 @@
           "description": "Flag to activate dumping various files for the download section",
           "fa_icon": "fas fa-toggle-on",
           "help_text": "Activating oma_dumps will enable species, sequences, GO annotations files as text files for the download section."
+        },
+        "old_releases": {
+          "type": "string",
+          "description": "Base-path containing old releases", 
+          "help_text": "Will find existing OmaServer.h5 files in subfolders and treat as previous releases for which IDMapping and HOG-ID mappings will be computed",
+          "fa_icon": "fas fa-folder-open",
+          "format": "directory-path"
         }
       }
     },

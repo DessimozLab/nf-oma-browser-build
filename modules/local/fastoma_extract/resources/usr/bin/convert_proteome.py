@@ -56,10 +56,18 @@ def convert_entry(rec, cds, loc_provider):
 
 def convert_matrix(matrix_fname: Optional[PathLike], ids:List[str]):
     prot_to_group = {}
+    group_id_to_group_nr = {}
+    next_group_nr = 1
     if matrix_fname is not None:
         with auto_open(matrix_fname, 'rt') as fh:
             csv_reader = csv.DictReader(fh, dialect='excel-tab')
-            prot_to_group = {row['Protein']: int(row['Group'][3:]) for row in csv_reader}
+            for row in csv_reader:
+                prot = row['Protein']
+                group_id = row['Group']
+                if group_id not in group_id_to_group_nr:
+                    group_id_to_group_nr[group_id] = next_group_nr
+                    next_group_nr += 1
+                prot_to_group[prot] = group_id_to_group_nr[group_id]
     return {f"{k+1}": prot_to_group.get(id, 0) for k, id in enumerate(ids)}
 
 

@@ -17,11 +17,21 @@ class TaxidProvider:
         self._unique_taxids = None
 
     def augment_by_taxonomy(self, names, taxonomy_file):
-        try:
-            num_id = [int(n) for n in names]
-        except ValueError:
-            logger.info(f"Node labels are not all numeric - generating negative Taxids")
+        numeric, non_numeric = [], []
+        for n in names:
+            try:
+                int(n)
+                numeric.append(n)
+            except ValueError:
+                non_numeric.append(n)
+
+        for n in non_numeric:
+            self.mapping[n]['SciName'] = n
+
+        if not numeric:
             return
+
+        num_id = [int(n) for n in numeric]
         tax = omataxonomy.Taxonomy(taxonomy_file)
         scinames = tax.translate_to_names(num_id)
         mnemonic = tax.get_mnemonic_names(num_id)

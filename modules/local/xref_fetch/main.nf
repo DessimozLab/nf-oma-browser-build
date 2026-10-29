@@ -1,7 +1,7 @@
 
 process FETCH_REFSEQ {
     label "process_low"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
 
     output:
         path "*.gpff.gz", emit: refseq_proteins
@@ -23,7 +23,7 @@ process FETCH_REFSEQ {
 process FILTER_AND_SPLIT {
     tag "$source"
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
 
     input:
         tuple path(xref), val(format), val(source), path(tax_map)
@@ -50,7 +50,7 @@ process FILTER_AND_SPLIT {
 
 process RELEVANT_TAXID_MAP {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
 
     input:
         path gs_tsv
@@ -81,7 +81,7 @@ process MAP_XREFS {
     label "process_medium"
     label "process_long"
     label "HIGH_IO_ACCESS"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
     tag "Maps xref ${xref_in} from ${source}"
 
     input:
@@ -98,43 +98,19 @@ process MAP_XREFS {
 
     script:
         // Size of actual file (follows symlink)
+        def local_path = task.ext?.copy_to_local_path ?: ''
         def seq_buf_size = seq_buf.size()
         def seq_idx_db_size = seq_idx_db.size()
         def rand_nr = (Math.random()*10000 as Integer) as String
+        def templ = template("copy_to_local.sh")
         """
         echo "Requested memory: ${task.memory}"
         echo "Available CPUs: ${task.cpus}"
-
-        copy_to_tmp_if_space() {
-            local source_file="\$1"
-            local file_size="\$2"
-            local unique_name="\$3"
-            
-            # Get available space in tmpDir
-            free_blocks=\$(df -P "\$tmpDir" | tail -1 | awk '{print \$4}')
-            block_size=\$(df -P "\$tmpDir" | tail -1 | awk '{print \$2}')
-            free_space=\$((free_blocks * block_size))
-
-            if [ "\$file_size" -le "\$free_space" ]; then
-                local_file="\${tmpDir}/\$unique_name"
-                echo "Copying \$source_file to \$local_file"
-                cp -L "\$source_file" "\$local_file"
-                rm "\$source_file"
-                ln -s "\$local_file" "\$source_file"
-                echo "Successfully moved \$source_file to tmpDir"
-            else
-                echo "Not enough space in TMPDIR for \$source_file, using original location"
-            fi
-        }
-
-        # Check if TMPDIR on compute node has enough space for the sequence buffer
-        tmpDir="\${TMPDIR:-/tmp}"
-
-        # copy seq_buf to local tmp if space available:
-        copy_to_tmp_if_space "$seq_buf" "${seq_buf_size}" "${seq_buf.name}_${rand_nr}"
-
-        # copy seq_idx_db to local tmp if space available:
-        copy_to_tmp_if_space "$seq_idx_db" "${seq_idx_db_size}" "${seq_idx_db.name}_${rand_nr}"
+        ${templ.text}
+        
+        copy_files_to_local "${local_path}" \\
+            "$seq_buf" "${seq_buf_size}" "${seq_buf.name}_${rand_nr}" \\
+            "$seq_idx_db" "${seq_idx_db_size}" "${seq_idx_db.name}_${rand_nr}"
         
         # List content for debugging
         ls -la . 
@@ -160,7 +136,7 @@ process MAP_XREFS {
 
 process COLLECT_XREFS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
     tag "Collecting xrefs for $source"
 
     input:
@@ -189,7 +165,7 @@ process COLLECT_XREFS {
 
 process COMBINE_ALL_XREFS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
     tag "Combining all xrefs into single hdf5 db"
 
     input:
@@ -214,7 +190,7 @@ process COMBINE_ALL_XREFS {
 
 process BUILD_REDUCED_XREFS {
     label "process_medium"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
     tag "Building a reduced set of xrefs for lookup and search"
 
     input:
@@ -241,7 +217,7 @@ process BUILD_REDUCED_XREFS {
 
 process DUMP_XREFS {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
     tag "Dumping xrefs to tsv files"
 
     input:
@@ -260,6 +236,7 @@ process DUMP_XREFS {
             --out-refseq oma-refseq.txt.gz \\
             --out-entrez oma-entrez.txt.gz \\
             --out-ensembl oma-ensembl.txt.gz \\
+            --out-source oma-source.txt.gz \\
             --out-ncbi oma-ncbi.txt.gz
         """
 }

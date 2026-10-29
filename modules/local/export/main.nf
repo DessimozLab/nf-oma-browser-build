@@ -1,0 +1,175 @@
+process DUMP_PROTEINS {
+    label "process_single"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
+    tag "Dumping protein sequences and annotations"
+
+    input:
+        tuple val(meta), path(db)
+        
+    output:
+        path "oma-*", emit: dumps
+
+    script:
+        """
+        oma-dump -vv sequences \\
+            --db $db \\
+            --out-proteins oma-seqs.fa.gz \\
+            --out-cdna oma-cds.fa.gz \\
+            --out-annotations oma-protein-annotations.txt.gz
+        """
+
+    stub:
+        """
+        touch oma-seqs.fa.gz
+        touch oma-cds.fa.gz
+        """
+}
+
+process DUMP_OMA_GROUPS {
+    label "process_single"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
+    tag "Dumping OMA Groups"
+
+    input:
+        tuple val(meta), path(db)
+
+    output:
+        path "oma-groups.*.gz", emit: dumps
+        path "group-descriptions.txt.gz", emit: group_descriptions
+
+    script:
+        """
+        oma-dump -v oma-groups \\
+            --db $db \\
+            --out-txt oma-groups.txt.gz \\
+            --out-orthoxml oma-groups.orthoXML.gz \\
+            --out-keywords group-descriptions.txt.gz
+        """
+
+    stub:
+        """
+        touch oma-groups.txt.gz
+        """
+}
+
+process DUMP_ID_HISTORY {
+    label "process_single"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
+    tag "Dumping ID histories"
+
+    input:
+        path db
+        path prev_db
+
+    output:
+        path "IDHistory-*.txt.gz", emit: id_histories
+
+    script:
+        """
+        oma-dump -v id-history \\
+            --db $db \\
+            --prev-dbs $prev_db
+        """
+
+    stub:
+        """
+        touch IDHistory-test-to-test.txt.gz
+        """
+}
+
+process DUMP_UNIPROT_CROSSLINKS {
+    label "process_single"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
+    tag "Dumping linkout mapping between UniProt and OMA"
+
+    input:
+    tuple val(meta), path(db)
+
+    output:
+    path "UniProt-OMA.txt.gz", emit: uniprot_oma_mapping
+
+    script:
+    """
+    oma-dump -v uniprot-crosslinks \\
+        --db $db \\
+        --out UniProt-OMA.txt.gz
+    """
+
+    stub:
+    """
+    touch UniProt-OMA.txt.gz
+    """
+}
+
+process DUMP_NCBI_CROSSLINKS {
+    label "process_single"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
+    tag "Dumping linkout mapping between NCBI and OMA"
+    
+    input:
+    tuple val(meta), path(db)
+
+    output:
+    path "ncbi/*", emit: ncbi_linkout_files
+
+    script:
+    """
+    mkdir -p ./ncbi
+    oma-dump -v ncbi-linkout \\
+        --db $db \\
+        --out ncbi/
+    """
+
+    stub:
+    """
+    touch NCBI-OMA.txt.gz
+    """
+}
+
+process DUMP_VPAIRS {
+    label "process_single"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
+    tag "Dumping vpairs"
+
+    input:
+    tuple val(meta), path(db)
+
+    output:
+    path "oma-pairs.txt.gz", emit: vpairs
+
+    script:
+    """
+    oma-dump -v pairwise-orthologs \\
+        --db $db \\
+        --out oma-pairs.txt.gz
+    """
+
+    stub:
+    """
+    touch oma-pairs.txt.gz
+    """
+}
+
+process DUMP_ROOTHOG_DESCRIPTIONS {
+    label "process_single"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
+    tag "Dumping rootHOG descriptions"
+
+    input:
+    tuple val(meta), path(db)
+
+    output:
+    path "roothog-descriptions.txt.gz", emit: roothog_descriptions
+
+    script:
+    """
+    oma-dump -v roothog-descriptions \\
+        --db $db \\
+        --out roothog-descriptions.txt.gz
+    """
+
+    stub:
+    """
+    touch roothog-descriptions.txt.gz
+    """
+}

@@ -1,6 +1,6 @@
 process PREPARE_OMA_TAXONOMY {
     label "process_single"
-    container "docker.io/dessimozlab/omabuild:1.5.0"
+    container "docker.io/dessimozlab/omabuild:1.6.0"
     tag "Verify / Build NCBITax database"
     storeDir "${params.outdir ?: './results'}/taxonomy_cache"
 
